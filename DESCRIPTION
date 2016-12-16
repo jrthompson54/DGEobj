@@ -22,12 +22,13 @@ Collate:
     'itemNames.R'
     'print.R'
     'getType.R'
+    'getBaseType.R
     'dim.R'
     'getItems.R'
     'getItem.R'
     'rmItem.R'
     'addItem.R'
     'dimensionMatch.R'
-    'addType.R'
+    'newType.R'
     'showTypes.R'
 RoxygenNote: 5.0.1

@@ -15,19 +15,31 @@
 #the value of .type is a basetype
 .type <- list(row="row",
               col="col",
-              assay="assay",
-              meta="meta",
-              contrastTop = "row",
-              contrastTreat="meta",
+              assay ="assay",
+              meta ="meta",
+              counts ="assay",
+              design ="col",
+              geneAnno ="row",
+              transcriptAnno = "row",
+              topTable = "row",
+              topTreat ="meta",
               fit = "row",
               DGEList = "row",
-              designMatrix = "col",
-              designTable = "col")
-#Uncomment this block when you need to update the .rda files
+              designMatrix = "col"
+              )
+
+# These Types can only have one instance in a DGEresult
+.uniqueType <- list("counts",
+                    "design",
+                    "geneAnno",
+                    "transcriptAnno",
+                    "DGEList")
+# Uncomment this block when you need to update the .rda files
 # x = getwd()
 # setwd ("~/R/lib/pkgsrc/DGE.Tools2/")
 # save(.type, file="./data/type.rda")
 # save(.basetype, file="./data/basetype.rda")
+# save(.uniqueType,  file="./data/uniqueType.rda")
 # setwd(x)
 
 

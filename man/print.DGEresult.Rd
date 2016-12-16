@@ -2,31 +2,23 @@
 % Please edit documentation in R/print.R
 \name{print.DGEresult}
 \alias{print.DGEresult}
-\title{Function DGEresult}
+\title{Function print.DGEresult}
 \usage{
-\method{print}{DGEresult}(dgeResult, verbose = FALSE, ...)
+\method{print}{DGEresult}(dgeResult, verbose = FALSE, pretty = TRUE, ...)
 }
 \arguments{
-\item{data}{A parcel of data to be added to the DGEresult object.}
+\item{dgeResult}{A DGEresult object.}
 
-\item{dataName}{A unique name for the data parcel}
+\item{verbose}{Add funArgs to the output}
 
-\item{dataType}{A data type identifier. See .}
-}
-\value{
-A DGEresult object
+\item{pretty}{prints using knitr::kable if TRUE}
 }
 \description{
-Initializes an empty DGEresult object.  Optionally, add
-the first data element.
+Print a DGEresult object
 }
 \examples{
-   # init an empty DGEresult object
-   myDGEresult <- DGEresult()
-   # init and add the first data object.
-   myDGEresult <- DGEresult(data = mycounts,
-                   dataName = "counts",
-                   dataType = "assay")
+  print(myDGEresult)
+  print(myDGEresult, verbose=TRUE)
 
 }
 \author{
