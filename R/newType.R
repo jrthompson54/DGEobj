@@ -6,6 +6,7 @@
 #                   "and can only be used on class DGEresult"))
 # }
 newType <- function(itemType, basetype, uniqueItem=FALSE){
+    #Set uniqueItem to TRUE to allow only one instance of itemType
     result <- FALSE
     if (missing(itemType) | missing(basetype))
         stop("Both type and basetype arguments are required")
@@ -19,7 +20,7 @@ newType <- function(itemType, basetype, uniqueItem=FALSE){
     #define new type
     .type[itemType] <- basetype
     if (uniqueItem == TRUE)
-        .uniqueType[(length(.uniqueType)+1)] <- itemType
+        .uniqueType <- c(.uniqueType, itemType)
 
     result <- TRUE
     return(.type)

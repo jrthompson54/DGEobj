@@ -1,4 +1,6 @@
 ### addItem
+### items must have row and column names
+###
 addItem <- function(x, ...) UseMethod("addItem")
 addItem.default <- function(dgeResult, ...){
     warning(paste("addItem does not know how to handle object of class ",
@@ -6,10 +8,15 @@ addItem.default <- function(dgeResult, ...){
                   "and can only be used on class DGEresult"))
 }
 addItem.DGEresult <- function(dgeResult, item, itemName, itemType,
-                              overwrite=FALSE, funArgs=match.call()){
+                              overwrite=FALSE, funArgs=match.call()
+                              ){
 
     if (missing(item) | missing(itemName) | missing(itemType))
         stop("All Three of item, itemName, itemType are required")
+
+    #item must have rownames
+    if (is.null(rownames(item)))
+        stop ("item is missing rownames!")
 
     #enforce itemType
     if (!itemType %in% names(.type))
@@ -41,6 +48,9 @@ addItem.DGEresult <- function(dgeResult, item, itemName, itemType,
             dgeResult$dateCreated[[itemName]] <- lubridate::now()
             dgeResult$funArgs[[itemName]] <- funArgs
     }
+
+    if (is.null(rownames(item)))
+        warning ("No rownames assigned")
 
     return(dgeResult)
 }

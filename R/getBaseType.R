@@ -6,7 +6,21 @@ getBaseType.default <- function(dgeResult, ...){
                   "and can only be used on class DGEresult"))
 }
 getBaseType.DGEresult <- function(dgeResult, baseType){
-    baseTypes <- unlist(dgeResult$type)
-    idx <- baseType %in% baseTypes
-    itemList <- dgeResult$data[idx]
+
+    if (missing(baseType))
+        stop("baseType argument is required")
+
+    if (!baseType %in% .basetype)
+        stop("baseType must be one of: row, col, assay, meta")
+
+    idx <- dgeResult$basetype %in% baseType
+
+    if (sum(idx) < length(baseType))
+        warning("Some baseTypes were not found")
+
+    if (sum(idx) == 1)
+        result <- dgeResult$data[idx][[1]]
+    else
+        result <- dgeResult$data[idx]
+    return(result)
 }

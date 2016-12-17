@@ -13,7 +13,7 @@
                assay="assay",
                meta="meta")
 #the value of .type is a basetype
-.type <- list(row="row",
+.type <- c(row="row",
               col="col",
               assay ="assay",
               meta ="meta",
@@ -29,11 +29,10 @@
               )
 
 # These Types can only have one instance in a DGEresult
-.uniqueType <- list("counts",
-                    "design",
-                    "geneAnno",
-                    "transcriptAnno",
-                    "DGEList")
+.uniqueType <- c("counts",
+                "design",
+                "geneAnno",
+                "transcriptAnno")
 # Uncomment this block when you need to update the .rda files
 # x = getwd()
 # setwd ("~/R/lib/pkgsrc/DGE.Tools2/")

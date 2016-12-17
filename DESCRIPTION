@@ -17,18 +17,17 @@ Imports:
     magrittr (>= 1.5)   
 Collate:
     'DGEresult.R'
-    'rownames.R'
-    'colnames.R'
-    'itemNames.R'
-    'print.R'
-    'getType.R'
-    'getBaseType.R
-    'dim.R'
-    'getItems.R'
-    'getItem.R'
-    'rmItem.R'
     'addItem.R'
+    'rmItem.R'
+    'dim.R'
     'dimensionMatch.R'
+    'getBaseType.R'
+    'getItem.R'
+    'getType.R'
     'newType.R'
     'showTypes.R'
+    'print.R'
+    'itemNames.R'
+    'colnames.R'
+    'rownames.R'
 RoxygenNote: 5.0.1

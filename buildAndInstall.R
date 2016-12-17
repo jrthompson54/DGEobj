@@ -1,5 +1,5 @@
 #I use this to build and locally install the package while testing.
-#Not for use by end Users!
+#Not intended for use by end Users!
 
 x = getwd()
 setwd ("~/R/lib/pkgsrc/DGEresult/")

@@ -1,12 +1,15 @@
+rm(list=ls())
 RSE <- readRDS("RSE.RDS")
 library(magrittr)
 library(SummarizedExperiment)
 library(DGEresult)
 d <- DGEresult()
 d %<>% addItem(assay(RSE, "Counts"), "counts", "counts")
-d %<>% addItem(mcols(RSE), "GeneInfo", "geneAnno")
+geneanno <- mcols(RSE)
+rownames(geneanno) <- geneanno$ID
+d %<>% addItem(geneanno, "GeneInfo", "geneAnno")
 d %<>% addItem(colData(RSE), "Design", "design")
-d %<>% addItem(mcols(RSE), "contrastTest", "topTable")
+d %<>% addItem(geneanno, "contrastTest", "topTable")
 print(d)
 
 d %<>% rmItem("Design")
@@ -14,7 +17,7 @@ d %<>% rmItem("contrastTest")
 print(d)
 
 d %<>% addItem(colData(RSE), "Design", "design")
-d %<>% addItem(mcols(RSE), "contrastTest", "topTable")
+d %<>% addItem(geneanno, "contrastTest", "topTable")
 print(d)
 #test trap for overwriting item
 d %<>% addItem(colData(RSE), "Design", "col")
@@ -38,7 +41,8 @@ dim(d)
 print(d)
 d %<>% addItem(assay(RSE, "Counts"), "counts", "assay")
 d %<>% addItem(colData(RSE), "Design", "col")
-d %<>% addItem(mcols(RSE), "geneAnnotation", "geneAnno")
+d %<>% addItem(geneanno, "geneAnnotation", "geneAnno")
+d %<>% addItem(geneanno, "contrastTest", "topTable")
 print(d)
 
 print(d, verbose=T)
@@ -51,12 +55,17 @@ print(d)
 
 colnames(d) # colnames not working
 rownames(d) #not working
+rnames <- rownames.DGEresult(d)
+cnames <- colnames.DGEresult(d)
 
 d %<>% addItem(assay(RSE, "Counts"), "TPM", "assay")
 
-Items <- getType(d, "assay")
-Items <- getBaseType(d, "assay")  #not Working
+Items <- getType(d, "counts")
+Items <- getType(d, c("assay", "counts", "design"))
+Items <- getBaseType(d, "assay")
+Items <- getItem (d, "counts")
 
+.type <- newType("TPM", "assay", uniqueItem = TRUE)
 #Function List
 # addItem.R
 # newType.R
