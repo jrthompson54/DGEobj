@@ -1,31 +1,31 @@
 ### Function print ###
-#' Function print.DGEresult
+#' Function print.DGEobj
 #'
-#' Print a DGEresult object
+#' Print a DGEobj object
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq
 #'
-#' @param dgeResult A DGEresult object.
+#' @param dgeObj A DGEobj object.
 #' @param verbose  Add funArgs to the output
 #' @param pretty prints using knitr::kable if TRUE
 #'
 #' @return NULL
 #'
 #' @examples
-#'   print(myDGEresult)
-#'   print(myDGEresult, verbose=TRUE)
+#'   print(myDGEobj)
+#'   print(myDGEobj, verbose=TRUE)
 #'
 #' @import magrittr
 #'
 #' @export
-print.DGEresult <- function(dgeResult, verbose=FALSE, pretty=TRUE, ...)  {
+print.DGEobj <- function(dgeObj, verbose=FALSE, pretty=TRUE, ...)  {
 
-    ItemNames <- itemNames(dgeResult)
-    ItemTypes <- dgeResult$type
-    baseTypes <- dgeResult$basetype
+    ItemNames <- itemNames(dgeObj)
+    ItemTypes <- dgeObj$type
+    baseTypes <- dgeObj$basetype
     creationDates <- lapply(d$dateCreated, strftime)
-    funArgs <- dgeResult$funArgs
+    funArgs <- dgeObj$funArgs
 
     df <- data.frame(cbind(ItemName=ItemNames, ItemType=ItemTypes,
                            BaseType=baseTypes, DateCreated=creationDates),
@@ -35,8 +35,7 @@ print.DGEresult <- function(dgeResult, verbose=FALSE, pretty=TRUE, ...)  {
 
     #print(knitr::kable(df, row.names=FALSE))
 
-    Dim <- dim(dgeResult)
-    cat(paste("\nDimension: [", Dim[1], ", ", Dim[2], "]", sep=""))
+    cat(paste("\nDimension: [", dim(dgeObj)[1], ", ", dim(dgeObj)[2], "]", sep=""))
     cat("")
     if (pretty == TRUE)
         return(knitr::kable(df, row.names=FALSE))

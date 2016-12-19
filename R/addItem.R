@@ -1,13 +1,8 @@
 ### addItem
 ### items must have row and column names
 ###
-addItem <- function(x, ...) UseMethod("addItem")
-addItem.default <- function(dgeResult, ...){
-    warning(paste("addItem does not know how to handle object of class ",
-                  class(dgeResult),
-                  "and can only be used on class DGEresult"))
-}
-addItem.DGEresult <- function(dgeResult, item, itemName, itemType,
+#' @export
+addItem <- function(dgeObj, item, itemName, itemType,
                               overwrite=FALSE, funArgs=match.call()
                               ){
 
@@ -19,13 +14,13 @@ addItem.DGEresult <- function(dgeResult, item, itemName, itemType,
         stop ("item is missing rownames!")
 
     #enforce itemType
-    if (!itemType %in% names(.type))
+    if (!itemType %in% names(.DGEobjDef$type))
         stop(paste("itemType must be one of: ",
-                   paste(names(.type), collapse=", "), sep=""))
+                   paste(names(.DGEobjDef$type), collapse=", "), sep=""))
 
     #check for disallowed second instance of uniqueTypes (unless overwrite mode)
-    if(itemType %in% .uniqueType  &
-       itemType %in% dgeResult$type &
+    if(itemType %in% .DGEobjDef$uniqueType  &
+       itemType %in% dgeObj$type &
        overwrite==FALSE)
         stop (paste( "Only one instance of type ", itemType, " allowed.",
                      " Use a base type instead (row, col, assay, meta)",
@@ -36,22 +31,22 @@ addItem.DGEresult <- function(dgeResult, item, itemName, itemType,
         funArgs <- paste(funArgs, collapse=" ")
 
     #refuse to add if itemName exists already unless overwrite = T
-    if (overwrite==FALSE & itemName %in% names(dgeResult$data))
-        stop('itemName already exists in DGEresult!')
+    if (overwrite==FALSE & itemName %in% names(dgeObj$data))
+        stop('itemName already exists in DGEobj!')
     #confirm dimensions consistent before adding
-    else if (.dimensionMatch(dgeResult, item, itemType) == TRUE){
+    else if (.dimensionMatch(dgeObj, item, itemType) == TRUE){
 
-            print("Adding Item")
-            dgeResult$data[[itemName]] <- item
-            dgeResult$type[[itemName]] <- itemType
-            dgeResult$basetype[[itemName]] <- .type[[itemType]]
-            dgeResult$dateCreated[[itemName]] <- lubridate::now()
-            dgeResult$funArgs[[itemName]] <- funArgs
+            # print("Adding Item")
+            dgeObj$data[[itemName]] <- item
+            dgeObj$type[[itemName]] <- itemType
+            dgeObj$basetype[[itemName]] <- .DGEobjDef$type[[itemType]]
+            dgeObj$dateCreated[[itemName]] <- lubridate::now()
+            dgeObj$funArgs[[itemName]] <- funArgs
     }
 
     if (is.null(rownames(item)))
         warning ("No rownames assigned")
 
-    return(dgeResult)
+    return(dgeObj)
 }
 #addItem

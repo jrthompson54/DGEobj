@@ -2,8 +2,8 @@
 #Not intended for use by end Users!
 
 x = getwd()
-setwd ("~/R/lib/pkgsrc/DGEresult/")
-pkg = "~/R/lib/pkgsrc/DGEresult_0.1.0.tar.gz"
+setwd ("~/R/lib/pkgsrc/DGEobj/")
+pkg = "~/R/lib/pkgsrc/DGEobj_0.1.0.tar.gz"
 library(devtools);document();load_all;build()
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)

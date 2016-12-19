@@ -1,10 +1,11 @@
+#' @export
 #Return the list of all item names
 itemNames  <- function(x, ...) UseMethod("itemNames")
-itemNames.default <- function(dgeResult, ...){
+itemNames.default <- function(dgeObj, ...){
     warning(paste("dim does not know how to handle object of class ",
-                  class(dgeResult),
+                  class(dgeObj),
                   "and can only be used on class DGEresult"))
 }
-itemNames.DGEresult <- function(dgeResult){
-    names(dgeResult$data)
+itemNames.DGEobj <- function(dgeObj){
+    names(dgeObj$data)
 }

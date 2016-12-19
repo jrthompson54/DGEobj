@@ -1,19 +1,20 @@
 
-#' ### DGEresult object definition
+### DGEobj object definition
 
 ### Define an extensible datatype
 ### There are 4 immutable base type: row, col, assay, meta
 ### Each type must be one of these four basetypes
-### Additional types can be added to .type as long as they are
+### Extensibility: Additional types can be added to .DGEobj$type as long as they are
 ### assigned to one of the 4 basetypes.
 ###
 ### Data Definitions
-.basetype <- c(row="row",
-               col="col",
-               assay="assay",
-               meta="meta")
-#the value of .type is a basetype
-.type <- c(row="row",
+.DGEobjDef <- list(
+    basetype = c(row="row",
+                   col="col",
+                   assay="assay",
+                   meta="meta"),
+    #the value of .type is a basetype
+    type = c(row="row",
               col="col",
               assay ="assay",
               meta ="meta",
@@ -26,26 +27,25 @@
               fit = "row",
               DGEList = "row",
               designMatrix = "col"
-              )
+              ),
 
 # These Types can only have one instance in a DGEresult
-.uniqueType <- c("counts",
+    uniqueType = c("counts",
                 "design",
                 "geneAnno",
                 "transcriptAnno")
+)
 # Uncomment this block when you need to update the .rda files
 # x = getwd()
-# setwd ("~/R/lib/pkgsrc/DGE.Tools2/")
-# save(.type, file="./data/type.rda")
-# save(.basetype, file="./data/basetype.rda")
-# save(.uniqueType,  file="./data/uniqueType.rda")
+# setwd ("~/R/lib/pkgsrc/DGEobj/")
+# save(.DGEobj, file="./data/DGEobj.rda")
 # setwd(x)
 
 
-### Function DGEresult ###
-#' Function DGEresult
+### Function DGEobj ###
+#' Function DGEobj
 #'
-#' Initializes an empty DGEresult object.  Optionally, add
+#' Initializes an empty DGEobj.  Optionally, add
 #' the first data element.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
@@ -53,7 +53,7 @@
 #'
 #' @param data A parcel of data to be added to the DGEresult object.
 #' @param dataName  A unique name for the data parcel
-#' @param dataType A data type identifier. See .
+#' @param dataType A data type identifier. See .DGEobj$type
 #'
 #' @return A DGEresult object
 #'
@@ -67,22 +67,23 @@
 #'
 #' @export
 ### # Constructor function for the class
-DGEresult <- function(data, dataName, dataType) {
+DGEobj <- function(data, dataName, dataType) {
 
     #initialize an empty DGEresult and optionally add the first item
-    dgeResult <- list()
-    dgeResult$data <- list()
-    dgeResult$type <- list()
-    dgeResult$basetype <- list()
-    dgeResult$dateCreated <- list()
-    dgeResult$funArgs <- list()
-    class(dgeResult) <- "DGEresult"
+    dgeObj <- list()
+    dgeObj$data <- list()
+    dgeObj$type <- list()
+    dgeObj$basetype <- list()
+    dgeObj$dateCreated <- list()
+    dgeObj$funArgs <- list()
+    dgeObj$objDef <- .DGEobj
+    class(dgeObj) <- "DGEobj"
 
-    #optionally load the first item into dgeResult
+    #optionally load the first item into dgeObj
     if (!missing(data) & !missing(dataName) & !missing(dataType))
-        dgeResult <- addItem.DGEresult(dgeResult, data, dataName, dataType)
+        dgeObj <- addItem.DGEresult(dgeObj, data, dataName, dataType)
 
-    return (dgeResult)
+    return (dgeObj)
 }
 
     #x is a list ot POSIXct datetimes
@@ -96,5 +97,8 @@ DGEresult <- function(data, dataName, dataType) {
 ##      subsetting
 ##      as.RSE
 ##      as.ES
+##
+##
+##      FunctionListlo
 
 

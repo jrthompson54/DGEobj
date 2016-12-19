@@ -1,31 +1,36 @@
 ### .dimensionMatch
-.dimensionMatch <- function(x, ...) UseMethod(".dimensionMatch")
-.dimensionMatch.default <- function(dgeResult, ...) {
-    warning(paste(".dimensionMatch does not know how to handle object of class ",
-                  class(dgeResult),
-                  "and can only be used on class DGEresult"))
-}
-.dimensionMatch.DGEresult <- function(dgeResult, item, itemType){
+.dimensionMatch <- function(dgeObj, item, itemType){
     #check the dimensions of item against the DGEresult object dim
     #set the DGEresult dimension if not set (i.e. case of empty DGEresult)
     #stop with an error if item is mismatched with DGEresult dim
+    #to work with this an object must return a result with the dim command
+    #
+    testrow <- function(dgeObj, item){
+        #stop if dimensions don't match
+        if (is.null(dim(item))) #item is 1D use length
+            if (nrow(dgeObj) > 0 & nrow(dgeObj) != length(item))
+                stop('New row object does not match row dimension of DGEobj object')
+        else if (nrow(dgeObj) > 0 & nrow(dgeObj) != nrow(item))
+            stop('New row object does not match row dimension of DGEobj object')
+    }
+
+    testcol <- function(dgeObj, item){
+        #stop if dimensions don't match
+        if (is.null(dim(item))) #item is 1D use length
+            if (ncol(dgeObj) > 0 & ncol(dgeObj) != length(item))
+                stop('Rows in new col object must match col dimension of DGEobj object')
+        else if (ncol(dgeObj) > 0 & ncol(dgeObj) != nrow(item))
+            stop('Rows in new col object must match col dimension of DGEobj object')
+    }
+
+
     result <- FALSE
-    switch(.type[[itemType]],
-           "row" = {
-               if (dim(dgeResult)[1] > 0 & dim(dgeResult)[1] != nrow(item))
-                   stop('New row object does not match row dimension of DGEresult object')
-           },
-
-           "col" = {
-               if (dim(dgeResult)[2] > 0 & dim(dgeResult)[2] != nrow(item))
-                   stop('Rows in new col object does not match col dimension of DGEresult object')
-           },
-
+    switch(.DGEobjDef$type[[itemType]],
+           "row" = testrow(dgeObj, item),
+           "col" = testcol(dgsObj, item),
            "assay" = {
-               if (nrow(dgeResult) > 0 & nrow(dgeResult) != nrow(item))
-                   stop('New assay object does not match row dimension of DGEresult object')
-               if (ncol(dgeResult) >0 & ncol(dgeResult) != ncol(item))
-                   stop('New assay object does not match col dimension of DGEresult object')
+               testrow(dgeObj, item)
+               testcol(dgeObj, item)
            }
 
     ) #end switch

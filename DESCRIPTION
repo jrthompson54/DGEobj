@@ -1,4 +1,4 @@
-Package: DGEresult
+Package: DGEobj
 Type: Package
 Title: DGEresult rovides a S3 data class to manage and annotate DGE analysis results.
 Version: 0.1.0
@@ -16,18 +16,18 @@ Imports:
     dplyr (>= 0.4.3),
     magrittr (>= 1.5)   
 Collate:
-    'DGEresult.R'
+    'DGEobj.R'
     'addItem.R'
     'rmItem.R'
-    'dim.R'
     'dimensionMatch.R'
     'getBaseType.R'
     'getItem.R'
     'getType.R'
+    'dim.R'
     'newType.R'
     'showTypes.R'
     'print.R'
     'itemNames.R'
-    'colnames.R'
-    'rownames.R'
+    'dimnames.R'
+    'updateDGEobjDef.R'
 RoxygenNote: 5.0.1
