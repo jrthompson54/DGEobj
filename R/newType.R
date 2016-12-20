@@ -6,23 +6,18 @@
 #                   class(dgeResult),
 #                   "and can only be used on class DGEresult"))
 # }
-newType <- function(itemType, baseType, uniqueItem=FALSE,
-                    DGEobjDef = .DGEobjDef){
+newType <- function(dgeObj, itemType, baseType, uniqueItem=FALSE){
     #Set uniqueItem to TRUE to allow only one instance of itemType
     result <- FALSE
-    if (missing(itemType) | missing(baseType))
-        stop("Both itemType and baseType arguments are required")
-    #check basetype
-    if (!baseType %in% DGEobjDef$basetype)
-        stop ("Basetype must be one of: row, col, assay, meta")
-    #does type already exist?
-    if (itemType %in% names(DGEobjDef$type))
-        stop(paste("Type [", itemType, "] already exists", sep=""))
+    assert_that(!missing(dgeObj), !missing(itemType),
+                !missing(baseType), class(dgeObj) == "DGEobj",
+                baseType %in% dgeObj$objDef$basetype
+    )
 
     #define new type
-    DGEobjDef$type[itemType] <- baseType
+    dgeObj$objDef$type[itemType] <- baseType
     if (uniqueItem == TRUE)
-        DGEobjDef$uniqueType <- c(DGEobjDef$uniqueType, itemType)
+        dgeObj$objDef$uniqueType <- c(dgeObj$objDef$uniqueType, itemType)
 
-    return(DGEobjDef)
+    return(dgeObj)
 }

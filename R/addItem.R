@@ -14,12 +14,12 @@ addItem <- function(dgeObj, item, itemName, itemType,
         stop ("item is missing rownames!")
 
     #enforce itemType
-    if (!itemType %in% names(.DGEobjDef$type))
+    if (!itemType %in% names(dgeObj$objDef$type))
         stop(paste("itemType must be one of: ",
-                   paste(names(.DGEobjDef$type), collapse=", "), sep=""))
+                   paste(names(dgeObj$objDef$type), collapse=", "), sep=""))
 
     #check for disallowed second instance of uniqueTypes (unless overwrite mode)
-    if(itemType %in% .DGEobjDef$uniqueType  &
+    if(itemType %in% dgeObj$objDef$uniqueType  &
        itemType %in% dgeObj$type &
        overwrite==FALSE)
         stop (paste( "Only one instance of type ", itemType, " allowed.",
@@ -39,7 +39,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
             # print("Adding Item")
             dgeObj$data[[itemName]] <- item
             dgeObj$type[[itemName]] <- itemType
-            dgeObj$basetype[[itemName]] <- .DGEobjDef$type[[itemType]]
+            dgeObj$basetype[[itemName]] <- dgeObj$objDef$type[[itemType]]
             dgeObj$dateCreated[[itemName]] <- lubridate::now()
             dgeObj$funArgs[[itemName]] <- funArgs
     }

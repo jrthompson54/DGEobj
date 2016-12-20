@@ -25,7 +25,7 @@
 
 
     result <- FALSE
-    switch(.DGEobjDef$type[[itemType]],
+    switch(dgeObj$objDef$type[[itemType]],
            "row" = testrow(dgeObj, item),
            "col" = testcol(dgsObj, item),
            "assay" = {

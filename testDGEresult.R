@@ -3,13 +3,16 @@ RSE <- readRDS("RSE.RDS")
 library(magrittr)
 library(SummarizedExperiment)
 library(DGEobj)
-d <- DGEobj()
-d %<>% addItem(assay(RSE, "Counts"), "counts", "counts")
-geneanno <- mcols(RSE)
-rownames(geneanno) <- geneanno$ID
-d %<>% addItem(geneanno, "GeneInfo", "geneAnno")
-d %<>% addItem(colData(RSE), "Design", "design")
-d %<>% addItem(geneanno, "contrastTest", "topTable")
+library(assertthat)
+
+MyCounts <- assay(RSE, "Counts")
+MyGeneAnno <- mcols(RSE)
+rownames(MyGeneAnno) <- MyGeneAnno$ID
+Design <- colData(RSE)
+
+d <- initDGEobj(MyCounts, Design, MyGeneAnno, "geneDat")
+
+d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
 dim(d)
 
@@ -18,10 +21,10 @@ d %<>% rmItem("contrastTest")
 print(d)
 
 d %<>% addItem(colData(RSE), "Design", "design")
-d %<>% addItem(geneanno, "contrastTest", "topTable")
+d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
 #test trap for overwriting item
-d %<>% addItem(colData(RSE), "Design", "col")
+d %<>% addItem(colData(RSE), "Design", "design")
 print(d)
 
 #test trap for adding 2nd instance of unique item
@@ -40,15 +43,15 @@ dim(d)
 d %<>% rmItem("xxx")
 dim(d)
 print(d)
-d %<>% addItem(assay(RSE, "Counts"), "counts", "assay")
+d %<>% addItem(assay(RSE, "Counts"), "counts", "counts")
 d %<>% addItem(colData(RSE), "Design", "col")
-d %<>% addItem(geneanno, "geneAnnotation", "geneAnno")
-d %<>% addItem(geneanno, "contrastTest", "topTable")
+d %<>% addItem(MyGeneAnno, "geneAnnotation", "geneDat")
+d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
 
 print(d, verbose=T)
 
-showTypes()
+showTypes(d)
 
 myAnnotation <- getItem(d, "Design")
 myCounts <- getItem(d, "counts")
@@ -65,15 +68,13 @@ Items <- getType(d, c("assay", "counts", "design"))
 Items <- getBaseType(d, "assay")
 Items <- getItem (d, "counts")
 
-newDGEobjDef <- newType("TPM", "assay", uniqueItem = TRUE)
-showTypes(newDGEobjDef)
-showTypes()
+d <- newType(d, "TPM", "assay", uniqueItem = TRUE)
+showTypes(d)
 
-newDGEobjDef <- newType("FPKM", "assay", uniqueItem = TRUE, DGEobjDef = newDGEobjDef)
-showTypes()
-showTypes(newDGEobjDef)
-.DGEobjDef <- newDGEobjDef
-showTypes()
+d <- newType(d, "FPKM", "assay", uniqueItem = TRUE)
+
+showTypes(d)
+
 #can't get new types into the .DGEobjDef object definition
 
 #Function List

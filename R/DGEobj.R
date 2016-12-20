@@ -20,20 +20,23 @@
               meta ="meta",
               counts ="assay",
               design ="col",
-              geneAnno ="row",
-              transcriptAnno = "row",
+              geneDat ="row",
+              isoformDat = "row",
+              exonDat = "row",
               topTable = "row",
               topTreat ="meta",
               fit = "row",
-              DGEList = "row",
-              designMatrix = "col"
+              designMatrix = "col",
+              geneList = "meta",
+              pathway = "meta"
               ),
 
 # These Types can only have one instance in a DGEresult
     uniqueType = c("counts",
                 "design",
-                "geneAnno",
-                "transcriptAnno")
+                "geneDat",
+                "isoformDat",
+                "exonDat")
 )
 # Uncomment this block when you need to update the .rda files
 # x = getwd()
@@ -51,15 +54,20 @@
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq
 #'
-#' @param data A parcel of data to be added to the DGEresult object.
-#' @param dataName  A unique name for the data parcel
-#' @param dataType A data type identifier. See .DGEobj$type
+#' @param
+#' @param counts A count matrix or dataframe with row and colnames.
+#' @param rowDat  Gene, isoform or exon level annotation. rownames must match
+#'    rownames in count matrix.
+#' @param colDat A dataframe describing the experiment design.  Rownames much match
+#'  colnames(counts).
+#' @param DGEobjDef An object definition. Defaults to the global DGE object definition
+#'     (.DGEobjDef).
 #'
 #' @return A DGEresult object
 #'
 #' @examples
 #'    # init an empty DGEresult object
-#'    myDGEresult <- DGEresult()
+#'    myDGEresult <- initDGEobj()
 #'    # init and add the first data object.
 #'    myDGEresult <- DGEresult(data = mycounts,
 #'                    dataName = "counts",
@@ -67,25 +75,62 @@
 #'
 #' @export
 ### # Constructor function for the class
-DGEobj <- function(data, dataName, dataType) {
+initDGEobj <- function(counts, colDat, rowDat,
+                       rowDatType="geneDat",
+                       DGEobjDef=.DGEobjDef) {
+    assert_that(!missing(counts),
+                !missing(colDat),
+                !missing(rowDat),
+                !missing(rowDatType))
+    assert_that(is.matrix(counts) | is.data.frame(counts))
+    assert_that (rowDatType %in% names(DGEobjDef$type))
+    assert_that (!is.null(rownames(counts)), !is.null(rownames(rowDat)))
 
-    #initialize an empty DGEresult and optionally add the first item
+    #initialize an empty DGEobj and load require items
     dgeObj <- list()
     dgeObj$data <- list()
     dgeObj$type <- list()
     dgeObj$basetype <- list()
     dgeObj$dateCreated <- list()
     dgeObj$funArgs <- list()
-    dgeObj$objDef <- .DGEobj
+    dgeObj$objDef <- DGEobjDef
     class(dgeObj) <- "DGEobj"
 
-    #optionally load the first item into dgeObj
-    if (!missing(data) & !missing(dataName) & !missing(dataType))
-        dgeObj <- addItem.DGEresult(dgeObj, data, dataName, dataType)
+    dgeObj <- addItem(dgeObj, counts, "counts", "counts")
+    dgeObj <- addItem(dgeObj, colDat, "Design", "design")
+    switch(rowDatType,
+           "geneDat" = {
+               dgeObj <- addItem(dgeObj, rowDat, "geneDat", "geneDat")},
+           "isoformDat" = {
+               dgeObj <- addItem(dgeObj, rowDat, "isoformDat", "isoformDat")},
+           "exonDat" = {
+               dgeObj <- addItem(dgeObj, rowDat, "exonDat", "exonDat")}
+    )
+
+    attr(dgeObj, "Dim") <- c(nrow(counts), ncol(counts))
 
     return (dgeObj)
 }
 
+
+# DGEobj <- function(data, dataName, dataType) {
+#
+#     #initialize an empty DGEresult and optionally add the first item
+#     dgeObj <- list()
+#     dgeObj$data <- list()
+#     dgeObj$type <- list()
+#     dgeObj$basetype <- list()
+#     dgeObj$dateCreated <- list()
+#     dgeObj$funArgs <- list()
+#     dgeObj$objDef <- .DGEobj
+#     class(dgeObj) <- "DGEobj"
+#
+#     #optionally load the first item into dgeObj
+#     if (!missing(data) & !missing(dataName) & !missing(dataType))
+#         dgeObj <- addItem.DGEresult(dgeObj, data, dataName, dataType)
+#
+#     return (dgeObj)
+# }
     #x is a list ot POSIXct datetimes
     #names(unclass(y))
     # [1] "sec"    "min"    "hour"   "mday"   "mon"    "year"   "wday"   "yday"   "isdst"  "zone"   "gmtoff"

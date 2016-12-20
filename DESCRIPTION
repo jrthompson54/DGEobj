@@ -29,5 +29,4 @@ Collate:
     'print.R'
     'itemNames.R'
     'dimnames.R'
-    'updateDGEobjDef.R'
 RoxygenNote: 5.0.1
