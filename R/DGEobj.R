@@ -96,15 +96,20 @@ initDGEobj <- function(counts, colDat, rowDat,
     dgeObj$objDef <- DGEobjDef
     class(dgeObj) <- "DGEobj"
 
-    dgeObj <- addItem(dgeObj, counts, "counts", "counts")
-    dgeObj <- addItem(dgeObj, colDat, "Design", "design")
+    dgeObj <- addItem(dgeObj, counts, "counts", "counts",
+                      funArgs = match.call())
+    dgeObj <- addItem(dgeObj, colDat, "Design", "design",
+                      funArgs = match.call())
     switch(rowDatType,
            "geneDat" = {
-               dgeObj <- addItem(dgeObj, rowDat, "geneDat", "geneDat")},
+               dgeObj <- addItem(dgeObj, rowDat, "geneDat", "geneDat",
+                                 funArgs = match.call())},
            "isoformDat" = {
-               dgeObj <- addItem(dgeObj, rowDat, "isoformDat", "isoformDat")},
+               dgeObj <- addItem(dgeObj, rowDat, "isoformDat", "isoformDat",
+                                 funArgs = match.call())},
            "exonDat" = {
-               dgeObj <- addItem(dgeObj, rowDat, "exonDat", "exonDat")}
+               dgeObj <- addItem(dgeObj, rowDat, "exonDat", "exonDat",
+                                 funArgs = match.call())}
     )
 
     attr(dgeObj, "Dim") <- c(nrow(counts), ncol(counts))

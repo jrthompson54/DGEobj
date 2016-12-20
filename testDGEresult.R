@@ -15,6 +15,7 @@ d <- initDGEobj(MyCounts, Design, MyGeneAnno, "geneDat")
 d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
 dim(d)
+print(d, verbose=T)
 
 d %<>% rmItem("Design")
 d %<>% rmItem("contrastTest")
@@ -75,7 +76,6 @@ d <- newType(d, "FPKM", "assay", uniqueItem = TRUE)
 
 showTypes(d)
 
-#can't get new types into the .DGEobjDef object definition
 
 #Function List
 # addItem.R
