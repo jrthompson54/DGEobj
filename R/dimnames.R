@@ -1,46 +1,43 @@
 #' @export
-#colnames, rownames: point these functions to the row and col annotation of assays
-dimnames.DGEobj <- function(dgeObj){
-    #return  list(rownames=rnames, colnames=cnames)
+dimnames.DGEobj <- function(dgeObj)
+    return(attr(dgeObj, "assayDimnames"))
 
-    #get row names
-    idx <- dgeObj$basetype == "assay"
-    if (sum(idx) > 0)
-        rnames <-rownames(dgeObj$data[idx][[1]])
-    else { #check row objects
-        idx <- dgeObj$basetype == "row"
-        if (sum(idx) > 0)
-            rnames <- rownames(dgeObj$data[idx][[1]])
-        else #no col data yet
-            rnames <- as.character()
-    }
-
-    #Get col names
-    idx <- dgeObj$basetype == "assay"
-    if (sum(idx) > 0)
-        cnames <- colnames(dgeObj$data[idx][[1]])
-    else { #check assays
-        idx <- dgeObj$basetype == "col"
-        if (sum(idx) > 0)
-            cnames <- rownames(dgeObj$data[idx][[1]])
-        else #no col data yet
-            cnames <- as.character()
-    }
-
-    return(list(rownames=rnames, colnames=cnames))
-} #dimnames.DGEobj
+#dimnames.DGEobj
+# dimnames.DGEobj <- function(dgeObj){
+#     #return  list(rownames=rnames, colnames=cnames)
+#
+#     #get row names
+#     idx <- dgeObj$basetype == "assay"
+#     if (sum(idx) > 0)
+#         rnames <-rownames(dgeObj$data[idx][[1]])
+#     else { #check row objects
+#         idx <- dgeObj$basetype == "row"
+#         if (sum(idx) > 0)
+#             rnames <- rownames(dgeObj$data[idx][[1]])
+#         else #no col data yet
+#             rnames <- as.character()
+#     }
+#
+#     #Get col names
+#     idx <- dgeObj$basetype == "assay"
+#     if (sum(idx) > 0)
+#         cnames <- colnames(dgeObj$data[idx][[1]])
+#     else { #check assays
+#         idx <- dgeObj$basetype == "col"
+#         if (sum(idx) > 0)
+#             cnames <- rownames(dgeObj$data[idx][[1]])
+#         else #no col data yet
+#             cnames <- as.character()
+#     }
+#
+#     return(list(rownames=rnames, colnames=cnames))
+# } #dimnames.DGEobj
 
 .updateRowNames <- function(dgeObj, rnames){
     #update rownames where appropriate
 
-    #get names of row basetypes
-    idx <- names(dgeObj$data[dgeObj$basetype == "row"])
-    if (length(idx) > 0)
-        for (n in idx) {
-            rownames(dgeObj$data[[n]]) <- rnames
-        }
-    #get names of assay basetypes
-    idx <- names(dgeObj$data[dgeObj$basetype == "assay"])
+    #get names of row and assay asetypes
+    idx <- names(dgeObj$data[dgeObj$basetype %in% c("row", "assay")])
     if (length(idx) > 0)
         for (n in idx) {
             rownames(dgeObj$data[[n]]) <- rnames
@@ -50,11 +47,11 @@ dimnames.DGEobj <- function(dgeObj){
 .updateColNames <- function(dgeObj, cnames){
     #update rownames where appropriate
 
-    #get names of row basetypes
+    #get names of col basetypes
     idx <- names(dgeObj$data[dgeObj$basetype == "col"])
     if (length(idx) > 0)
         for (n in idx) {
-            colnames(dgeObj$data[[n]]) <- cnames
+            rownames(dgeObj$data[[n]]) <- cnames
         }
     #get names of assay basetypes
     idx <- names(dgeObj$data[dgeObj$basetype == "assay"])

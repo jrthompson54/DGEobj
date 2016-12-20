@@ -15,4 +15,3 @@ install_git("http://biogit.pri.bms.com/thompj27/DGEresult", repos=BiocInstaller:
 
 #for dev
 install_git("http://biogit.pri.bms.com/thompj27/DGE.Tools", branch="dev", repos=BiocInstaller::biocinstallRepos())
-

@@ -29,4 +29,5 @@ Collate:
     'print.R'
     'itemNames.R'
     'dimnames.R'
+    'as.list.R'
 RoxygenNote: 5.0.1

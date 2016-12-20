@@ -10,10 +10,11 @@ MyGeneAnno <- mcols(RSE)
 rownames(MyGeneAnno) <- MyGeneAnno$ID
 Design <- colData(RSE)
 
-d <- initDGEobj(MyCounts, Design, MyGeneAnno, "geneDat")
+d <- initDGEobj(MyCounts, Design, MyGeneAnno, "gene")
 
 d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
+
 dim(d)
 print(d, verbose=T)
 
@@ -46,7 +47,7 @@ dim(d)
 print(d)
 d %<>% addItem(assay(RSE, "Counts"), "counts", "counts")
 d %<>% addItem(colData(RSE), "Design", "col")
-d %<>% addItem(MyGeneAnno, "geneAnnotation", "geneDat")
+d %<>% addItem(MyGeneAnno, "geneAnnotation", "geneData")
 d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
 
@@ -62,20 +63,25 @@ colnames(d)
 rownames(d)
 
 
-d %<>% addItem(assay(RSE, "Counts"), "TPM", "assay")
+d %<>% addItem(assay(RSE, "Counts"), "TPM", "TPM")
 
 Items <- getType(d, "counts")
 Items <- getType(d, c("assay", "counts", "design"))
 Items <- getBaseType(d, "assay")
 Items <- getItem (d, "counts")
 
-d <- newType(d, "TPM", "assay", uniqueItem = TRUE)
+d <- newType(d, "LogTPM", "assay", uniqueItem = TRUE)
 showTypes(d)
 
-d <- newType(d, "FPKM", "assay", uniqueItem = TRUE)
+head(rownames(d))
+head(colnames(d))
+nrow(d)
+ncol(d)
 
-showTypes(d)
-
+# test renameing dimnames
+shortcolnames <- Design$Barcode
+lcgenenames <- tolower(rownames(counts))
+dimnames(d) <- list(lcgenenames, shortcolnames)
 
 #Function List
 # addItem.R

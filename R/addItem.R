@@ -23,12 +23,15 @@ addItem <- function(dgeObj, item, itemName, itemType,
        itemType %in% dgeObj$type &
        overwrite==FALSE)
         stop (paste( "Only one instance of type ", itemType, " allowed.",
-                     " Use a base type instead (row, col, assay, meta)",
-                     sep=""))
+                     " Use a base type instead (row, col, assay, meta),",
+                     " or define a new type.", sep=""))
 
     #convert call objects to text
     if (class(funArgs) == "call")
-        funArgs <- paste(funArgs, collapse=" ")
+        # funArgs <- paste(funArgs, collapse="; ")
+        funArgs <- paste(funArgs[[1]], "(",
+                        paste(funArgs[2:length(funArgs)], collapse=", "),
+                        ")", sep="")
 
     #refuse to add if itemName exists already unless overwrite = T
     if (overwrite==FALSE & itemName %in% names(dgeObj$data))

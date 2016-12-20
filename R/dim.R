@@ -7,7 +7,7 @@
 #                   "and can only be used on class DGEresult"))
 # }
 dim.DGEobj <- function(dgeObj)
-    attr(d, "Dim")
+    attr(d, "assayDim")
 
 
 # dim.DGEobj <- function(dgeObj){

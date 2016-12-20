@@ -2,37 +2,42 @@
 % Please edit documentation in R/DGEobj.R
 \name{initDGEobj}
 \alias{initDGEobj}
-\title{Function DGEobj}
+\title{Function initDGEobj}
 \usage{
-initDGEobj(counts, colDat, rowDat, rowDatType = "geneDat",
-  DGEobjDef = .DGEobjDef)
+initDGEobj(counts, colData, rowData, level, DGEobjDef = .DGEobjDef,
+  customAttr)
 }
 \arguments{
 \item{counts}{A count matrix or dataframe with row and colnames.}
 
-\item{colDat}{A dataframe describing the experiment design.  Rownames much match
+\item{colData}{A dataframe describing the experiment design.  Rownames much match
 colnames(counts).}
 
-\item{rowDat}{Gene, isoform or exon level annotation. rownames must match
+\item{rowData}{Gene, isoform or exon level annotation. rownames must match
 rownames in count matrix.}
 
 \item{DGEobjDef}{An object definition. Defaults to the global DGE object definition
-(.DGEobjDef).}
+(.DGEobjDef) and you usually shouldn't change this.}
+
+\item{customAttr}{An optional (but highly recommended) named list of attributes
+to assign to the DGEobj.}
 }
 \value{
-A DGEresult object
+A DGEobj object
 }
 \description{
 Initializes an empty DGEobj.  Optionally, add
 the first data element.
 }
 \examples{
-   # init an empty DGEresult object
-   myDGEresult <- initDGEobj()
-   # init and add the first data object.
-   myDGEresult <- DGEresult(data = mycounts,
-                   dataName = "counts",
-                   dataType = "assay")
+   # initialize a DGEobj
+   myDGEresult <- DGEresult(counts = MyCounts,
+                            rowData = MyGeneAnnotation,
+                            colData = MyDesign,
+                            level = "gene",
+                            customAttr = list (PID = "20161025-0001",
+                                               XpressID = "12345")
+                           )
 
 }
 \author{
