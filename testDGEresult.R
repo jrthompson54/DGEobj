@@ -6,25 +6,27 @@ library(DGEobj)
 library(assertthat)
 
 MyCounts <- assay(RSE, "Counts")
+attr(MyCounts, "Algorithm") <- "RSEM"
 MyGeneAnno <- mcols(RSE)
 rownames(MyGeneAnno) <- MyGeneAnno$ID
 Design <- colData(RSE)
 
 d <- initDGEobj(MyCounts, Design, MyGeneAnno, "gene")
+MyContrast <- MyGeneAnno
+attr(MyContrast, "PValue") = 1
+d %<>% addItem(MyGeneAnno, "contrastTest", "topTable", overwrite = T)
 
-d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
 
 dim(d)
 print(d, verbose=T)
 
 d %<>% rmItem("Design")
-d %<>% rmItem("contrastTest")
 print(d)
 
 d %<>% addItem(colData(RSE), "Design", "design")
-d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
+
 #test trap for overwriting item
 d %<>% addItem(colData(RSE), "Design", "design")
 print(d)
@@ -36,11 +38,6 @@ d %<>% addItem(assay(RSE, "Counts"), "Morecounts", "counts")
 d %<>% addItem(colData(RSE), "Design", "design", overwrite=T)
 print(d)
 
-dim(d)
-#test rmItem
-d %<>% rmItem("contrastTest")
-print(d)
-dim(d)
 #try to remove a nonexistent item
 d %<>% rmItem("xxx")
 dim(d)
@@ -48,12 +45,15 @@ print(d)
 d %<>% addItem(assay(RSE, "Counts"), "counts", "counts")
 d %<>% addItem(colData(RSE), "Design", "col")
 d %<>% addItem(MyGeneAnno, "geneAnnotation", "geneData")
-d %<>% addItem(MyGeneAnno, "contrastTest", "topTable")
 print(d)
 
 print(d, verbose=T)
 
 showTypes(d)
+
+attributes(d)
+
+length(d)
 
 myAnnotation <- getItem(d, "Design")
 myCounts <- getItem(d, "counts")

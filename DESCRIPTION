@@ -30,4 +30,6 @@ Collate:
     'itemNames.R'
     'dimnames.R'
     'as.list.R'
+    'length.R'
+    'attributes.R'
 RoxygenNote: 5.0.1

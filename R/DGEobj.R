@@ -171,6 +171,7 @@ initDGEobj <- function(counts, colData, rowData, #required
     attr(dgeObj, "assayDim") <- c(nrow(counts), ncol(counts))
     attr(dgeObj, "assayDimnames") <- list(rownames=rownames(counts),
                                      colnames=colnames(counts))
+
     if (!missing(customAttr))
         for (i in 1:length(customAttr))
             attr(dgeObj, names(customAttr[i])) <- customAttr[[i]]
