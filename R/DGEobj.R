@@ -138,12 +138,19 @@ initDGEobj <- function(counts, colData, rowData, #required
     #initialize an empty DGEobj
     dgeObj <- list()
     dgeObj$data <- list()
-    dgeObj$type <- list()
-    dgeObj$basetype <- list()
-    dgeObj$dateCreated <- list()
-    dgeObj$funArgs <- list()
-    dgeObj$objDef <- DGEobjDef
     class(dgeObj) <- "DGEobj"
+
+    attr(dgeObj, "type") <- list()
+    attr(dgeObj, "basetype") <- list()
+    attr(dgeObj, "dateCreated") <- list()
+    attr(dgeObj, "funArgs") <- list()
+    attr(dgeObj, "objDef") <- DGEobjDef
+
+    # dgeObj$type <- list()
+    # dgeObj$basetype <- list()
+    # dgeObj$dateCreated <- list()
+    # dgeObj$funArgs <- list()
+    # dgeObj$objDef <- DGEobjDef
 
     #load required items
     dgeObj <- addItem(dgeObj, counts, "counts", "counts",

@@ -5,12 +5,12 @@ getBaseType <- function(dgeObj, baseType){
     if (missing(baseType))
         stop("baseType argument is required")
 
-    if (!baseType %in% dgeObj$objDef$basetype)
+    if (!baseType %in% attr(dgeObj, "objDef")$basetype)
         stop(paste("baseType must be one of: ",
-                paste(dgeObj$objDef$basetype, collapse=", "),
+                paste(attr(dgeObj, "objDef")$basetype, collapse=", "),
                 sep=""))
 
-    idx <- dgeObj$basetype %in% baseType
+    idx <- attr(dgeObj, "basetype") %in% baseType
 
     if (sum(idx) < length(baseType))
         warning("Some baseTypes were not found")

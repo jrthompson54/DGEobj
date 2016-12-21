@@ -22,18 +22,16 @@
 print.DGEobj <- function(dgeObj, verbose=FALSE, pretty=TRUE, ...)  {
 
     ItemNames <- itemNames(dgeObj)
-    ItemTypes <- dgeObj$type
-    baseTypes <- dgeObj$basetype
-    creationDates <- lapply(d$dateCreated, strftime)
-    funArgs <- dgeObj$funArgs
+    ItemTypes <- attr(dgeObj, "type")  #dgeObj$type
+    baseTypes <- attr(dgeObj, "basetype") #dgeObj$basetype
+    creationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
+    funArgs <- attr(dgeObj, "funArgs")  #dgeObj$funArgs
 
     df <- data.frame(cbind(ItemName=ItemNames, ItemType=ItemTypes,
                            BaseType=baseTypes, DateCreated=creationDates),
                      row.names=NULL)
     if (verbose==TRUE)
         df$funArgs <- unlist(funArgs)
-
-    #print(knitr::kable(df, row.names=FALSE))
 
     cat(paste("\nDimension: [", dim(dgeObj)[1], ", ", dim(dgeObj)[2], "]", sep=""))
     cat("")

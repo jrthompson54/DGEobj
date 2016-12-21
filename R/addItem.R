@@ -5,22 +5,27 @@
 addItem <- function(dgeObj, item, itemName, itemType,
                               overwrite=FALSE, funArgs=match.call()
                               ){
-
-    if (missing(item) | missing(itemName) | missing(itemType))
-        stop("All Three of item, itemName, itemType are required")
-
-    #item must have rownames
-    if (is.null(rownames(item)))
-        stop ("item is missing rownames!")
+    assert_that(!missing(dgeObj),
+                !missing(item),
+                !missing(itemName),
+                !missing(itemType),
+                !is.null(rownames(item))
+    )
 
     #enforce itemType
-    if (!itemType %in% names(dgeObj$objDef$type))
+    types <- names(attr(dgeObj, "objDef")$type)
+    if (!itemType %in% types)
         stop(paste("itemType must be one of: ",
-                   paste(names(dgeObj$objDef$type), collapse=", "), sep=""))
+                   paste(types, collapse=", "), sep=""))
+
+    #refuse to add if itemName exists already unless overwrite = T
+    if (overwrite==FALSE & itemName %in% names(dgeObj$data))
+        stop('itemName already exists in DGEobj!')
 
     #check for disallowed second instance of uniqueTypes (unless overwrite mode)
-    if(itemType %in% dgeObj$objDef$uniqueType  &
-       itemType %in% dgeObj$type &
+    uniqueTypes <- attr(dgeObj, "objDef")$uniqueType
+    if(itemType %in% uniqueTypes  &
+       itemType %in% attr(dgeObj, "type") &
        overwrite==FALSE)
         stop (paste( "Only one instance of type ", itemType, " allowed.",
                      " Use a base type instead (row, col, assay, meta),",
@@ -33,23 +38,26 @@ addItem <- function(dgeObj, item, itemName, itemType,
                         paste(funArgs[2:length(funArgs)], collapse=", "),
                         ")", sep="")
 
-    #refuse to add if itemName exists already unless overwrite = T
-    if (overwrite==FALSE & itemName %in% names(dgeObj$data))
-        stop('itemName already exists in DGEobj!')
     #confirm dimensions consistent before adding
-    else if (.dimensionMatch(dgeObj, item, itemType) == TRUE){
+    if (.dimensionMatch(dgeObj, item, itemType) == FALSE)
+        stop("item doesn't match dimension of dgeObj")
 
-            # print("Adding Item")
-            dgeObj$data[[itemName]] <- item
-            dgeObj$type[[itemName]] <- itemType
-            dgeObj$basetype[[itemName]] <- dgeObj$objDef$type[[itemType]]
-            dgeObj$dateCreated[[itemName]] <- lubridate::now()
-            dgeObj$funArgs[[itemName]] <- funArgs
-    }
+    #ready to add the item
+    # print("Adding Item")
+    dgeObj$data[[itemName]] <- item
+    # dgeObj$type[[itemName]] <- itemType
+    #
+    # add the type attribute to a named list
+    attr(dgeObj, "type")[[itemName]] <- itemType
 
-    if (is.null(rownames(item)))
-        warning ("No rownames assigned")
+    #dgeObj$basetype[[itemName]] <- dgeObj$objDef$type[[itemType]]
+    attr(dgeObj, "basetype")[[itemName]] <- attr(dgeObj, "objDef")$type[[itemType]]
+
+    #dgeObj$dateCreated[[itemName]] <- lubridate::now()
+    attr(dgeObj, "dateCreated")[[itemName]] <- lubridate::now()
+
+    #dgeObj$funArgs[[itemName]] <- funArgs
+    attr(dgeObj, "funArgs")[[itemName]] <- funArgs
 
     return(dgeObj)
-}
-#addItem
+} #addItem

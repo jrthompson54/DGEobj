@@ -25,7 +25,8 @@
 
 
     result <- FALSE
-    switch(dgeObj$objDef$type[[itemType]],
+    switch(#get the basetype
+           attr(dgeObj, "objDef")$type[[itemType]],
            "row" = testrow(dgeObj, item),
            "col" = testcol(dgsObj, item),
            "assay" = {

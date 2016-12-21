@@ -11,13 +11,13 @@ newType <- function(dgeObj, itemType, baseType, uniqueItem=FALSE){
     result <- FALSE
     assert_that(!missing(dgeObj), !missing(itemType),
                 !missing(baseType), class(dgeObj) == "DGEobj",
-                baseType %in% dgeObj$objDef$basetype
+                baseType %in% attr(dgeObj, "objDef")$basetype
     )
 
     #define new type
     dgeObj$objDef$type[itemType] <- baseType
     if (uniqueItem == TRUE)
-        dgeObj$objDef$uniqueType <- c(dgeObj$objDef$uniqueType, itemType)
+        attr(dgeObj, "objDef")$uniqueType <- c(attr(dgeObj, "objDef")$uniqueType, itemType)
 
     return(dgeObj)
 }

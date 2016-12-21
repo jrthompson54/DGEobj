@@ -25,8 +25,6 @@ d %<>% rmItem("Design")
 print(d)
 
 d %<>% addItem(colData(RSE), "Design", "design")
-print(d)
-
 #test trap for overwriting item
 d %<>% addItem(colData(RSE), "Design", "design")
 print(d)
@@ -40,11 +38,7 @@ print(d)
 
 #try to remove a nonexistent item
 d %<>% rmItem("xxx")
-dim(d)
-print(d)
-d %<>% addItem(assay(RSE, "Counts"), "counts", "counts")
-d %<>% addItem(colData(RSE), "Design", "col")
-d %<>% addItem(MyGeneAnno, "geneAnnotation", "geneData")
+
 print(d)
 
 print(d, verbose=T)
@@ -62,7 +56,6 @@ print(d)
 colnames(d)
 rownames(d)
 
-
 d %<>% addItem(assay(RSE, "Counts"), "TPM", "TPM")
 
 Items <- getType(d, "counts")
@@ -70,6 +63,7 @@ Items <- getType(d, c("assay", "counts", "design"))
 Items <- getBaseType(d, "assay")
 Items <- getItem (d, "counts")
 
+showTypes(d)
 d <- newType(d, "LogTPM", "assay", uniqueItem = TRUE)
 showTypes(d)
 
@@ -81,7 +75,7 @@ ncol(d)
 # test renameing dimnames
 shortcolnames <- Design$Barcode
 lcgenenames <- tolower(rownames(counts))
-dimnames(d) <- list(lcgenenames, shortcolnames)
+dimnames(d) <- list(lcgenenames, shortcolnames) #dimnames assignment doesn't work
 
 #Function List
 # addItem.R
