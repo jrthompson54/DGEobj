@@ -1,11 +1,21 @@
+### Function as.list.DGEobj ###
+#' Function as.list.DGEobj
+#'
+#' Casts a DGEobj class object as a simple list.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#'
+#' @return A simple list version of the DGEobj
+#'
+#' @examples
+#'    MyDGElist <- as.list(dgeObj)
+#'
+#' @import magrittr assertthat lubridate
+#'
 #' @export
-## as.list
-# as.list <- function(x, ...) UseMethod("as.list")
-# as.list.default <- function(dgeResult, ...) {
-#     warning(paste("as.list does not know how to handle object of class ",
-#                   class(dgeResult),
-#                   "and can only be used on class DGEresult"))
-# }
 as.list.DGEobj <- function(dgeObj){
     #Set uniqueItem to TRUE to allow only one instance of itemType
     unclass(dgeObj)

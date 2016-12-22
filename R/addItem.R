@@ -1,6 +1,34 @@
-### addItem
-### items must have row and column names
-###
+### Function addItem ###
+#' Function addItem (DGEobj)
+#'
+#' Add a data item to a class DGEobj
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#' @param item  Required. The data item to be deposited in the DGEobj
+#' @param itemName Required.  A user assigned name for this data item
+#' @param itemType Required.  A type attribute.  See showTypes to see the
+#'     pre-defined types. Types are extensible with the newType function.
+#' @param overwrite Default = FALSE.  Set to TRUE to overwrite the data object
+#'     stored in the itemName slot
+#' @param funArgs A text field to annotate how the data object was created.
+#'    If you pass the result of match.call() as this argument, it captures the
+#'    name and arguments used in the current function.
+#'
+#' @return A DGEobj class object with a new item added.
+#'
+#' @examples
+#'    myFunArgs <- match.call() #capture calling function and arguments
+#'    showTypes()  #See what predefined types are available
+#'    myDgeObj <- addItem(myDgeObj, item = MyCounts,
+#'                                  itemName = "counts",
+#'                                  itemType = "counts",
+#'                                  funArgs = myFunArgs)
+#'
+#' @import magrittr assertthat lubridate
+#'
 #' @export
 addItem <- function(dgeObj, item, itemName, itemType,
                               overwrite=FALSE, funArgs=match.call()

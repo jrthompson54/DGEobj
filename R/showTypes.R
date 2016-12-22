@@ -1,5 +1,23 @@
+### Function as.list ###
+#' Function as.list
+#'
+#' Casts a DGEobj class object as a simple list.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#' @param pretty TRUE value (the default) invokes knitr::kable to print a
+#'    nicely formatted table
+#'
+#' @return Prints a list of defined "types"
+#'
+#' @examples
+#'    showTypes(MyDgeObj)
+#'
+#' @import magrittr assertthat dplyr knitr
+#'
 #' @export
-### showTypes
 showTypes <- function(dgeObj, pretty=TRUE){
 
     assert_that(class(dgeObj) == "DGEobj")

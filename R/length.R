@@ -1,3 +1,18 @@
+### Function length.DGEobj ###
+#' Function length.DGEobj
+#'
+#' Returns the number of data items in a DGEobj.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#'
+#' @return integer
+#'
+#' @examples
+#'    Mylen <- length(dgeObj)
+#'
 #' @export
 ### length.DGEobj
 length.DGEobj <- function(dgeObj)

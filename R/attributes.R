@@ -1,3 +1,20 @@
+### Function showAttributes ###
+#' Function showAttributes
+#'
+#' Prints the attributes associated with a DEGobj.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#'
+#' @return Prints a list of attributes and values.
+#'
+#' @examples
+#'    showAttributes(MydgeObj)
+#'
+#' @import magrittr assertthat lubridate
+#'
 #' @export
 ### attributes.DGEobj
 showAttributes <- function(dgeObj) {
@@ -16,7 +33,7 @@ showAttributes <- function(dgeObj) {
         print(paste("dataName", ":", sep=""))
 
         atnames <- names(attributes(dgeObj$data[[i]]))
-        #drop dimnames. we're interested in other attributes here
+        #drop dimnames. we're interested in other custom attributes here
         atnames <- setdiff(atnames, c("dim", "dimnames", "rownames", "colnames", "assayDimnames", "listData"))
         print(paste("atnames:", paste(atnames, collapse=", "),sep=" "))
 

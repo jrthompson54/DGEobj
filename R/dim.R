@@ -1,11 +1,19 @@
+### Function dim ###
+#' Function dim
+#'
+#' Reports the dimensions of the assay slot (row = genes; col = samples).
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#'
+#' @return An integer vector [r,c] with a length of 2.
+#'
+#' @examples
+#'    dim(MyDgeObj)
+#'
 #' @export
-### dim
-# dim <- function(x, ...) UseMethod("dim")
-# dim.default <- function(dgeResult, ...) {
-#     warning(paste("dim does not know how to handle object of class ",
-#                   class(dgeResult),
-#                   "and can only be used on class DGEresult"))
-# }
 dim.DGEobj <- function(dgeObj)
     attr(d, "assayDim")
 

@@ -1,3 +1,23 @@
+### Function getBaseType ###
+#' Function getBaseType
+#'
+#' Accessor function for DGEobj class objects.  Retrieves all data items of a
+#' given basetype or list of basetypes.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#' @param baseType One of: ["row", "col", "assay", "meta"]
+#'
+#' @return A simple list of data items
+#'
+#' @examples
+#'    Assays <- getBaseType(dgeObj, baseType="assay")
+#'    AssaysAndGeneAnnotation <- getBaseType(degObj, c("assay", "row"))
+#'
+#' @import magrittr assertthat lubridate
+#'
 #' @export
 #Return all items of a specified type as a list
 getBaseType <- function(dgeObj, baseType){

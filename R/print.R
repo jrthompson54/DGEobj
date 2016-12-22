@@ -16,16 +16,16 @@
 #'   print(myDGEobj)
 #'   print(myDGEobj, verbose=TRUE)
 #'
-#' @import magrittr
+#' @import knitr
 #'
 #' @export
 print.DGEobj <- function(dgeObj, verbose=FALSE, pretty=TRUE, ...)  {
 
     ItemNames <- itemNames(dgeObj)
-    ItemTypes <- attr(dgeObj, "type")  #dgeObj$type
-    baseTypes <- attr(dgeObj, "basetype") #dgeObj$basetype
+    ItemTypes <- attr(dgeObj, "type")
+    baseTypes <- attr(dgeObj, "basetype")
     creationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
-    funArgs <- attr(dgeObj, "funArgs")  #dgeObj$funArgs
+    funArgs <- attr(dgeObj, "funArgs")
 
     df <- data.frame(cbind(ItemName=ItemNames, ItemType=ItemTypes,
                            BaseType=baseTypes, DateCreated=creationDates),

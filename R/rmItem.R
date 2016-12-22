@@ -1,5 +1,22 @@
+### Function as.list ###
+#' Function as.list
+#'
+#' Removes a named data item from a DGEobj
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#' @param itemName
+#'
+#' @return An updated DGEobj
+#'
+#' @examples
+#'    MyDgeObj <- rmItem(MyDgeObj, "design")
+#'
+#' @import assertthat
+#'
 #' @export
-### rmItem
 rmItem <- function(dgeObj, itemName){
     assert_that(class(dgeObj) == "DGEobj",
                 !missing(itemName),
@@ -14,11 +31,6 @@ rmItem <- function(dgeObj, itemName){
     attr(dgeObj, "basetype")[[itemName]] <- NULL
     attr(dgeObj, "dateCreated")[[itemName]] <- NULL
     attr(dgeObj, "funArgs")[[itemName]] <- NULL
-
-    # dgeObj$type[itemName] <- NULL
-    # dgeObj$basetype[itemName] <- NULL
-    # dgeObj$dateCreated[itemName] <- NULL
-    # dgeObj$funArgs[itemName] <- NULL
 
     return(dgeObj)
 }

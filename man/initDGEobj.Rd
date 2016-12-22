@@ -26,8 +26,7 @@ to assign to the DGEobj.}
 A DGEobj object
 }
 \description{
-Initializes an empty DGEobj.  Optionally, add
-the first data element.
+Initializes DGEobj with first data item.
 }
 \examples{
    # initialize a DGEobj

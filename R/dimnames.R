@@ -1,3 +1,21 @@
+### Function dimnames.DGEobj ###
+#' Function dimnames.DGEobj
+#'
+#' Returns the rownames and colnames in a list of length 2.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  A class dgeObj created by function initDGEobj
+#'
+#' @return A list of length 2 containing rownames and colnames.
+#'
+#' @examples
+#'    MyDims <- dimnames(dgeObj)
+#'    MyDims <- dimnames(d)
+#'    names(MyDims)
+#'    [1] "rownames" "colnames"
+#'
 #' @export
 dimnames.DGEobj <- function(dgeObj)
     return(attr(dgeObj, "assayDimnames"))

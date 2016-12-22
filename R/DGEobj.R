@@ -60,13 +60,11 @@
 ### Function initDGEobj ###
 #' Function initDGEobj
 #'
-#' Initializes an empty DGEobj.  Optionally, add
-#' the first data element.
+#' Initializes DGEobj with first data item.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq
 #'
-#' @param
 #' @param counts A count matrix or dataframe with row and colnames.
 #' @param rowData  Gene, isoform or exon level annotation. rownames must match
 #'    rownames in count matrix.
@@ -88,6 +86,8 @@
 #'                             customAttr = list (PID = "20161025-0001",
 #'                                                XpressID = "12345")
 #'                            )
+#'
+#' @import assertthat magrittr
 #'
 #' @export
 ### # Constructor function for the class
