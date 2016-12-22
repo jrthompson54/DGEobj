@@ -32,4 +32,5 @@ Collate:
     'as.list.R'
     'length.R'
     'attributes.R'
+    'setAttributes.R'
 RoxygenNote: 5.0.1

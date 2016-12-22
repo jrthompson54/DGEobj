@@ -8,12 +8,16 @@
 ### assigned to one of the 4 basetypes.
 ###
 ### Data Definitions
+#
+# The .DGEobjDef describes the structure of the DGE object.
 .DGEobjDef <- list(
+    #there are 4 basetypes that fundamentally describe how to subset different items
     basetype = c(row="row",
                    col="col",
                    assay="assay",
                    meta="meta"),
-    #the value of .type is a basetype
+    #the value of type is a basetype  All Types must be associated with one
+    #of the four basetypes.
     type = c(row="row",
              col="col",
              assay ="assay",
@@ -33,12 +37,12 @@
              TPM = "assay",
              FPKM = "assay",
              zFPKM = "assay",
+             AffyRMA = "assay",
 
              topTreat ="meta",
              geneList = "meta",
              pathway = "meta",
              URL = "meta"
-
               ),
 
 # These Types can only have one instance in a DGEobj
@@ -48,8 +52,59 @@
                 "isoformData",
                 "exonData"),
 
-    allowedLevels = c("gene", "isoform", "exon")
-)
+    allowedLevels = c("gene", "isoform", "exon"),
+
+#
+#Define allowed values for attributes of each data type to be attached to the data item.
+
+##experimental:  here's the fine line between capturing accurate metadata and overburdening
+##the end user to provide information.  If we only allow data entry in define fields,
+##we'll likely not meet everyone's needs.  But if we don't enforce a vocabulary, caos reigns.  So
+##Let's try to define the obvious attributes of different types and provide a mechanism
+##to add new attributes to the definition.  Also make attribute names case insensitive.
+##
+##Define addAttributes to take a named list of attributes and add them with one line.
+    typeAttributes = c(
+         row = c("SeqId", "Source", "Version"), #name of geneid col, source e.g. Ensembl, version e.g. R84
+         col = "SampIdCol",  #name of sampleID column
+         assay = c("normalized", "LowIntFilter"),
+         meta ="",
+
+         geneData = c("SeqId", "Source", "Version"),
+         isoformData = c("SeqId", "Source", "Version"),
+         exonData = c("SeqId", "Source", "Version"),
+         topTable = c("SeqId", "Source", "Version"),
+         fit = c("SeqId", "Source", "Version"),
+
+         design ="SampIdCol",
+         designMatrix = "SampIdCol",
+
+         counts =c("normalized", "LowIntFilter"),
+         Log2CPM = c("normalized", "LowIntFilter"),
+         TPM = c("normalized", "LowIntFilter"),
+         FPKM = c("normalized", "LowIntFilter"),
+         zFPKM = c("normalized", "LowIntFilter"),
+         AffyRMA = c("normalized", "LowIntFilter"),
+
+         topTreat ="",
+         geneList = "",
+         pathway = "",
+         URL = ""
+         ),
+
+    mainAttributes = c(
+                Platform = c("RNA-Seq", "EdgeSeq", "DNA-Seq",
+                             "Nanostring", "ddPCR", "TaqMan", "Affy"),
+                Instrument = c("NextSeq", "HiSeq", "PacBio", "Nanopore", "IonTorrent"),
+                Vendor = c("BMS", "Rutgers", "CHOP", "EA"),
+                readType = c("PE", "SE"),
+                readLength = "",
+                strandSpecific = c(TRUE, FALSE),
+                AffyChip = ""
+                )
+
+) #.DGEobjDef
+
 # Uncomment this block when you need to update the ./data/DGEobj.rda file
 # x = getwd()
 # setwd ("~/R/lib/pkgsrc/DGEobj/")

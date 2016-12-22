@@ -2,7 +2,7 @@
 % Please edit documentation in R/showTypes.R
 \name{showTypes}
 \alias{showTypes}
-\title{Function as.list}
+\title{Function showTypes}
 \usage{
 showTypes(dgeObj, pretty = TRUE)
 }
@@ -16,7 +16,7 @@ nicely formatted table}
 Prints a list of defined "types"
 }
 \description{
-Casts a DGEobj class object as a simple list.
+Show the list of all Types defined  in the DGEobj.
 }
 \examples{
    showTypes(MyDgeObj)

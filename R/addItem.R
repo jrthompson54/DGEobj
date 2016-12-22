@@ -27,7 +27,7 @@
 #'                                  itemType = "counts",
 #'                                  funArgs = myFunArgs)
 #'
-#' @import magrittr assertthat lubridate
+#' @import lubridate assertthat
 #'
 #' @export
 addItem <- function(dgeObj, item, itemName, itemType,

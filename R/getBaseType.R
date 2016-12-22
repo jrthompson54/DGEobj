@@ -16,8 +16,6 @@
 #'    Assays <- getBaseType(dgeObj, baseType="assay")
 #'    AssaysAndGeneAnnotation <- getBaseType(degObj, c("assay", "row"))
 #'
-#' @import magrittr assertthat lubridate
-#'
 #' @export
 #Return all items of a specified type as a list
 getBaseType <- function(dgeObj, baseType){

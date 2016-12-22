@@ -1,7 +1,7 @@
-### Function as.list ###
-#' Function as.list
+### Function showTypes ###
+#' Function showTypes
 #'
-#' Casts a DGEobj class object as a simple list.
+#' Show the list of all Types defined  in the DGEobj.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj

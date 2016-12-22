@@ -13,8 +13,6 @@
 #' @examples
 #'    MyDGElist <- as.list(dgeObj)
 #'
-#' @import magrittr assertthat lubridate
-#'
 #' @export
 as.list.DGEobj <- function(dgeObj){
     #Set uniqueItem to TRUE to allow only one instance of itemType

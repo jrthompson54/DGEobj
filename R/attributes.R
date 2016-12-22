@@ -13,8 +13,6 @@
 #' @examples
 #'    showAttributes(MydgeObj)
 #'
-#' @import magrittr assertthat lubridate
-#'
 #' @export
 ### attributes.DGEobj
 showAttributes <- function(dgeObj) {
@@ -22,7 +20,7 @@ showAttributes <- function(dgeObj) {
     #first show the main DGEobj attributes (omitting assayDimnames):
     at <- attributes(unclass(dgeObj))
     if (length(at) >0){
-        idx <- setdiff(names(at), "assayDimnames")
+        idx <- dplyr::setdiff(names(at), "assayDimnames")
         print(names(at[idx]))
     }
 
@@ -34,7 +32,8 @@ showAttributes <- function(dgeObj) {
 
         atnames <- names(attributes(dgeObj$data[[i]]))
         #drop dimnames. we're interested in other custom attributes here
-        atnames <- setdiff(atnames, c("dim", "dimnames", "rownames", "colnames", "assayDimnames", "listData"))
+        atnames <- dplyr::setdiff(atnames, c("dim", "dimnames", "rownames",
+                                             "colnames", "assayDimnames", "listData"))
         print(paste("atnames:", paste(atnames, collapse=", "),sep=" "))
 
         for (j in atnames) #print the name then the attribute value
