@@ -4,7 +4,7 @@
 \alias{as.list.DGEobj}
 \title{Function as.list.DGEobj}
 \usage{
-\method{as.list}{DGEobj}(dgeObj)
+as.list.DGEobj(dgeObj)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}

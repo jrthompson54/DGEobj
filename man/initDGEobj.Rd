@@ -30,12 +30,14 @@ Initializes DGEobj with first data item.
 }
 \examples{
    # initialize a DGEobj
-   myDGEresult <- DGEresult(counts = MyCounts,
+   myDgeObj <- initDGEobj(counts = MyCounts,
                             rowData = MyGeneAnnotation,
                             colData = MyDesign,
                             level = "gene",
-                            customAttr = list (PID = "20161025-0001",
-                                               XpressID = "12345")
+                            customAttr = list (PID = "20171025-0001",
+                                               XpressID = "12345",
+                                               Genome = "Mouse.B38",
+                                               GeneModel = "Ensembl.R84")
                            )
 
 }

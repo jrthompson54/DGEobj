@@ -14,10 +14,18 @@
 #' @examples
 #'    MyCounts <- getItem(dgeObj, "counts")
 #'
+#' @import assertthat
+#'
 #' @export
 getItem <- function(dgeObj, itemName){
     #itemName can be a single element or a vector of item names.
     # Return a single element or a list if more than one element
+    #
+    assert_that(!missing(dgeObj),
+                !missing(itemName),
+                class(dgeObj)[[1]] == "DGEobj",
+                class(itemName)[[1]] == "character"
+    )
 
     idx <- names(dgeObj$data) %in% itemName
     if (sum(idx) == 1)

@@ -28,6 +28,7 @@
              exonData = "row",
              topTable = "row",
              fit = "row",
+             DGEList = "row",
 
              design ="col",
              designMatrix = "col",
@@ -50,20 +51,21 @@
                 "design",
                 "geneData",
                 "isoformData",
-                "exonData"),
+                "exonData",
+                "DGEList"),
 
     allowedLevels = c("gene", "isoform", "exon"),
 
-#
-#Define allowed values for attributes of each data type to be attached to the data item.
+    #
+    #Define allowed values for attributes of each data type to be attached to the data item.
 
-##experimental:  here's the fine line between capturing accurate metadata and overburdening
-##the end user to provide information.  If we only allow data entry in define fields,
-##we'll likely not meet everyone's needs.  But if we don't enforce a vocabulary, caos reigns.  So
-##Let's try to define the obvious attributes of different types and provide a mechanism
-##to add new attributes to the definition.  Also make attribute names case insensitive.
-##
-##Define addAttributes to take a named list of attributes and add them with one line.
+    ##experimental:  here's the fine line between capturing accurate metadata and overburdening
+    ##the end user to provide information.  If we only allow data entry in define fields,
+    ##we'll likely not meet everyone's needs.  But if we don't enforce a vocabulary, caos reigns.  So
+    ##Let's try to define the obvious attributes of different types and provide a mechanism
+    ##to add new attributes to the definition.  Also make attribute names case insensitive.
+    ##
+    ##Define addAttributes to take a named list of attributes and add them with one line.
     typeAttributes = c(
          row = c("SeqId", "Source", "Version"), #name of geneid col, source e.g. Ensembl, version e.g. R84
          col = "SampIdCol",  #name of sampleID column
@@ -73,13 +75,15 @@
          geneData = c("SeqId", "Source", "Version"),
          isoformData = c("SeqId", "Source", "Version"),
          exonData = c("SeqId", "Source", "Version"),
-         topTable = c("SeqId", "Source", "Version"),
-         fit = c("SeqId", "Source", "Version"),
+         topTable = "",
+         fit = "",
+         DGEList = c("normalization", "LowIntFilter"),
 
          design ="SampIdCol",
          designMatrix = "SampIdCol",
 
-         counts =c("normalized", "LowIntFilter"),
+         counts =c("normalization", "LowIntFilter"),
+
          Log2CPM = c("normalized", "LowIntFilter"),
          TPM = c("normalized", "LowIntFilter"),
          FPKM = c("normalized", "LowIntFilter"),
@@ -108,7 +112,7 @@
 # Uncomment this block when you need to update the ./data/DGEobj.rda file
 # x = getwd()
 # setwd ("~/R/lib/pkgsrc/DGEobj/")
-# save(.DGEobj, file="./data/DGEobj.rda")
+# save(.DGEobjDef, file="./data/DGEobj.rda")
 # setwd(x)
 
 
@@ -134,12 +138,14 @@
 #'
 #' @examples
 #'    # initialize a DGEobj
-#'    myDGEresult <- DGEresult(counts = MyCounts,
+#'    myDgeObj <- initDGEobj(counts = MyCounts,
 #'                             rowData = MyGeneAnnotation,
 #'                             colData = MyDesign,
 #'                             level = "gene",
-#'                             customAttr = list (PID = "20161025-0001",
-#'                                                XpressID = "12345")
+#'                             customAttr = list (PID = "20171025-0001",
+#'                                                XpressID = "12345",
+#'                                                Genome = "Mouse.B38",
+#'                                                GeneModel = "Ensembl.R84")
 #'                            )
 #'
 #' @import assertthat magrittr
@@ -189,6 +195,8 @@ initDGEobj <- function(counts, colData, rowData, #required
         )
 
     #all our data are properly aligned; build the DGEobj
+    #
+    funArgs <- match.call()
 
     #initialize an empty DGEobj
     dgeObj <- list()
@@ -201,35 +209,42 @@ initDGEobj <- function(counts, colData, rowData, #required
     attr(dgeObj, "funArgs") <- list()
     attr(dgeObj, "objDef") <- DGEobjDef
 
-    # dgeObj$type <- list()
-    # dgeObj$basetype <- list()
-    # dgeObj$dateCreated <- list()
-    # dgeObj$funArgs <- list()
-    # dgeObj$objDef <- DGEobjDef
-
     #load required items
     dgeObj <- addItem(dgeObj, counts, "counts", "counts",
-                      funArgs = match.call())
+                      funArgs = funArgs)
     dgeObj <- addItem(dgeObj, colData, "Design", "design",
-                      funArgs = match.call())
+                      funArgs = funArgs)
     switch(level,
            "gene" = {
                dgeObj <- addItem(dgeObj, rowData, "geneData", "geneData",
-                                 funArgs = match.call())
+                                 funArgs = funArgs)
                attr(dgeObj, "level") <- "gene"
                },
            "isoform" = {
                dgeObj <- addItem(dgeObj, rowData, "isoformData", "isoformData",
-                                 funArgs = match.call())
+                                 funArgs = funArgs)
                attr(dgeObj, "level") <- "isoform"
                },
            "exon" = {
                dgeObj <- addItem(dgeObj, rowData, "exonData", "exonData",
-                                 funArgs = match.call())
+                                 funArgs = funArgs)
                attr(dgeObj, "level") <- "exon"
                }
     )
 
+    ### depends on chr pos data;  wrap in try
+    result <- try (dgeObj <- addItem(dgeObj, df2GR(rowData), "rowRanges", "rowRanges",
+                      funArgs=funArgs),
+                   silent=TRUE)
+    if (class(result) == "try-error"){
+        print(colnames(rowData))
+        warning("Couldn't build a rowRanges object!")
+    }
+
+
+    result <- try({counts <- as.matrix(counts)}, silent=TRUE)
+    if (class(result) == "try-error")
+        stop("Couldn't coerce counts to a numeric matrix!")
     attr(dgeObj, "assayDim") <- c(nrow(counts), ncol(counts))
     attr(dgeObj, "assayDimnames") <- list(rownames=rownames(counts),
                                      colnames=colnames(counts))
@@ -242,30 +257,6 @@ initDGEobj <- function(counts, colData, rowData, #required
 }
 
 
-# DGEobj <- function(data, dataName, dataType) {
-#
-#     #initialize an empty DGEresult and optionally add the first item
-#     dgeObj <- list()
-#     dgeObj$data <- list()
-#     dgeObj$type <- list()
-#     dgeObj$basetype <- list()
-#     dgeObj$dateCreated <- list()
-#     dgeObj$funArgs <- list()
-#     dgeObj$objDef <- .DGEobj
-#     class(dgeObj) <- "DGEobj"
-#
-#     #optionally load the first item into dgeObj
-#     if (!missing(data) & !missing(dataName) & !missing(dataType))
-#         dgeObj <- addItem.DGEresult(dgeObj, data, dataName, dataType)
-#
-#     return (dgeObj)
-# }
-    #x is a list ot POSIXct datetimes
-    #names(unclass(y))
-    # [1] "sec"    "min"    "hour"   "mday"   "mon"    "year"   "wday"   "yday"   "isdst"  "zone"   "gmtoff"
-    # > y[["hour"]]
-
-
 ##  To Do
 ##
 ##      subsetting
@@ -273,6 +264,56 @@ initDGEobj <- function(counts, colData, rowData, #required
 ##      as.ES
 ##
 ##
-##      FunctionListlo
+
+### Function df2GR ###
+#' @import magrittr IRanges GenomicRanges
+df2GR <- function(df, seqnames=c("seqnames", "chr", "chromosome"),
+                  start="start", end="end", strand="strand",
+                  start.offset=1, end.offset=start.offset) {
+    #Convert a Annotation DF to a genomic Ranges object
+    #Optional parameters for seqnames, start, end, strand anticipate possible you might have for these
+    #fields in your annotation file.  Only need to modify these if your annotation uses differenc colnames
+    #for these fields
+    #
+    #These lines return the colnames used in your datafile.
+    seqnames.col <- match(seqnames, tolower(colnames(df))) %>% na.omit %>% .[1]
+    start.col <- match(start, tolower(colnames(df))) %>% na.omit %>% .[1]
+    end.col <- match(end, tolower(colnames(df))) %>% na.omit %>% .[1]
+    strand.col <- match(strand, tolower(colnames(df))) %>% na.omit %>% .[1]
+    other.cols <- setdiff(seq_along(colnames(df)), c(seqnames.col, start.col, end.col, strand.col))
+
+    #make sure start and end are numeric; if not, remove commas and convert to numeric
+    if (is.character(df[[start.col]])) {
+        df[[start.col]] = gsub(",", "", df[[start.col]]) %>% as.numeric
+    }
+    if (is.character(df[[end.col]])) {
+        df[[end.col]] = gsub(",", "", df[[end.col]]) %>% as.numeric
+    }
+
+    MyRanges = IRanges::IRanges(start=df[[start.col]] - start.offset + 1,
+                                end=df[[end.col]]) - end.offset + 1
+
+    gr <- GenomicRanges::GRanges(seqnames=df[[seqnames.col]],
+                                 ranges=MyRanges,
+                                 strand=df[[strand.col]])
+
+    GenomicRanges::mcols(gr) <- df[other.cols]
+    names(gr) <- rownames(df)
+    return(gr)
+}
+
+### Function Txt2DF ###
+Txt2DF <- function(filename) {
+    #configured to read Omicsoft .txt files correctly capturing GeneIDs as rownames
+    if (file.exists(filename)) {
+        df = read.table (filename, sep="\t", stringsAsFactors = FALSE,
+                         header=TRUE, row.names = 1, comment.char="",
+                         quote="", na.strings=c("NA", "."))
+        return (df)
+    } else {
+        warning (paste ("Warning: File = ", filename, "not found."))
+        return (-1)
+    }
+}
 
 

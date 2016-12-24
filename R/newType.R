@@ -33,7 +33,7 @@ newType <- function(dgeObj, itemType, baseType, uniqueItem=FALSE){
     )
 
     #define new type
-    dgeObj$objDef$type[itemType] <- baseType
+    attr(dgeObj, "objDef")$type[itemType] <- baseType
     if (uniqueItem == TRUE)
         attr(dgeObj, "objDef")$uniqueType <- c(attr(dgeObj, "objDef")$uniqueType, itemType)
 
