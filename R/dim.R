@@ -15,7 +15,8 @@
 #'
 #' @export
 dim.DGEobj <- function(dgeObj)
-    attr(d, "assayDim")
+    #get the first assay
+    dim(getBaseType(dgeObj, "assay")[[1]])
 
 
 # dim.DGEobj <- function(dgeObj){

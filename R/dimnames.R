@@ -12,13 +12,14 @@
 #'
 #' @examples
 #'    MyDims <- dimnames(dgeObj)
-#'    MyDims <- dimnames(d)
 #'    names(MyDims)
 #'    [1] "rownames" "colnames"
 #'
 #' @export
-dimnames.DGEobj <- function(dgeObj)
-    return(attr(dgeObj, "assayDimnames"))
+dimnames.DGEobj <- function(dgeObj){
+    firstAssay <- getBaseType(dgeObj, "assay")[[1]]
+    return(list(rownames=rownames(firstAssay), colnames=colnames(firstAssay)))
+}
 
 #dimnames.DGEobj
 # dimnames.DGEobj <- function(dgeObj){

@@ -11,7 +11,7 @@ MyGeneAnno <- mcols(RSE)
 rownames(MyGeneAnno) <- MyGeneAnno$ID
 Design <- colData(RSE)
 
-d <- initDGEobj(MyCounts, Design, MyGeneAnno, "gene")
+d <- initDGEobj(counts=MyCounts, colData=Design, rowData=MyGeneAnno, "gene")
 MyContrast <- MyGeneAnno
 attr(MyContrast, "PValue") = 1
 d %<>% addItem(MyGeneAnno, "contrastTest", "topTable", overwrite = T)
@@ -53,6 +53,7 @@ myAnnotation <- getItem(d, "Design")
 myCounts <- getItem(d, "counts")
 print(d)
 
+dimnames(d)
 colnames(d)
 rownames(d)
 

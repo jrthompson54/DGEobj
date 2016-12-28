@@ -26,6 +26,7 @@
              geneData ="row",
              isoformData = "row",
              exonData = "row",
+             granges = "row",
              topTable = "row",
              fit = "row",
              DGEList = "row",
@@ -52,7 +53,8 @@
                 "geneData",
                 "isoformData",
                 "exonData",
-                "DGEList"),
+                "DGEList",
+                "granges"),
 
     allowedLevels = c("gene", "isoform", "exon"),
 
@@ -106,7 +108,6 @@
                 strandSpecific = c(TRUE, FALSE),
                 AffyChip = ""
                 )
-
 ) #.DGEobjDef
 
 # Uncomment this block when you need to update the ./data/DGEobj.rda file
@@ -129,11 +130,11 @@
 #'    rownames in count matrix.
 #' @param colData A dataframe describing the experiment design.  Rownames much match
 #'  colnames(counts).
-#' @param DGEobjDef An object definition. Defaults to the global DGE object definition
-#'     (.DGEobjDef) and you usually shouldn't change this.
+#' @param level One of "gene", "isoform" or "exon"
 #' @param customAttr An optional (but highly recommended) named list of attributes
 #'     to assign to the DGEobj.
-#'
+#' @param DGEobjDef An object definition. Defaults to the global DGE object definition
+#'     (.DGEobjDef) and you usually shouldn't change this.
 #' @return A DGEobj object
 #'
 #' @examples
@@ -152,24 +153,21 @@
 #'
 #' @export
 ### # Constructor function for the class
-initDGEobj <- function(counts, colData, rowData, #required
+initDGEobj <- function(counts, rowData, colData, #required
                        level,   #one of gene, isoform or exon
-                       DGEobjDef=.DGEobjDef,
-                       customAttr #optional list of named Attr/Value pairs
+                       customAttr, #optional list of named Attr/Value pairs
+                       DGEobjDef=.DGEobjDef
                        ) {
     assert_that(!missing(counts),
                 !missing(colData),
                 !missing(rowData),
-                !missing(level))
-
-    assert_that((is.matrix(counts) | is.data.frame(counts)),
+                !missing(level),
+                is.matrix(counts) | is.data.frame(counts),
                 level %in% DGEobjDef$allowedLevels,
                 !is.null(rownames(counts)),
                 !is.null(colnames(counts)),
                 !is.null(rownames(rowData))
                 )
-
-    assert_that(level %in% DGEobjDef$allowedLevels)
 
     #some reality checking before we build the DGEobj
     #rownames annotation = rownames on counts
@@ -177,6 +175,7 @@ initDGEobj <- function(counts, colData, rowData, #required
     # similarly rownames in colData must match colnames in counts
     assert_that(nrow(counts) == nrow(rowData),
                 ncol(counts) == nrow(colData))
+
     #if we're here, lengths match up, now check names
     if (!all(rownames(counts) == rownames(rowData))){
         #sort both by rowname
@@ -197,6 +196,10 @@ initDGEobj <- function(counts, colData, rowData, #required
     #all our data are properly aligned; build the DGEobj
     #
     funArgs <- match.call()
+
+    result <- try(counts <- as.matrix(counts), silent=TRUE)
+    if (class(result) == "try-error")
+        stop("Couldn't coerce counts to a numeric matrix!")
 
     #initialize an empty DGEobj
     dgeObj <- list()
@@ -233,21 +236,14 @@ initDGEobj <- function(counts, colData, rowData, #required
     )
 
     ### depends on chr pos data;  wrap in try
-    result <- try (dgeObj <- addItem(dgeObj, df2GR(rowData), "rowRanges", "rowRanges",
-                      funArgs=funArgs),
-                   silent=TRUE)
+    result <- try ({
+        dgeObj <- addItem(dgeObj, as(rowData, "GRanges"), "granges", "granges",
+                      funArgs=funArgs)},
+            silent=TRUE)
     if (class(result) == "try-error"){
-        print(colnames(rowData))
-        warning("Couldn't build a rowRanges object!")
+        #print(colnames(rowData))
+        warning("Couldn't build a GRanges object!")
     }
-
-
-    result <- try({counts <- as.matrix(counts)}, silent=TRUE)
-    if (class(result) == "try-error")
-        stop("Couldn't coerce counts to a numeric matrix!")
-    attr(dgeObj, "assayDim") <- c(nrow(counts), ncol(counts))
-    attr(dgeObj, "assayDimnames") <- list(rownames=rownames(counts),
-                                     colnames=colnames(counts))
 
     if (!missing(customAttr))
         for (i in 1:length(customAttr))

@@ -8,7 +8,7 @@
 #' @keywords RNA-Seq, DGEobj
 #'
 #' @param dgeObj  A class dgeObj created by function initDGEobj
-#' @param baseType One of: ["row", "col", "assay", "meta"]
+#' @param baseType One or more of: ["row", "col", "assay", "meta"]
 #'
 #' @return A simple list of data items
 #'
@@ -33,9 +33,7 @@ getBaseType <- function(dgeObj, baseType){
     if (sum(idx) < length(baseType))
         warning("Some baseTypes were not found")
 
-    if (sum(idx) == 1)
-        result <- dgeObj$data[idx][[1]]
-    else
-        result <- dgeObj$data[idx]
+    result <- dgeObj$data[idx]
     return(result)
 }
+

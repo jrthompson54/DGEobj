@@ -17,7 +17,6 @@ Returns the rownames and colnames in a list of length 2.
 }
 \examples{
    MyDims <- dimnames(dgeObj)
-   MyDims <- dimnames(d)
    names(MyDims)
    [1] "rownames" "colnames"
 

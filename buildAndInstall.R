@@ -3,8 +3,8 @@
 
 x = getwd()
 setwd ("~/R/lib/pkgsrc/DGEobj/")
-pkg = "~/R/lib/pkgsrc/DGEobj_0.1.0.tar.gz"
 library(devtools);document();load_all;build()
+pkg = "~/R/lib/pkgsrc/DGEobj_0.2.0.tar.gz"
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)
 

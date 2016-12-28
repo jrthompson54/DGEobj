@@ -9,7 +9,7 @@ getBaseType(dgeObj, baseType)
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
 
-\item{baseType}{One of: ["row", "col", "assay", "meta"]}
+\item{baseType}{One or more of: ["row", "col", "assay", "meta"]}
 }
 \value{
 A simple list of data items

@@ -33,7 +33,6 @@
                testrow(dgeObj, item)
                testcol(dgeObj, item)
            }
-
     ) #end switch
     result <- TRUE
     return(result)

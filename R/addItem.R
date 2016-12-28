@@ -33,11 +33,12 @@
 addItem <- function(dgeObj, item, itemName, itemType,
                               overwrite=FALSE, funArgs=match.call()
                               ){
+
     assert_that(!missing(dgeObj),
                 !missing(item),
                 !missing(itemName),
                 !missing(itemType),
-                !is.null(rownames(item))
+                (itemType == "granges" | !is.null(rownames(item)))
     )
 
     #enforce itemType

@@ -4,23 +4,25 @@
 \alias{initDGEobj}
 \title{Function initDGEobj}
 \usage{
-initDGEobj(counts, colData, rowData, level, DGEobjDef = .DGEobjDef,
-  customAttr)
+initDGEobj(counts, rowData, colData, level, customAttr,
+  DGEobjDef = .DGEobjDef)
 }
 \arguments{
 \item{counts}{A count matrix or dataframe with row and colnames.}
 
-\item{colData}{A dataframe describing the experiment design.  Rownames much match
-colnames(counts).}
-
 \item{rowData}{Gene, isoform or exon level annotation. rownames must match
 rownames in count matrix.}
 
-\item{DGEobjDef}{An object definition. Defaults to the global DGE object definition
-(.DGEobjDef) and you usually shouldn't change this.}
+\item{colData}{A dataframe describing the experiment design.  Rownames much match
+colnames(counts).}
+
+\item{level}{One of "gene", "isoform" or "exon"}
 
 \item{customAttr}{An optional (but highly recommended) named list of attributes
 to assign to the DGEobj.}
+
+\item{DGEobjDef}{An object definition. Defaults to the global DGE object definition
+(.DGEobjDef) and you usually shouldn't change this.}
 }
 \value{
 A DGEobj object
