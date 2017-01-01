@@ -1,9 +1,11 @@
 rm(list=ls())
-RSE <- readRDS("RSE.RDS")
+
 library(magrittr)
 library(SummarizedExperiment)
 library(DGEobj)
 library(assertthat)
+
+RSE <- readRDS("RSE.RDS")
 
 MyCounts <- assay(RSE, "Counts")
 attr(MyCounts, "Algorithm") <- "RSEM"

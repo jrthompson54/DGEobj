@@ -4,10 +4,14 @@
 \alias{showAttributes}
 \title{Function showAttributes}
 \usage{
-showAttributes(dgeObj)
+showAttributes(dgeObj, skip)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
+
+\item{skip}{A character vector of attributes to skip. Use this to avoid
+printing certain lengthy attributes like rownames.  Defaults to c("dim",
+dimnames", "rownames", "colnames", "listData", "objDef")}
 }
 \value{
 Prints a list of attributes and values.

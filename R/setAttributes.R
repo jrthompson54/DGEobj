@@ -33,7 +33,9 @@ setAttributes <- function(item, attribs){
 
     assert_that(!missing(item),
                 !missing(attribs),
-                !class(attribs)[[1]] == "class")
+                class(attribs)[[1]] == "list",
+                !is.null(names(attribs))
+    )
 
     for (i in 1:length(attribs))
         attr(item, names(attribs[i])) <- attribs[[i]]

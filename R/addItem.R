@@ -16,8 +16,9 @@
 #' @param funArgs A text field to annotate how the data object was created.
 #'    If you pass the result of match.call() as this argument, it captures the
 #'    name and arguments used in the current function.
+#' @param custAttr A named list of attributes to add to DGEList
 #'
-#' @return A DGEobj class object with a new item added.
+#' @return A DGEobj class object with a new DGEList added.
 #'
 #' @examples
 #'    myFunArgs <- match.call() #capture calling function and arguments
@@ -31,7 +32,9 @@
 #'
 #' @export
 addItem <- function(dgeObj, item, itemName, itemType,
-                              overwrite=FALSE, funArgs=match.call()
+                              overwrite=FALSE,
+                              funArgs=match.call(),
+                              custAttr
                               ){
 
     assert_that(!missing(dgeObj),
@@ -70,6 +73,12 @@ addItem <- function(dgeObj, item, itemName, itemType,
     #confirm dimensions consistent before adding
     if (.dimensionMatch(dgeObj, item, itemType) == FALSE)
         stop("item doesn't match dimension of dgeObj")
+
+    # if (exists("custAttr")){
+    if (!missing("custAttr")){
+        print("Adding custom attributes")
+        item <- setAttributes(item, custAttr)
+    }
 
     #ready to add the item
     # print("Adding Item")

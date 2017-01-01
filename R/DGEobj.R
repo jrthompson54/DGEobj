@@ -15,7 +15,9 @@
     basetype = c(row="row",
                    col="col",
                    assay="assay",
-                   meta="meta"),
+                   meta="meta",
+                   rowvector="rowvector",
+                   colvector="colvector"),
     #the value of type is a basetype  All Types must be associated with one
     #of the four basetypes.
     type = c(row="row",
@@ -26,10 +28,11 @@
              geneData ="row",
              isoformData = "row",
              exonData = "row",
-             granges = "row",
-             topTable = "row",
-             fit = "row",
+             granges = "rowvector",
              DGEList = "row",
+             Elist = "assay",
+             fit = "row",
+             topTable = "row",
 
              design ="col",
              designMatrix = "col",
@@ -40,10 +43,11 @@
              FPKM = "assay",
              zFPKM = "assay",
              AffyRMA = "assay",
+             Elist = "assay",
 
              topTreat ="meta",
-             geneList = "meta",
-             pathway = "meta",
+             geneList = "meta",  #intended for short gene lists
+             pathway = "meta",   #should consider format standards for genelists and pathways
              URL = "meta"
               ),
 
@@ -54,6 +58,7 @@
                 "isoformData",
                 "exonData",
                 "DGEList",
+                "Elist",
                 "granges"),
 
     allowedLevels = c("gene", "isoform", "exon"),
@@ -120,7 +125,7 @@
 ### Function initDGEobj ###
 #' Function initDGEobj
 #'
-#' Initializes DGEobj with first data item.
+#' Initializes DGEobj with base data (counts, gene annotation and sample annotation).
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq
@@ -215,7 +220,7 @@ initDGEobj <- function(counts, rowData, colData, #required
     #load required items
     dgeObj <- addItem(dgeObj, counts, "counts", "counts",
                       funArgs = funArgs)
-    dgeObj <- addItem(dgeObj, colData, "Design", "design",
+    dgeObj <- addItem(dgeObj, colData, "design", "design",
                       funArgs = funArgs)
     switch(level,
            "gene" = {

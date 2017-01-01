@@ -7,6 +7,9 @@
 #' @keywords RNA-Seq, DGEobj
 #'
 #' @param dgeObj  A class dgeObj created by function initDGEobj
+#' @param skip  A character vector of attributes to skip. Use this to avoid
+#'   printing certain lengthy attributes like rownames.  Defaults to c("dim",
+#'   dimnames", "rownames", "colnames", "listData", "objDef")
 #'
 #' @return Prints a list of attributes and values.
 #'
@@ -15,7 +18,7 @@
 #'
 #' @export
 ### attributes.DGEobj
-showAttributes <- function(dgeObj) {
+showAttributes <- function(dgeObj, skip) {
 
     #first show the main DGEobj attributes (omitting assayDimnames):
     # at <- attributes(unclass(dgeObj))C
@@ -32,7 +35,7 @@ showAttributes <- function(dgeObj) {
         atnames <- names(attributes(dgeObj$data[[i]]))
         #drop dimnames. we're interested in other custom attributes here
         atnames <- dplyr::setdiff(atnames, c("dim", "dimnames", "rownames",
-                                             "colnames", "listData"))
+                                             "colnames", "listData", "objDef"))
         print(paste("atnames:", paste(atnames, collapse=", "),sep=" "))
 
         for (j in atnames) #print the name then the attribute value

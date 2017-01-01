@@ -28,7 +28,7 @@ to assign to the DGEobj.}
 A DGEobj object
 }
 \description{
-Initializes DGEobj with first data item.
+Initializes DGEobj with base data (counts, gene annotation and sample annotation).
 }
 \examples{
    # initialize a DGEobj

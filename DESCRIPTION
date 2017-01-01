@@ -33,4 +33,5 @@ Collate:
     'length.R'
     'attributes.R'
     'setAttributes.R'
+    'as.DGEO.R'
 RoxygenNote: 5.0.1
