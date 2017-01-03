@@ -29,8 +29,7 @@
              isoformData = "row",
              exonData = "row",
              granges = "rowvector",
-             DGEList = "row",
-             Elist = "assay",
+
              fit = "row",
              topTable = "row",
 
@@ -43,6 +42,7 @@
              FPKM = "assay",
              zFPKM = "assay",
              AffyRMA = "assay",
+             DGEList = "assay",
              Elist = "assay",
 
              topTreat ="meta",
