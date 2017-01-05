@@ -9,33 +9,33 @@ RSE <- readRDS("RSE.RDS")
 
 MyCounts <- assay(RSE, "Counts")
 attr(MyCounts, "Algorithm") <- "RSEM"
-MyGeneAnno <- mcols(RSE)
+MyGeneAnno <- mcols(RSE)  #without chr info
+MyGeneAnno <- rowRanges(RSE) %>% as.data.frame #with chr info
 rownames(MyGeneAnno) <- MyGeneAnno$ID
-Design <- colData(RSE)
+Design <- colData(RSE) %>% as.data.frame
 
 d <- initDGEobj(counts=MyCounts, colData=Design, rowData=MyGeneAnno, "gene")
 MyContrast <- MyGeneAnno
-attr(MyContrast, "PValue") = 1
-d %<>% addItem(MyGeneAnno, "contrastTest", "topTable", overwrite = T)
 
-print(d)
+d %<>% addItem(MyContrast, "contrastTest", "topTable", overwrite = T)
+
+print(d, verbose=T)
 
 dim(d)
 print(d, verbose=T)
 
-d %<>% rmItem("Design")
+d %<>% rmItem("design")
 print(d)
 
-d %<>% addItem(colData(RSE), "Design", "design")
 #test trap for overwriting item
-d %<>% addItem(colData(RSE), "Design", "design")
+d %<>% addItem(Design, "Design", "design")
 print(d)
 
 #test trap for adding 2nd instance of unique item
-d %<>% addItem(assay(RSE, "Counts"), "Morecounts", "counts")
+d %<>% addItem(MyCounts, "Morecounts", "counts")
 
 #force overwrite
-d %<>% addItem(colData(RSE), "Design", "design", overwrite=T)
+d %<>% addItem(Design, "Design", "design", overwrite=T)
 print(d)
 
 #try to remove a nonexistent item
