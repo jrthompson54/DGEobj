@@ -76,7 +76,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 
     # if (exists("custAttr")){
     if (!missing("custAttr")){
-        print("Adding custom attributes")
+        # print("Adding custom attributes")
         item <- setAttributes(item, custAttr)
     }
 

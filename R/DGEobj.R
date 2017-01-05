@@ -29,9 +29,9 @@
              isoformData = "row",
              exonData = "row",
              granges = "rowvector",
-             DGEList = "row",
-             Elist = "assay",
+
              fit = "row",
+             fit.contrast = "row",
              topTable = "row",
 
              design ="col",
@@ -43,12 +43,15 @@
              FPKM = "assay",
              zFPKM = "assay",
              AffyRMA = "assay",
+             DGEList = "assay",
              Elist = "assay",
 
              topTreat ="meta",
              geneList = "meta",  #intended for short gene lists
              pathway = "meta",   #should consider format standards for genelists and pathways
-             URL = "meta"
+             URL = "meta",
+             fit.contrast.treat = "meta",
+             contrastMatrix = "meta"
               ),
 
 # These Types can only have one instance in a DGEobj
@@ -59,7 +62,11 @@
                 "exonData",
                 "DGEList",
                 "Elist",
-                "granges"),
+                "granges",
+                "designMatrix",
+                "contrastMatrix",
+                "fit.contrast",
+                "fit.contrast.treat"),
 
     allowedLevels = c("gene", "isoform", "exon"),
 
