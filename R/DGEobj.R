@@ -50,7 +50,7 @@
              geneList = "meta",  #intended for short gene lists
              pathway = "meta",   #should consider format standards for genelists and pathways
              URL = "meta",
-             fit.contrast.treat = "meta",
+             contrast.fit.treat = "meta",
              contrastMatrix = "meta",
              #types with _orig suffix are intended to store the initialized data
              #in its original state (i.e. before subsetting)

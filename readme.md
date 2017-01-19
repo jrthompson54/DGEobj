@@ -1,7 +1,6 @@
 # DGEobj: An S3 data object to capture results from Differential Gene Expression analysis
 
-**Note: DGEobj is in early beta phase.  Most of all of the implemented tools work.  Some tools, notably a subsetting function, are not in place yet.  Check
-back often.  I'll increment the version number each time I make changes.**
+**Note: DGEobj is in early beta phase.  Most of all of the implemented tools work.  Some tools, notably a subsetting function, are not in place yet.  Check back often.  I'll increment the version number each time I make changes.**
 
 DGEobj is an S3 data class that provides a flexible container for DGE analysis results.  
 The DGEobj is designed to be extensible allowing definition of new data types as needed. 

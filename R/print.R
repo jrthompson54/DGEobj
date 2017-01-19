@@ -23,15 +23,17 @@ print.DGEobj <- function(dgeObj, verbose=FALSE, pretty=TRUE, ...)  {
 
     ItemNames <- itemNames(dgeObj)
     ItemTypes <- attr(dgeObj, "type")
-    baseTypes <- attr(dgeObj, "basetype")
-    creationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
-    funArgs <- attr(dgeObj, "funArgs")
+    BaseTypes <- attr(dgeObj, "basetype")
+    CreationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
+    Parents <- lapply (dgeObj$data, function(x) attr(x, "parent"))
+    FunArgs <- attr(dgeObj, "funArgs")
 
     df <- data.frame(cbind(ItemName=ItemNames, ItemType=ItemTypes,
-                           BaseType=baseTypes, DateCreated=creationDates),
+                           BaseType=BaseTypes, DateCreated=CreationDates,
+                           Parent=Parents),
                      row.names=NULL)
     if (verbose==TRUE)
-        df$funArgs <- unlist(funArgs)
+        df$FunArgs <- unlist(FunArgs)
 
     cat(paste("\nDimension: [", dim(dgeObj)[1], ", ", dim(dgeObj)[2], "]", sep=""))
     cat("")
