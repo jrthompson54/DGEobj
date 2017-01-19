@@ -15,8 +15,8 @@ rownames(MyGeneAnno) <- MyGeneAnno$ID
 Design <- colData(RSE) %>% as.data.frame
 
 d <- initDGEobj(counts=MyCounts, colData=Design, rowData=MyGeneAnno, "gene")
-MyContrast <- MyGeneAnno
 
+MyContrast <- MyGeneAnno
 d %<>% addItem(MyContrast, "contrastTest", "topTable", overwrite = T)
 
 print(d, verbose=T)

@@ -31,7 +31,7 @@
              granges = "rowvector",
 
              fit = "row",
-             fit.contrast = "row",
+             contrast.fit = "row",
              topTable = "row",
 
              design ="col",
@@ -51,8 +51,16 @@
              pathway = "meta",   #should consider format standards for genelists and pathways
              URL = "meta",
              fit.contrast.treat = "meta",
-             contrastMatrix = "meta"
-              ),
+             contrastMatrix = "meta",
+             #types with _orig suffix are intended to store the initialized data
+             #in its original state (i.e. before subsetting)
+             geneData_orig ="meta",
+             isoformData_orig = "meta",
+             exonData_orig = "meta",
+             granges_orig = "meta",
+             counts_orig = "meta",
+             design_orig ="meta"
+             ),
 
 # These Types can only have one instance in a DGEobj
     uniqueType = c("counts",
@@ -63,10 +71,7 @@
                 "DGEList",
                 "Elist",
                 "granges",
-                "designMatrix",
-                "contrastMatrix",
-                "fit.contrast",
-                "fit.contrast.treat"),
+                "designMatrix"),
 
     allowedLevels = c("gene", "isoform", "exon"),
 
@@ -227,31 +232,45 @@ initDGEobj <- function(counts, rowData, colData, #required
     #load required items
     dgeObj <- addItem(dgeObj, counts, "counts", "counts",
                       funArgs = funArgs)
+    dgeObj <- addItem(dgeObj, counts, "counts_orig", "counts_orig",
+                      funArgs = funArgs)
+
     dgeObj <- addItem(dgeObj, colData, "design", "design",
                       funArgs = funArgs)
+    dgeObj <- addItem(dgeObj, colData, "design_orig", "design_orig",
+                      funArgs = funArgs)
+
     switch(level,
            "gene" = {
                dgeObj <- addItem(dgeObj, rowData, "geneData", "geneData",
                                  funArgs = funArgs)
-               attr(dgeObj, "level") <- "gene"
+               dgeObj <- addItem(dgeObj, rowData, "geneData_orig", "geneData_orig",
+                                 funArgs = funArgs)
+               dgeObj %<>% setAttributes(list(level="gene"))
                },
            "isoform" = {
                dgeObj <- addItem(dgeObj, rowData, "isoformData", "isoformData",
                                  funArgs = funArgs)
-               attr(dgeObj, "level") <- "isoform"
+               dgeObj <- addItem(dgeObj, rowData, "isoformData_orig", "isoformData_orig",
+                                 funArgs = funArgs)
+               dgeObj %<>% setAttributes(list(level="isoform"))
                },
            "exon" = {
                dgeObj <- addItem(dgeObj, rowData, "exonData", "exonData",
                                  funArgs = funArgs)
-               attr(dgeObj, "level") <- "exon"
+               dgeObj <- addItem(dgeObj, rowData, "exonData_orig", "exonData_orig",
+                                 funArgs = funArgs)
+               dgeObj %<>% setAttributes(list(level="exon"))
                }
     )
 
     ### depends on chr pos data;  wrap in try
     result <- try ({
         dgeObj <- addItem(dgeObj, as(rowData, "GRanges"), "granges", "granges",
-                      funArgs=funArgs)},
-            silent=TRUE)
+                      funArgs=funArgs)
+        dgeObj <- addItem(dgeObj, as(rowData, "GRanges"), "granges_orig", "granges_orig",
+                          funArgs=funArgs)
+        }, silent=TRUE)
     if (class(result) == "try-error"){
         #print(colnames(rowData))
         warning("Couldn't build a GRanges object!")

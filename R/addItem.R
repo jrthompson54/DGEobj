@@ -41,7 +41,8 @@ addItem <- function(dgeObj, item, itemName, itemType,
                 !missing(item),
                 !missing(itemName),
                 !missing(itemType),
-                (itemType == "granges" | !is.null(rownames(item)))
+                #granges don't have rownames; anything else should have rownames
+                (itemType %in% c("granges", "granges_orig") | !is.null(rownames(item)))
     )
 
     #enforce itemType

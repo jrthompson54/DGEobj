@@ -3,8 +3,11 @@
 
 x = getwd()
 setwd ("~/R/lib/pkgsrc/DGEobj/")
-library(devtools);document();load_all;build()
-pkg = "~/R/lib/pkgsrc/DGEobj_0.2.0.tar.gz"
+library(devtools)
+document()
+load_all
+build()
+pkg = "~/R/lib/pkgsrc/DGEobj_0.3.0.tar.gz"
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)
 
@@ -15,3 +18,4 @@ install_git("http://biogit.pri.bms.com/thompj27/DGEresult", repos=BiocInstaller:
 
 #for dev
 install_git("http://biogit.pri.bms.com/thompj27/DGE.Tools", branch="dev", repos=BiocInstaller::biocinstallRepos())
+
