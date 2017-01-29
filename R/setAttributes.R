@@ -73,6 +73,7 @@ getItemAttributes <- function(dgeObj, attrName){
     )
 
     myattributes <- lapply (dgeObj, function(x) attr(x, attrName))
+    return(myattributes)
 }
 
 
