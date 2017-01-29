@@ -5,7 +5,7 @@ library(SummarizedExperiment)
 library(DGEobj)
 library(assertthat)
 
-RSE <- readRDS("RSE.RDS")
+RSE <- readRDS("../RSE.RDS")
 
 MyCounts <- assay(RSE, "Counts")
 attr(MyCounts, "Algorithm") <- "RSEM"
@@ -22,21 +22,22 @@ d %<>% addItem(MyContrast, "contrastTest", "topTable", overwrite = T)
 print(d, verbose=T)
 
 dim(d)
-print(d, verbose=T)
 
-d %<>% rmItem("design")
+# d %<>% rmItem("design")
 print(d)
 
 #test trap for overwriting item
-d %<>% addItem(Design, "Design", "design")
+d %<>% addItem(Design, "design", "design")
+print(d)
+
+#force overwrite
+d %<>% addItem(Design, "design", "design", overwrite=T)
 print(d)
 
 #test trap for adding 2nd instance of unique item
-d %<>% addItem(MyCounts, "Morecounts", "counts")
+d %<>% addItem(MyCounts, "counts", "counts")
 
-#force overwrite
-d %<>% addItem(Design, "Design", "design", overwrite=T)
-print(d)
+
 
 #try to remove a nonexistent item
 d %<>% rmItem("xxx")
@@ -51,7 +52,7 @@ attributes(d)
 
 length(d)
 
-myAnnotation <- getItem(d, "Design")
+myAnnotation <- getItem(d, "design")
 myCounts <- getItem(d, "counts")
 print(d)
 
@@ -62,7 +63,7 @@ rownames(d)
 d %<>% addItem(assay(RSE, "Counts"), "TPM", "TPM")
 
 Items <- getType(d, "counts")
-Items <- getType(d, c("assay", "counts", "design"))
+Items <- getType(d, c("x", "counts", "design"))
 Items <- getBaseType(d, "assay")
 Items <- getItem (d, "counts")
 
@@ -75,25 +76,8 @@ head(colnames(d))
 nrow(d)
 ncol(d)
 
-# test renameing dimnames
-shortcolnames <- Design$Barcode
-lcgenenames <- tolower(rownames(counts))
-dimnames(d) <- list(lcgenenames, shortcolnames) #dimnames assignment doesn't work
 
-#Function List
-# addItem.R
-# newType.R
-# colnames.R
-# DGEresult.R
-# dim.R
-# dimensionMatch.R
-# getItem.R
-# getItems.R
-# getType.R
-# itemNames.R
-# print.R
-# rmItem.R
-# rownames.R
-# showTypes.R
+
+
 
 

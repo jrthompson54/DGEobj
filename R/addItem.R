@@ -28,7 +28,7 @@
 #'                                  itemType = "counts",
 #'                                  funArgs = myFunArgs)
 #'
-#' @import lubridate assertthat
+#' @import assertthat
 #'
 #' @export
 addItem <- function(dgeObj, item, itemName, itemType,
@@ -49,19 +49,19 @@ addItem <- function(dgeObj, item, itemName, itemType,
     )
 
     #enforce itemType
-    types <- names(attr(dgeObj, "objDef")$type)
-    if (!itemType %in% types)
+    allowedTypes <- names(attr(dgeObj, "objDef")$type)
+    if (!itemType %in% allowedTypes)
         stop(paste("itemType must be one of: ",
-                   paste(types, collapse=", "), sep=""))
+                   paste(allowedTypes, collapse=", "), sep=""))
 
     #refuse to add if itemName exists already unless overwrite = T
-    if (overwrite==FALSE & itemName %in% names(dgeObj$data))
+    if (overwrite==FALSE & itemName %in% names(dgeObj))
         stop('itemName already exists in DGEobj!')
 
     #check for disallowed second instance of uniqueTypes (unless overwrite mode)
     uniqueTypes <- attr(dgeObj, "objDef")$uniqueType
     if(itemType %in% uniqueTypes  &
-       itemType %in% attr(dgeObj, "type") &
+       itemType %in% getItemAttributes(dgeObj, "type") &
        overwrite==FALSE)
         stop (paste( "Only one instance of type ", itemType, " allowed.",
                      " Use a base type instead (row, col, assay, meta),",
@@ -78,28 +78,23 @@ addItem <- function(dgeObj, item, itemName, itemType,
     if (.dimensionMatch(dgeObj, item, itemType) == FALSE)
         stop("item doesn't match dimension of dgeObj")
 
+    #set type, basetype, dateCreated and funArgs attributes of item
+    stdAttr <- list(
+        type = itemType,
+        basetype = basetype,
+        dateCreated = lubridate::now(),
+        funArgs = funArgs
+    )
+    item <- setAttributes(item, stdAttr)
+
     # if (exists("custAttr")){
     if (!missing("custAttr")){
         # print("Adding custom attributes")
         item <- setAttributes(item, custAttr)
     }
 
-    #ready to add the item
-    # print("Adding Item")
-    dgeObj$data[[itemName]] <- item
-    # dgeObj$type[[itemName]] <- itemType
-    #
-    # add the type attribute to a named list
-    attr(dgeObj, "type")[[itemName]] <- itemType
-
-    #dgeObj$basetype[[itemName]] <- dgeObj$objDef$type[[itemType]]
-    attr(dgeObj, "basetype")[[itemName]] <- attr(dgeObj, "objDef")$type[[itemType]]
-
-    #dgeObj$dateCreated[[itemName]] <- lubridate::now()
-    attr(dgeObj, "dateCreated")[[itemName]] <- lubridate::now()
-
-    #dgeObj$funArgs[[itemName]] <- funArgs
-    attr(dgeObj, "funArgs")[[itemName]] <- funArgs
+    #ready to add the item with all its attributes
+    dgeObj[[itemName]] <- item
 
     return(dgeObj)
 } #addItem

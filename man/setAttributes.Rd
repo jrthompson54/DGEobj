@@ -30,7 +30,7 @@ Set one or more attributes on an object
    #set attributes on an item inside a DGEobj
    MyAttributes <- list(normalized = FALSE,
                         LowIntFilter = "FPK >5 in >= 1 group"),
-   MyDGEObj$data[["counts"]] <- setAttributes(MyDGEObj$data[["counts"]], MyAttributes)
+   MyDGEObj[["counts"]] <- setAttributes(MyDGEObj[["counts"]], MyAttributes)
 
 }
 \author{

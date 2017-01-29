@@ -24,7 +24,7 @@
 #'    #set attributes on an item inside a DGEobj
 #'    MyAttributes <- list(normalized = FALSE,
 #'                         LowIntFilter = "FPK >5 in >= 1 group"),
-#'    MyDGEObj$data[["counts"]] <- setAttributes(MyDGEObj$data[["counts"]], MyAttributes)
+#'    MyDGEObj[["counts"]] <- setAttributes(MyDGEObj[["counts"]], MyAttributes)
 #'
 #' @import magrittr assertthat dplyr knitr
 #'
@@ -41,5 +41,39 @@ setAttributes <- function(item, attribs){
         attr(item, names(attribs[i])) <- attribs[[i]]
     return(item)
 }
+
+### Function getItemAttributes ###
+#' Function getItemAttributes
+#'
+#' Set one or more attributes on an object
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  a DGEobj structre
+#' @param attrName The name of the item attribute to retrieve
+#'
+#' @return a list of attribute values for the items
+#'
+#' @examples
+#'    #assign attributes to a DGEobj
+#'    MyTypes <- getItemAttributes(dgeObj, "type")
+#'    MyBaseTypes <- getItemAttributes(dgeObj, "basetype")
+#'    MyCreationDates <- getItemAttributes(dgeObj, "dateCreated")
+#'
+#' @import magrittr assertthat dplyr knitr
+#'
+#' @export
+getItemAttributes <- function(dgeObj, attrName){
+    assert_that(
+        !missing(dgeObj),
+        !missing(attrName),
+        class(dgeObj)[[1]] == "DGEobj",
+        class(attrName)[[1]] == "character"
+    )
+
+    myattributes <- lapply (dgeObj, function(x) attr(x, attrName))
+}
+
 
 

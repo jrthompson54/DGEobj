@@ -35,22 +35,21 @@ subset <- function(DgeObj, row, col){
         switch(attr(DgeObj, "basetype")[[i]],
 
                row = {
-                    if (is.null(dim(DgeObj$data[[i]])))
-                        DgeObj$data[i] <- DgeObj$data[[i]][row]
-                    else DgeObj$data[i] <- DgeObj$data[[i]][row,]
+                    if (is.null(dim(DgeObj[[i]])))
+                        DgeObj[i] <- DgeObj[[i]][row]
+                    else DgeObj[i] <- DgeObj[[i]][row,]
                      },
 
                col = {
-                   if (is.null(dim(DgeObj$data[[i]])))
-                       DgeObj$data[i] <- DgeObj$data[[i]][col]
-                    else DgeObj$data[i] <- DgeObj$data[[i]][col,]
+                   if (is.null(dim(DgeObj[[i]])))
+                       DgeObj[i] <- DgeObj[[i]][col]
+                    else DgeObj[i] <- DgeObj[[i]][col,]
                     },
 
                assay = {
-                   DgeObj$data[i] <- DgeObj$data[[i]][row, col]
+                   DgeObj[i] <- DgeObj[[i]][row, col]
                })
     }
-    #update dimnames from 1st assay
     #designMatrix not subsetted correctly
     #Elist not correct
     #contrasts not correct

@@ -217,26 +217,24 @@ initDGEobj <- function(counts, rowData, colData, #required
 
     #initialize an empty DGEobj
     dgeObj <- list()
-    dgeObj$data <- list()
     class(dgeObj) <- "DGEobj"
-
-    attr(dgeObj, "type") <- list()
-    attr(dgeObj, "basetype") <- list()
-    attr(dgeObj, "dateCreated") <- list()
-    attr(dgeObj, "funArgs") <- list()
     attr(dgeObj, "objDef") <- DGEobjDef
 
+
     #load required items
+    #
+    #Counts
     dgeObj <- addItem(dgeObj, counts, "counts", "counts",
                       funArgs = funArgs)
     dgeObj <- addItem(dgeObj, counts, "counts_orig", "counts_orig",
                       funArgs = funArgs)
 
+    #colData
     dgeObj <- addItem(dgeObj, colData, "design", "design",
                       funArgs = funArgs)
     dgeObj <- addItem(dgeObj, colData, "design_orig", "design_orig",
                       funArgs = funArgs)
-
+    #rowData
     switch(level,
            "gene" = {
                dgeObj <- addItem(dgeObj, rowData, "geneData", "geneData",
@@ -244,6 +242,7 @@ initDGEobj <- function(counts, rowData, colData, #required
                dgeObj <- addItem(dgeObj, rowData, "geneData_orig", "geneData_orig",
                                  funArgs = funArgs)
                dgeObj %<>% setAttributes(list(level="gene"))
+               grangesAttr <- list(parent = "geneData")
                },
            "isoform" = {
                dgeObj <- addItem(dgeObj, rowData, "isoformData", "isoformData",
@@ -251,6 +250,7 @@ initDGEobj <- function(counts, rowData, colData, #required
                dgeObj <- addItem(dgeObj, rowData, "isoformData_orig", "isoformData_orig",
                                  funArgs = funArgs)
                dgeObj %<>% setAttributes(list(level="isoform"))
+               grangesAttr <- list(parent = "isoform")
                },
            "exon" = {
                dgeObj <- addItem(dgeObj, rowData, "exonData", "exonData",
@@ -258,24 +258,28 @@ initDGEobj <- function(counts, rowData, colData, #required
                dgeObj <- addItem(dgeObj, rowData, "exonData_orig", "exonData_orig",
                                  funArgs = funArgs)
                dgeObj %<>% setAttributes(list(level="exon"))
+               grangesAttr <- list(parent = "exon")
                }
     )
 
+    #Build GRanges if chr pos info complete
     ### depends on chr pos data;  wrap in try
     result <- try ({
         dgeObj <- addItem(dgeObj, as(rowData, "GRanges"), "granges", "granges",
-                      funArgs=funArgs)
+                      funArgs=funArgs, custAttr=grangesAttr)
+
+        grangesAttr$parent <- paste(grangesAttr$parent, "_orig", sep="")
         dgeObj <- addItem(dgeObj, as(rowData, "GRanges"), "granges_orig", "granges_orig",
-                          funArgs=funArgs)
+                          funArgs=funArgs, custAttr=grangesAttr)
         }, silent=TRUE)
     if (class(result) == "try-error"){
         #print(colnames(rowData))
         warning("Couldn't build a GRanges object!")
     }
 
+    #add additional DGEobj level attributes
     if (!missing(customAttr))
-        for (i in 1:length(customAttr))
-            attr(dgeObj, names(customAttr[i])) <- customAttr[[i]]
+        setAttributes(degObj, customAttr)
 
     return (dgeObj)
 }

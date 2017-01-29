@@ -1,7 +1,7 @@
 Package: DGEobj
 Type: Package
 Title: DGEresult provides a S3 data class to manage and annotate DGE analysis results.
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
@@ -20,9 +20,7 @@ Collate:
     'addItem.R'
     'rmItem.R'
     'dimensionMatch.R'
-    'getBaseType.R'
-    'getItem.R'
-    'getType.R'
+    'get.R'
     'dim.R'
     'newType.R'
     'showTypes.R'
@@ -30,7 +28,6 @@ Collate:
     'itemNames.R'
     'dimnames.R'
     'as.list.R'
-    'length.R'
     'attributes.R'
     'setAttributes.R'
     'as.DGEO.R'

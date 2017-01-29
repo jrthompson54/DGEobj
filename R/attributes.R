@@ -29,17 +29,17 @@ showAttributes <- function(dgeObj, skip) {
 
     #Now print attributes from each data item except dimnnames
     for (i in 1:length(dgeObj)) {
-        dataName <- names(dgeObj$data)[i]
+        dataName <- names(dgeObj)[i]
         print(paste("dataName", ":", sep=""))
 
-        atnames <- names(attributes(dgeObj$data[[i]]))
+        atnames <- names(attributes(dgeObj[[i]]))
         #drop dimnames. we're interested in other custom attributes here
         atnames <- dplyr::setdiff(atnames, c("dim", "dimnames", "rownames",
                                              "colnames", "listData", "objDef"))
         print(paste("atnames:", paste(atnames, collapse=", "),sep=" "))
 
         for (j in atnames) #print the name then the attribute value
-            print(paste("[", j, "] = ", attr(dgeObj$data[[i]], j)))
+            print(paste("[", j, "] = ", attr(dgeObj[[i]], j)))
     }
 }
 

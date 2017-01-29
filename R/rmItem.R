@@ -18,19 +18,16 @@
 #'
 #' @export
 rmItem <- function(dgeObj, itemName){
-    assert_that(class(dgeObj) == "DGEobj",
+
+    assert_that(class(dgeObj)[[1]] == "DGEobj",
                 !missing(itemName),
-                class(itemName) == "character")
+                class(itemName)[[1]] == "character")
 
     #item not found
-    if (!itemName %in% names(dgeObj$data))
+    if (!itemName %in% names(dgeObj))
         stop(paste(itemName, " does not exist within DGEresult.", sep=""))
 
-    dgeObj$data[itemName] <- NULL
-    attr(dgeObj, "type")[[itemName]] <- NULL
-    attr(dgeObj, "basetype")[[itemName]] <- NULL
-    attr(dgeObj, "dateCreated")[[itemName]] <- NULL
-    attr(dgeObj, "funArgs")[[itemName]] <- NULL
+    dgeObj[itemName] <- NULL
 
     return(dgeObj)
 }
