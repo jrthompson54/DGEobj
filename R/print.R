@@ -39,7 +39,7 @@ print.DGEobj <- function(dgeObj, verbose=FALSE, ...)  {
     cat(paste("\nDimension: [", dim(dgeObj)[1], ", ", dim(dgeObj)[2], "]", sep=""))
     cat("")
 
-    knitr::kable(df, row.names=FALSE)
+    print(knitr::kable(df, row.names=FALSE))
 
     return(invisible(df))
 }

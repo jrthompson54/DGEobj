@@ -24,16 +24,20 @@
             stop('Rows in new col object must match col dimension of DGEobj object')
     }
 
+    testassayrowcol <- function(dgeObj, item){
+        #stop if dimensions don't match
+        if (nrow(dgeObj) > 0 & nrow(dgeObj) != nrow(item))
+            stop('New assay object does not match row dimension of DGEobj object')
+        if (ncol(dgeObj) > 0 & ncol(dgeObj) != ncol(item))
+            stop('New assay object does not match col dimension of DGEobj object')
+    }
 
     result <- FALSE
     switch(#get the basetype
            attr(dgeObj, "objDef")$type[[itemType]],
            "row" = testrow(dgeObj, item),
            "col" = testcol(dgeObj, item),
-           "assay" = {
-               testrow(dgeObj, item)
-               testcol(dgeObj, item)
-           }
+           "assay" = testassayrowcol(dgeObj, item)
     ) #end switch
     result <- TRUE
     return(result)
