@@ -37,12 +37,15 @@ addItem <- function(dgeObj, item, itemName, itemType,
                               custAttr
                               ){
 
+    basetype <- attr(dgeObj, "objDef")$type[[itemType]]
     assert_that(!missing(dgeObj),
                 !missing(item),
                 !missing(itemName),
                 !missing(itemType),
                 #granges don't have rownames; anything else should have rownames
-                (itemType %in% c("granges", "granges_orig") | !is.null(rownames(item)))
+                (itemType %in% c("granges", "granges_orig") |
+                     basetype == "meta" |
+                     !is.null(rownames(item)))
     )
 
     #enforce itemType

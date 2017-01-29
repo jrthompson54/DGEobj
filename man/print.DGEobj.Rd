@@ -4,14 +4,12 @@
 \alias{print.DGEobj}
 \title{Function print.DGEobj}
 \usage{
-\method{print}{DGEobj}(dgeObj, verbose = FALSE, pretty = TRUE, ...)
+\method{print}{DGEobj}(dgeObj, verbose = FALSE, ...)
 }
 \arguments{
-\item{dgeObj}{A DGEobj object.}
+\item{dgeObj}{A DGEobj object}
 
-\item{verbose}{Add funArgs to the output}
-
-\item{pretty}{prints using knitr::kable if TRUE}
+\item{verbose}{Add funArgs to the output (default=FALSE)}
 }
 \description{
 Print a DGEobj object

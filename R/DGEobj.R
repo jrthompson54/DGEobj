@@ -15,9 +15,7 @@
     basetype = c(row="row",
                    col="col",
                    assay="assay",
-                   meta="meta",
-                   rowvector="rowvector",
-                   colvector="colvector"),
+                   meta="meta"),
     #the value of type is a basetype  All Types must be associated with one
     #of the four basetypes.
     type = c(row="row",
@@ -28,10 +26,10 @@
              geneData ="row",
              isoformData = "row",
              exonData = "row",
-             granges = "rowvector",
+             granges = "row",
 
              fit = "row",
-             contrast.fit = "row",
+             contrast_fit = "row",
              topTable = "row",
 
              design ="col",
@@ -46,11 +44,12 @@
              DGEList = "assay",
              Elist = "assay",
 
+             corFit = "meta",
              topTreat ="meta",
              geneList = "meta",  #intended for short gene lists
              pathway = "meta",   #should consider format standards for genelists and pathways
              URL = "meta",
-             contrast.fit.treat = "meta",
+             contrast_fit_treat = "meta",
              contrastMatrix = "meta",
              #types with _orig suffix are intended to store the initialized data
              #in its original state (i.e. before subsetting)
@@ -69,9 +68,7 @@
                 "isoformData",
                 "exonData",
                 "DGEList",
-                "Elist",
-                "granges",
-                "designMatrix"),
+                "granges"),
 
     allowedLevels = c("gene", "isoform", "exon"),
 

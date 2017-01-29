@@ -14,9 +14,19 @@
 #'    dim(MyDgeObj)
 #'
 #' @export
-dim.DGEobj <- function(dgeObj)
-    #get the first assay
-    dim(getBaseType(dgeObj, "assay")[[1]])
+dim.DGEobj <- function(dgeObj){
+    #check the first assay for dimensions
+    dimension <- c(0,0)
+
+    idx <- attr(dgeObj, "basetype") == "assay"
+    myassays <- dgeObj$data[idx]
+
+    if (length(myassays) > 0)
+        dimension <- dim(myassays[[1]])
+
+    return(dimension)
+}
+
 
 
 # dim.DGEobj <- function(dgeObj){
