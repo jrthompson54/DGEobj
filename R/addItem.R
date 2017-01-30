@@ -37,15 +37,19 @@ addItem <- function(dgeObj, item, itemName, itemType,
                               custAttr
                               ){
 
-    basetype <- attr(dgeObj, "objDef")$type[[itemType]]
     assert_that(!missing(dgeObj),
                 !missing(item),
                 !missing(itemName),
-                !missing(itemType),
-                #granges don't have rownames; anything else should have rownames
-                (itemType %in% c("granges", "granges_orig") |
-                     basetype == "meta" |
-                     !is.null(rownames(item)))
+                !missing(itemType))
+
+    basetype <- attr(dgeObj, "objDef")$type[[itemType]]
+    switch(basetype,
+           row = {if (!itemType == "granges" & is.null(rownames(item)))
+                    stop("Row basetypes must have rownames")},
+           col = {if (is.null(rownames(item)))
+                    stop("Col basetypes must have rownames")},
+           assay = {if (is.null(rownames(item)) | is.null(colnames(item)))
+                        stop("Assay basetypes must have row and column names")}
     )
 
     #enforce itemType

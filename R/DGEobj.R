@@ -58,7 +58,8 @@
              exonData_orig = "meta",
              granges_orig = "meta",
              counts_orig = "meta",
-             design_orig ="meta"
+             design_orig ="meta",
+             svobj = "meta"
              ),
 
 # These Types can only have one instance in a DGEobj
