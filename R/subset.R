@@ -16,9 +16,9 @@
 #'    DgeObj <- subset(DgeObj, 1:10, 100:1000)
 #'
 #' @export
-subset <- function(DgeObj, row, col){
+subset.DGEobj <- function(DgeObj, row, col){
     #check if both row and col provided.
-    assert_that(class(DgeObj)[[1]] == "DGEobj")
+    assertthat::assert_that(class(DgeObj)[[1]] == "DGEobj")
 
     #make sure row and col in range
     if (max(row) > max(nrow(DgeObj)))
@@ -27,32 +27,32 @@ subset <- function(DgeObj, row, col){
         stop("col coordinates out of range")
 
     if (missing(row))
-        row <-nrow(DgeObj)
+        row <-1:nrow(DgeObj)
     if (missing(col))
-        col <- ncol(DgeObj)
+        col <- 1:ncol(DgeObj)
 
     for (i in 1:length(DgeObj)){
-        switch(attr(DgeObj, "basetype")[[i]],
+        switch(attr(DgeObj[[i]], "basetype"),
 
                row = {
-                    if (is.null(dim(DgeObj[[i]])))
-                        DgeObj[i] <- DgeObj[[i]][row]
-                    else DgeObj[i] <- DgeObj[[i]][row,]
+                    if (is.null(dim(DgeObj[[i]]))) #not a matrix type object
+                        DgeObj[[i]] <- DgeObj[[i]][row]
+                    else DgeObj[[i]] <- DgeObj[[i]][row,]
                      },
 
                col = {
                    if (is.null(dim(DgeObj[[i]])))
-                       DgeObj[i] <- DgeObj[[i]][col]
-                    else DgeObj[i] <- DgeObj[[i]][col,]
+                       DgeObj[[i]] <- DgeObj[[i]][col]
+                    else DgeObj[[i]] <- DgeObj[[i]][col,]
                     },
 
                assay = {
-                   DgeObj[i] <- DgeObj[[i]][row, col]
+                   DgeObj[[i]] <- DgeObj[[i]][row, col]
                })
     }
-    #designMatrix not subsetted correctly
-    #Elist not correct
-    #contrasts not correct
+    #designMatrix not subsetted correctly (col)
+    #Elist not correct (assay)
+    #contrasts not correct (row)
     #
     return(DgeObj)
 }

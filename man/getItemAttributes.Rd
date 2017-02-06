@@ -15,7 +15,7 @@ getItemAttributes(dgeObj, attrName)
 a list of attribute values for the items
 }
 \description{
-Set one or more attributes on an object
+get a named attribute from all items
 }
 \examples{
    #assign attributes to a DGEobj

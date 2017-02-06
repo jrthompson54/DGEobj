@@ -45,7 +45,7 @@ setAttributes <- function(item, attribs){
 ### Function getItemAttributes ###
 #' Function getItemAttributes
 #'
-#' Set one or more attributes on an object
+#' get a named attribute from all items
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
