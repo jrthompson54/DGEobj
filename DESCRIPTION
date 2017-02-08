@@ -32,4 +32,4 @@ Collate:
     'setAttributes.R'
     'as.DGEO.R'
     'subset.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

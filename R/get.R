@@ -63,7 +63,9 @@ getItem <- function(dgeObj, itemName)
 #' @param type A single type of list of types to retreives.  Enter
 #'    showTypes(MyDgeObj) to see a list of allowed types.  See F. addType
 #'    to define new types.
-#' @return A data item or list of data items
+#' @param parent (Optional) filter return list for common parent (e.g. useful
+#' to select one set of contrast results when multiple fits have been performed)
+#' @return A list of data items
 #'
 #' @examples
 #'    MyContrastList <- getType(dgeObj, type="topTable")
@@ -71,19 +73,30 @@ getItem <- function(dgeObj, itemName)
 #'
 #' @export
 #Return all items of a specified type as a list
-getType <- function(dgeObj, type){
+getType <- function(dgeObj, type, parent){
     #type can be a single named type or a vector or list of types
     idx <- getItemAttributes(dgeObj, "type") %in% type
-    if (sum(idx) == 1)
-        result <- dgeObj[idx][[1]]
-    else
-        result <- dgeObj[idx]
+    # if (sum(idx) == 1)
+    #     result <- dgeObj[idx][[1]]
+    # else
+    #   result <- dgeObj[idx]
+
+    result <- dgeObj[idx]
+
+    #filter for defined parent
+    if (!missing("parent")){
+        #Get the names of items
+        itemNames <- names(lapply(result, attr, "parent"))
+        result <- result[itemNames]
+    }
 
     if (sum(idx) < length(type))
         warning("Some types were not found")
 
     return(result)
 }
+
+
 
 ### Function getBaseType ###
 #' Function getBaseType

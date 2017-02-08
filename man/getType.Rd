@@ -4,7 +4,7 @@
 \alias{getType}
 \title{Function getType}
 \usage{
-getType(dgeObj, type)
+getType(dgeObj, type, parent)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
@@ -12,9 +12,12 @@ getType(dgeObj, type)
 \item{type}{A single type of list of types to retreives.  Enter
 showTypes(MyDgeObj) to see a list of allowed types.  See F. addType
 to define new types.}
+
+\item{parent}{(Optional) filter return list for common parent (e.g. useful
+to select one set of contrast results when multiple fits have been performed)}
 }
 \value{
-A data item or list of data items
+A list of data items
 }
 \description{
 Retrieve one of more data items by type.
@@ -29,4 +32,3 @@ John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{DGEobj}
 \keyword{RNA-Seq,}
-

@@ -16,7 +16,7 @@
 #' @param funArgs A text field to annotate how the data object was created.
 #'    If you pass the result of match.call() as this argument, it captures the
 #'    name and arguments used in the current function.
-#' @param custAttr A named list of attributes to add to DGEList
+#' @param custAttr A named list of attributes to add to the item.
 #'
 #' @return A DGEobj class object with a new DGEList added.
 #'
@@ -102,3 +102,47 @@ addItem <- function(dgeObj, item, itemName, itemType,
 
     return(dgeObj)
 } #addItem
+
+
+### Function addItems ###
+#' Function addItem (DGEobj)
+#'
+#' Add a data item to a class DGEobj
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj A DGEobj that items will be added to.
+#' @param itemList  A list of data items to add to dgeObj
+#' @param overwrite Default = FALSE.  Set to TRUE to overwrite the data object
+#'     stored in the itemName slot
+#' @param custAttr A named list of attributes to add to each item (optional)
+#'
+#' @return A DGEobj class object with new items added.
+#'
+#' @examples
+#'    #replace a set of contrasts after adding something to each
+#'    myDgeObj <- addItems(myDgeObj, mycontrastList, overwrite=TRUE)
+#'
+#' @import assertthat
+#'
+#' @export
+addItems <- function(dgeObj, itemList, overwrite=FALSE, custAttr){
+
+    assert_that(!missing(dgeObj),
+                !missing(itemList),
+                class(dgeObj)[[1]] == "DGEobj",
+                class(itemList)[[1]] == "list")
+
+    if (!missing(custAttr)){
+        attrNames <- names(custAttr)
+        for (i in 1:length(itemList))
+            for (j in 1:length(custAttr))
+                attr(itemList[[i]], attrNames[[j]]) <- custAttr[[j]]
+    }
+
+    itemNames <- names(itemList)
+    itemType <- lapply(itemList, attr("Type"))
+    for (i in 1:length(itemList))
+        addItem(itemList[[i]], itemNames[[i]], itemType[[i]], overwrite=overwrite)
+}

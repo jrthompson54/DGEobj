@@ -24,7 +24,7 @@ stored in the itemName slot}
 If you pass the result of match.call() as this argument, it captures the
 name and arguments used in the current function.}
 
-\item{custAttr}{A named list of attributes to add to DGEList}
+\item{custAttr}{A named list of attributes to add to the item.}
 }
 \value{
 A DGEobj class object with a new DGEList added.
@@ -46,4 +46,3 @@ John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{DGEobj}
 \keyword{RNA-Seq,}
-
