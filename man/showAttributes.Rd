@@ -7,7 +7,7 @@
 showAttributes(dgeObj, skip)
 }
 \arguments{
-\item{dgeObj}{A class dgeObj created by function initDGEobj}
+\item{dgeObj}{A DGEobj created by function initDGEobj}
 
 \item{skip}{A character vector of attributes to skip. Use this to avoid
 printing certain lengthy attributes like rownames.  Defaults to c("dim",
@@ -28,3 +28,4 @@ John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{DGEobj}
 \keyword{RNA-Seq,}
+

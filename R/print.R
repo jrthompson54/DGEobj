@@ -20,7 +20,7 @@
 #' @export
 print.DGEobj <- function(dgeObj, verbose=FALSE, ...)  {
 
-    ItemNames <- itemNames(dgeObj)
+    ItemNames <- names(dgeObj)
     # ItemTypes <- lapply (dgeObj, function(x) attr(x, "type"))
     # BaseTypes <- lapply (dgeObj, function(x) attr(x, "basetype"))
     # Parents <- lapply (dgeObj, function(x) attr(x, "parent"))

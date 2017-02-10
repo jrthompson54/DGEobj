@@ -1,12 +1,14 @@
 Package: DGEobj
 Type: Package
-Title: DGEresult provides a S3 data class to manage and annotate DGE analysis results.
+Title: DGEresult provides a S3 data class to manage and annotate DGE analysis
+    results.
 Version: 0.6.0
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
-                  role = c("aut", "cre"))
-Description: Provides a S3 data class to manage and annotate DGE analysis results.
+    role = c("aut", "cre"))
+Description: Provides a S3 data class to manage and annotate DGE analysis
+    results.
 Depends:
     R (>= 3.3.2)
 License: BMS Proprietary
@@ -14,7 +16,7 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     dplyr (>= 0.4.3),
-    magrittr (>= 1.5)   
+    magrittr (>= 1.5)
 Collate:
     'DGEobj.R'
     'addItem.R'
@@ -29,7 +31,6 @@ Collate:
     'dimnames.R'
     'as.list.R'
     'attributes.R'
-    'setAttributes.R'
     'as.DGEO.R'
     'subset.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
