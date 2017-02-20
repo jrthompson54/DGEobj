@@ -51,7 +51,7 @@ showAttributes <- function(dgeObj, skip) {
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
 #'
-#' @param item  Anything you want to attach attrbutes to
+#' @param item  Anything you want to attach attributes to
 #' @param attribs A named list of attribute/value pairs
 #'
 #' @return the item with new attributes
@@ -87,8 +87,8 @@ setAttributes <- function(item, attribs){
     return(item)
 }
 
-### Function getItemAttributes ###
-#' Function getItemAttributes
+### Function getItemAttribute ###
+#' Function getItemAttribute
 #'
 #' get a named attribute from all items
 #'
@@ -102,14 +102,14 @@ setAttributes <- function(item, attribs){
 #'
 #' @examples
 #'    #assign attributes to a DGEobj
-#'    MyTypes <- getItemAttributes(dgeObj, "type")
-#'    MyBaseTypes <- getItemAttributes(dgeObj, "basetype")
-#'    MyCreationDates <- getItemAttributes(dgeObj, "dateCreated")
+#'    MyTypes <- getItemAttribute(dgeObj, "type")
+#'    MyBaseTypes <- getItemAttribute(dgeObj, "basetype")
+#'    MyCreationDates <- getItemAttribute(dgeObj, "dateCreated")
 #'
 #' @import magrittr assertthat dplyr knitr
 #'
 #' @export
-getItemAttributes <- function(dgeObj, attrName){
+getItemAttribute <- function(dgeObj, attrName){
     assert_that(
         !missing(dgeObj),
         !missing(attrName),
@@ -121,6 +121,32 @@ getItemAttributes <- function(dgeObj, attrName){
     return(myattributes)
 }
 
+### Function getAttributes ###
+#' Function getAttributes
+#'
+#' get all attributes from an item
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param item  a DGEobj structre
+#' @param excludeList A list of attribute names to exclude from the output
+#'     (default = list("dim", "dimnames"))
+#'
+#' @return a list of attribute values for the items
+#'
+#' @examples
+#'    #assign attributes to a DGEobj
+#'    MyAttr <- getAttributes(dgeObj$counts)
+#'
+#' @import magrittr assertthat dplyr knitr
+#'
+#' @export
+getAttributes <- function(item, excludeList=list("dim", "dimnames")){
+      at <- attributes(item)
+      idx <- !names(at) %in% excludeList
+      return(at[idx])
+}
 
 
-
+#'

@@ -7,7 +7,7 @@
 setAttributes(item, attribs)
 }
 \arguments{
-\item{item}{Anything you want to attach attrbutes to}
+\item{item}{Anything you want to attach attributes to}
 
 \item{attribs}{A named list of attribute/value pairs}
 }

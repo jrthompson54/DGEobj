@@ -75,7 +75,7 @@ getItem <- function(dgeObj, itemName)
 #Return all items of a specified type as a list
 getType <- function(dgeObj, type, parent){
     #type can be a single named type or a vector or list of types
-    idx <- getItemAttributes(dgeObj, "type") %in% type
+    idx <- getItemAttribute(dgeObj, "type") %in% type
     # if (sum(idx) == 1)
     #     result <- dgeObj[idx][[1]]
     # else
@@ -128,7 +128,7 @@ getBaseType <- function(dgeObj, baseType){
                 paste(attr(dgeObj, "objDef")$basetype, collapse=", "),
                 sep=""))
 
-    idx <- getItemAttributes(dgeObj, "basetype") %in% baseType
+    idx <- getItemAttribute(dgeObj, "basetype") %in% baseType
 
     if (sum(idx) < length(baseType))
         warning("Some baseTypes were not found")

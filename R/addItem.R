@@ -65,7 +65,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
     #check for disallowed second instance of uniqueTypes (unless overwrite mode)
     uniqueTypes <- attr(dgeObj, "objDef")$uniqueType
     if(itemType %in% uniqueTypes  &
-       itemType %in% getItemAttributes(dgeObj, "type") &
+       itemType %in% getItemAttribute(dgeObj, "type") &
        overwrite==FALSE)
         stop (paste( "Only one instance of type ", itemType, " allowed.",
                      " Use a base type instead (row, col, assay, meta),",

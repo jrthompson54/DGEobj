@@ -13,8 +13,8 @@ setwd(x)
 
 #install from Git
 #After pushing to git...
-install_git("http://biogit.pri.bms.com/thompj27/DGEresult")
-install_git("http://biogit.pri.bms.com/thompj27/DGEresult", repos=BiocInstaller::biocinstallRepos())
+install_git("http://biogit.pri.bms.com/thompj27/DGEobj")
+install_git("http://biogit.pri.bms.com/thompj27/DGEobj", repos=BiocInstaller::biocinstallRepos())
 
 #for dev
 install_git("http://biogit.pri.bms.com/thompj27/DGE.Tools", branch="dev", repos=BiocInstaller::biocinstallRepos())
