@@ -114,6 +114,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 #'
 #' @param dgeObj A DGEobj that items will be added to.
 #' @param itemList  A list of data items to add to dgeObj
+#' @param ItemTypes A list of type values for each item on itemList
 #' @param overwrite Default = FALSE.  Set to TRUE to overwrite the data object
 #'     stored in the itemName slot
 #' @param custAttr A named list of attributes to add to each item (optional)
@@ -127,7 +128,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 #' @import assertthat
 #'
 #' @export
-addItems <- function(dgeObj, itemList, overwrite=FALSE, custAttr){
+addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, custAttr){
 
     assert_that(!missing(dgeObj),
                 !missing(itemList),
@@ -142,7 +143,6 @@ addItems <- function(dgeObj, itemList, overwrite=FALSE, custAttr){
     }
 
     itemNames <- names(itemList)
-    itemType <- lapply(itemList, attr("Type"))
     for (i in 1:length(itemList))
-        addItem(itemList[[i]], itemNames[[i]], itemType[[i]], overwrite=overwrite)
+        addItem(itemList[[i]], itemNames[[i]], itemTypes[[i]], overwrite=overwrite)
 }

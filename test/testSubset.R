@@ -6,7 +6,10 @@ dd <- subset(d, 1:1000, 1:10)
 ddd <- as.list(dd)
 n <- names(ddd)
 for (i in 1:length(ddd)){
-    i
-    print(n[[i]])
-    print(dim(ddd[[i]]))
-}
+    s <- paste(n[[i]],
+            nrow(ddd[[i]]),
+            ncol(ddd[[i]]),
+            sep=" ")
+    print(s)
+    }
+print(ddd)
