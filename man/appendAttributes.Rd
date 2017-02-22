@@ -4,20 +4,17 @@
 \alias{appendAttributes}
 \title{Function appendAttributes}
 \usage{
-appendAttributes(dgeObj, itemName, attrNames, values)
+appendAttributes(dgeObj, itemName, attribs)
 }
 \arguments{
 \item{dgeObj}{a DGEobj structure}
 
 \item{itemName}{Name of the item being annotated}
 
-\item{attrNames}{List of attribute Names to update}
-
-\item{values}{list of Values to append to the named attributes}
+\item{attribs}{A named list of base attributes to annotate itemName}
 }
 \value{
-the specified attribute value (data type depends on the datatype
-stored in the attribute) or NULL if attribute doesn't exist
+A dDGEobj with updated attributes
 }
 \description{
 DGEobj have several attributes whose values are named lists (type, basetype,

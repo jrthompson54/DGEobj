@@ -81,9 +81,9 @@ setAttributes <- function(item, attribs){
                 class(attribs)[[1]] == "list",
                 !is.null(names(attribs))
     )
-
+    attribNames <- as.list(names(attribs))
     for (i in 1:length(attribs))
-        attr(item, names(attribs[i])) <- attribs[[i]]
+        attr(item, attribNames[[i]]) <- attribs[[i]]
     return(item)
 }
 
@@ -195,11 +195,9 @@ getAttribute <- function(item, attrName){
 #'
 #' @param dgeObj  a DGEobj structure
 #' @param itemName Name of the item being annotated
-#' @param attrNames List of attribute Names to update
-#' @param values list of Values to append to the named attributes
+#' @param attribs A named list of base attributes to annotate itemName
 #'
-#' @return the specified attribute value (data type depends on the datatype
-#' stored in the attribute) or NULL if attribute doesn't exist
+#' @return A dDGEobj with updated attributes
 #'
 #' @examples
 #'    #get an attribute from a DGEobj
@@ -210,25 +208,23 @@ getAttribute <- function(item, attrName){
 #' @import assertthat
 #'
 #' @export
-appendAttributes <- function(dgeObj, itemName, attrNames, values){
+appendAttributes <- function(dgeObj, itemName, attribs){
     assert_that(!missing(dgeObj),
                 !missing(itemName),
-                !missing(attrNames),
-                !missing(values),
+                !missing(attribs),
                 class(dgeObj)[[1]] == "DGEobj",
                 class(itemName)[[1]] == "character",
-                class(attrNames)[[1]] == "list",
-                class(values)[[1]] == "list",
-                length(attrNames) == length(values)
+                class(attribs)[[1]] == "list"
     )
-
-    for (i in 1:length(attrNames)){
-        #get the attribute
-        at <- attr(dgeObj, attrNames[[i]])
-        #add attribute for the new item
-        at[itemName] <- values[[i]]
+    attribNames <- as.list(names(attribs))
+    for (i in 1:length(attribs)){
+# browser()
+        #get the existing attributes
+        at <- attr(dgeObj, attribNames[[i]])
+        #append attribute for the new item
+        at[itemName] <- attribs[[i]]
         #store the modified attribute
-        attr(dgeObj, attrNames[[i]]) <- at
+        attr(dgeObj, attribNames[[i]]) <- at
     }
     return(dgeObj)
 }

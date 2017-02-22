@@ -32,12 +32,13 @@ subset.DGEobj <- function(DgeObj, row, col){
     if (max(col) > max(ncol(DgeObj)))
         stop("col coordinates out of range")
 
+    basetypes <- attr(DgeObj, "basetype")
     for (i in 1:length(DgeObj)){
 
         #save the item attributes (attributes will be stripped in the subsetting)
         at <- getAttributes(DgeObj[[i]])
 
-        switch(attr(DgeObj[[i]], "basetype"),
+        switch(basetypes[[i]],
 
                row = {
                     if (is.null(dim(DgeObj[[i]]))) #not a matrix type object
@@ -54,8 +55,9 @@ subset.DGEobj <- function(DgeObj, row, col){
                assay = {
                    DgeObj[[i]] <- DgeObj[[i]][row, col]
                })
-        #restore the attributes
-        DgeObj[[i]] <- setAttributes(DgeObj[[i]], at)
+        #restore the attributes, if any
+        if (length(at) > 0)
+            DgeObj[[i]] <- setAttributes(DgeObj[[i]], at)
     }
 
     return(DgeObj)

@@ -11,12 +11,12 @@ addItems(dgeObj, itemList, itemTypes, overwrite = FALSE, itemAttr)
 
 \item{itemList}{A list of data items to add to dgeObj}
 
+\item{itemTypes}{A list of type values for each item on itemList}
+
 \item{overwrite}{Default = FALSE.  Set to TRUE to overwrite the data object
 stored in the itemName slot}
 
 \item{itemAttr}{A named list of attributes to add to each item (optional)}
-
-\item{ItemTypes}{A list of type values for each item on itemList}
 }
 \value{
 A DGEobj class object with new items added.

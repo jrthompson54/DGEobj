@@ -106,8 +106,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 
     dgeObj <- appendAttributes(dgeObj,
                                itemName=itemName,
-                               attrNames=as.list(names(stdAttr)),
-                               values=stdAttr
+                               attribs=stdAttr
     )
 
     return(dgeObj)
@@ -115,16 +114,16 @@ addItem <- function(dgeObj, item, itemName, itemType,
 
 
 ### Function addItems ###
-#' Function addItem (DGEobj)
+#' Function addItems (DGEobj)
 #'
 #' Add a data item to a class DGEobj
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
 #'
-#' @param dgeObj A DGEobj that items will be added to.
-#' @param itemList  A list of data items to add to dgeObj
-#' @param ItemTypes A list of type values for each item on itemList
+#' @param dgeObj A DGEobj that items will be added to (required)
+#' @param itemList  A list of data items to add to dgeObj (required)
+#' @param itemTypes A list of type values for each item on itemList (required)
 #' @param overwrite Default = FALSE.  Set to TRUE to overwrite the data object
 #'     stored in the itemName slot
 #' @param itemAttr A named list of attributes to add to each item (optional)
@@ -142,9 +141,14 @@ addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, itemAttr){
 
     assert_that(!missing(dgeObj),
                 !missing(itemList),
+                !missing(itemTypes),
                 class(dgeObj)[[1]] == "DGEobj",
-                class(itemList)[[1]] == "list")
+                class(itemList)[[1]] == "list",
+                class(itemTypes)[[1]] == "list",
+                length(itemList) == length(itemTypes)
+                )
 
+    #attach the item attributes to every item
     if (!missing(itemAttr)){
         attrNames <- names(itemAttr)
         for (i in 1:length(itemList))
@@ -152,7 +156,12 @@ addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, itemAttr){
                 attr(itemList[[i]], attrNames[[j]]) <- itemAttr[[j]]
     }
 
+    #add the items to the
     itemNames <- names(itemList)
     for (i in 1:length(itemList))
-        addItem(itemList[[i]], itemNames[[i]], itemTypes[[i]], overwrite=overwrite)
+        addItem(dgeObj,
+                item=itemList[[i]],
+                itemName=itemNames[[i]],
+                itemType=itemTypes[[i]],
+                overwrite=overwrite)
 }
