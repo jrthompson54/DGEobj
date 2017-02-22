@@ -5,7 +5,7 @@
 \title{Function addItem (DGEobj)}
 \usage{
 addItem(dgeObj, item, itemName, itemType, overwrite = FALSE,
-  funArgs = match.call(), itemAttr, parent = NULL)
+  funArgs = match.call(), itemAttr, parent = "")
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
@@ -26,7 +26,8 @@ name and arguments used in the current function (optional)}
 
 \item{itemAttr}{A named list of attributes to add directly to the item (optional)}
 
-\item{parent}{ItemName of the parent of this item}
+\item{parent}{ItemName of the parent of this item (optional, but your DGEobj
+won't be well annotated if you don't use this wherever appropriate)}
 }
 \value{
 A DGEobj class object with a new DGEList added.

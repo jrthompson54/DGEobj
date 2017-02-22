@@ -19,7 +19,7 @@ dim.DGEobj <- function(dgeObj){
 
     dimension <- c(0,0)
 
-    idx <- getItemAttribute(dgeObj, "basetype") == "assay"
+    idx <- attr(dgeObj, "basetype") == "assay"
     myassays <- dgeObj[idx]
 
     if (length(myassays) > 0)

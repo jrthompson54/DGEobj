@@ -237,7 +237,7 @@ initDGEobj <- function(counts, rowData, colData, #required
                       itemName="counts_orig",
                       itemType="counts_orig",
                       funArgs = funArgs,
-                      parent = NULL)
+                      parent = "")
 
     dgeObj <- addItem(dgeObj,
                       item=counts,
@@ -253,7 +253,7 @@ initDGEobj <- function(counts, rowData, colData, #required
                       itemName="design_orig",
                       itemType="design_orig",
                       funArgs = funArgs,
-                      parent=NULL)
+                      parent="")
 
     dgeObj <- addItem(dgeObj,
                       item=colData,
@@ -280,7 +280,7 @@ initDGEobj <- function(counts, rowData, colData, #required
                       itemName=parent,
                       itemType=parent,
                       funArgs=funArgs,
-                      parent=NULL)
+                      parent="")
 
 
     dgeObj <- addItem(dgeObj,

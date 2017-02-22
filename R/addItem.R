@@ -17,7 +17,8 @@
 #'    If you pass the result of match.call() as this argument, it captures the
 #'    name and arguments used in the current function (optional)
 #' @param itemAttr A named list of attributes to add directly to the item (optional)
-#' @param parent ItemName of the parent of this item
+#' @param parent ItemName of the parent of this item (optional, but your DGEobj
+#'   won't be well annotated if you don't use this wherever appropriate)
 #'
 #' @return A DGEobj class object with a new DGEList added.
 #'
@@ -36,7 +37,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
                               overwrite=FALSE,
                               funArgs=match.call(),
                               itemAttr,
-                              parent=NULL
+                              parent=""
                               ){
 
     assert_that(!missing(dgeObj),
@@ -69,7 +70,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
     #check for disallowed second instance of uniqueTypes (unless overwrite mode)
     uniqueTypes <- attr(dgeObj, "objDef")$uniqueType
     if(itemType %in% uniqueTypes  &
-       itemType %in% getItemAttribute(dgeObj, "type") &
+       itemType %in% attr(dgeObj, "type") &
        overwrite==FALSE)
         stop (paste( "Only one instance of type ", itemType, " allowed.",
                      " Use a base type instead (row, col, assay, meta),",
@@ -98,7 +99,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
     stdAttr <- list(
         type = itemType,
         basetype = basetype,
-        dateCreated = lubridate::now(),
+        dateCreated = strftime(lubridate::now()),
         funArgs = funArgs,
         parent = parent
     )

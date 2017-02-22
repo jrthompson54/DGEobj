@@ -186,10 +186,9 @@ getAttribute <- function(item, attrName){
 #' Function appendAttributes
 #'
 #' DGEobj have several attributes whose values are named lists (type, basetype,
-#' parent, funArgs, dateCreated.  The names and length match the names and number
-#' of items.  This
-#' function is used by DGEobj::addItem to update these attributes when a new item
-#' is added.
+#' parent, funArgs, dateCreated.  The names and length match the names and
+#' number of items.  This function is used by DGEobj::addItem to update these
+#' attributes when a new item is added.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj

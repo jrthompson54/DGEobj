@@ -21,10 +21,9 @@ stored in the attribute) or NULL if attribute doesn't exist
 }
 \description{
 DGEobj have several attributes whose values are named lists (type, basetype,
-parent, funArgs, dateCreated.  The names and length match the names and number
-of items.  This
-function is used by DGEobj::addItem to update these attributes when a new item
-is added.
+parent, funArgs, dateCreated.  The names and length match the names and
+number of items.  This function is used by DGEobj::addItem to update these
+attributes when a new item is added.
 }
 \examples{
    #get an attribute from a DGEobj

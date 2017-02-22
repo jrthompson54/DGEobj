@@ -24,23 +24,20 @@ print.DGEobj <- function(dgeObj, verbose=FALSE, ...)  {
 # browser()
 
     ItemNames <- names(dgeObj)
-    # ItemTypes <- lapply (dgeObj, function(x) attr(x, "type"))
-    # BaseTypes <- lapply (dgeObj, function(x) attr(x, "basetype"))
-    # Parents <- lapply (dgeObj, function(x) attr(x, "parent"))
-    ItemTypes <- getItemAttribute(dgeObj, "type")
-    BaseTypes <- getItemAttribute(dgeObj, "basetype")
-    Parents <- getItemAttribute(dgeObj, "parent")
-
-   # CreationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
-    CreationDates <- lapply (dgeObj, function(x) strftime(attr(x, "dateCreated")))
+    ItemTypes <- attr(dgeObj, "type")
+    BaseTypes <- attr(dgeObj, "basetype")
+    Parents <- attr(dgeObj, "parent")
+    creationDates <- attr(dgeObj, "dateCreated")
+   # # CreationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
+   #  creationDates <- lapply (creationDates, strftime)
     #FunArgs <- attr(dgeObj, "funArgs")
-    FunArgs <- getItemAttribute(dgeObj, "funArgs")
+    FunArgs <- attr(dgeObj, "funArgs")
 
     df <- data.frame(cbind(ItemName=ItemNames,
     					   ItemType=ItemTypes,
                            BaseType=BaseTypes,
                            Parent=Parents,
-                           DateCreated=CreationDates),
+                           DateCreated=creationDates),
                            row.names=NULL)
     if (verbose==TRUE)
         df$FunArgs <- unlist(FunArgs)
@@ -83,17 +80,14 @@ printDGEobj <- function(dgeObj, verbose=FALSE, ...)  {
     browser()
 
     ItemNames <- names(dgeObj)
-    # ItemTypes <- lapply (dgeObj, function(x) attr(x, "type"))
-    # BaseTypes <- lapply (dgeObj, function(x) attr(x, "basetype"))
-    # Parents <- lapply (dgeObj, function(x) attr(x, "parent"))
-    ItemTypes <- getItemAttribute(dgeObj, "type")
-    BaseTypes <- getItemAttribute(dgeObj, "basetype")
-    Parents <- getItemAttribute(dgeObj, "parent")
-
-    # CreationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
-    CreationDates <- lapply (dgeObj, function(x) strftime(attr(x, "dateCreated")))
+    ItemTypes <- attr(dgeObj, "type")
+    BaseTypes <- attr(dgeObj, "basetype")
+    Parents <- attr(dgeObj, "parent")
+    creationDates <- attr(dgeObj, "dateCreated")
+    # # CreationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
+    #  creationDates <- lapply (creationDates, strftime)
     #FunArgs <- attr(dgeObj, "funArgs")
-    FunArgs <- getItemAttribute(dgeObj, "funArgs")
+    FunArgs <- attr(dgeObj, "funArgs")
 
     df <- data.frame(cbind(ItemName=ItemNames,
                            ItemType=ItemTypes,
