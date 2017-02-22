@@ -149,4 +149,89 @@ getAttributes <- function(item, excludeList=list("dim", "dimnames")){
 }
 
 
+### Function getAttribute ###
+#' Function getAttribute
 #'
+#' get a specified attribute from an item
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param item  a DGEobj or item
+#' @param attrName Name of the attribute to retrieve.
+#'
+#' @return the specified attribute value (data type depends on the datatype
+#' stored in the attribute) or NULL if attribute doesn't exist
+#'
+#' @examples
+#'    #get an attribute from a DGEobj
+#'    MyAttr <- getAttribute(dgeObj, "type")
+#'
+#'    #get an attribute from a DGEobj item
+#'    MyAttr <- getAttribute(dgeObj$designMatrix, "formula")
+#'
+#' @import assertthat
+#'
+#' @export
+getAttribute <- function(item, attrName){
+    assert_that(!missing(item),
+                !missing(attrName))
+
+    x <- attr(item, attrName)
+    return(x)
+}
+
+
+### Function appendAttributes ###
+#' Function appendAttributes
+#'
+#' DGEobj have several attributes whose values are named lists (type, basetype,
+#' parent, funArgs, dateCreated.  The names and length match the names and number
+#' of items.  This
+#' function is used by DGEobj::addItem to update these attributes when a new item
+#' is added.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj  a DGEobj structure
+#' @param itemName Name of the item being annotated
+#' @param attrNames List of attribute Names to update
+#' @param values list of Values to append to the named attributes
+#'
+#' @return the specified attribute value (data type depends on the datatype
+#' stored in the attribute) or NULL if attribute doesn't exist
+#'
+#' @examples
+#'    #get an attribute from a DGEobj
+#'    MyDgeObj <- appendAttributes(dgeObj, "counts",
+#'                    list("type", "basetype"),
+#'                    list("counts", "counts"))
+#'
+#' @import assertthat
+#'
+#' @export
+appendAttributes <- function(dgeObj, itemName, attrNames, values){
+    assert_that(!missing(dgeObj),
+                !missing(itemName),
+                !missing(attrNames),
+                !missing(values),
+                class(dgeObj)[[1]] == "DGEobj",
+                class(itemName)[[1]] == "character",
+                class(attrNames)[[1]] == "list",
+                class(values)[[1]] == "list",
+                length(attrNames) == length(values)
+    )
+
+    for (i in 1:length(attrNames)){
+        #get the attribute
+        at <- attr(dgeObj, attrNames[[i]])
+        #add attribute for the new item
+        at[itemName] <- values[[i]]
+        #store the modified attribute
+        attr(dgeObj, attrNames[[i]]) <- at
+    }
+    return(dgeObj)
+}
+
+

@@ -22,7 +22,7 @@ colnames(counts).}
 to assign to the DGEobj.}
 
 \item{DGEobjDef}{An object definition. Defaults to the global DGE object definition
-(.DGEobjDef) and you usually shouldn't change this.}
+(.DGEobjDef) and you usually shouldn't change this if you're running RNA-seq.}
 }
 \value{
 A DGEobj object

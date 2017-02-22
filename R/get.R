@@ -136,3 +136,36 @@ getBaseType <- function(dgeObj, baseType){
     result <- dgeObj[idx]
     return(result)
 }
+
+### Function BaseType ###
+#' Function BaseType
+#'
+#' Return the basetype for a given type
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param dgeObj A class DGEobj created by function initDGEobj
+#' @param type  A type for which you want the basetype
+#'
+#' @return A basetype value (chracter string)
+#'
+#' @examples
+#'    MyBaseType <- baseType(dgeObj, type="DGEList")
+#'
+#' @import assertthat
+#'
+#' @export
+baseType <- function(dgeObj, type){
+
+    assert_that(!missing(dgeObj),
+                !missing(type),
+                class(dgeObj)[[1]] == "DGEobj",
+                class(type)[[1]] == "character"
+                )
+    objDef <- attr(dgeObj, "objDef")
+    return (objDef$type[[type]])
+
+}
+
+

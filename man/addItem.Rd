@@ -5,7 +5,7 @@
 \title{Function addItem (DGEobj)}
 \usage{
 addItem(dgeObj, item, itemName, itemType, overwrite = FALSE,
-  funArgs = match.call(), custAttr)
+  funArgs = match.call(), itemAttr, parent = NULL)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
@@ -22,9 +22,11 @@ stored in the itemName slot}
 
 \item{funArgs}{A text field to annotate how the data object was created.
 If you pass the result of match.call() as this argument, it captures the
-name and arguments used in the current function.}
+name and arguments used in the current function (optional)}
 
-\item{custAttr}{A named list of attributes to add to the item.}
+\item{itemAttr}{A named list of attributes to add directly to the item (optional)}
+
+\item{parent}{ItemName of the parent of this item}
 }
 \value{
 A DGEobj class object with a new DGEList added.

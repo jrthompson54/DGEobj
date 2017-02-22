@@ -15,8 +15,9 @@
 #'     stored in the itemName slot
 #' @param funArgs A text field to annotate how the data object was created.
 #'    If you pass the result of match.call() as this argument, it captures the
-#'    name and arguments used in the current function.
-#' @param custAttr A named list of attributes to add to the item.
+#'    name and arguments used in the current function (optional)
+#' @param itemAttr A named list of attributes to add directly to the item (optional)
+#' @param parent ItemName of the parent of this item
 #'
 #' @return A DGEobj class object with a new DGEList added.
 #'
@@ -34,7 +35,8 @@
 addItem <- function(dgeObj, item, itemName, itemType,
                               overwrite=FALSE,
                               funArgs=match.call(),
-                              custAttr
+                              itemAttr,
+                              parent=NULL
                               ){
 
     assert_that(!missing(dgeObj),
@@ -42,7 +44,9 @@ addItem <- function(dgeObj, item, itemName, itemType,
                 !missing(itemName),
                 !missing(itemType))
 
-    basetype <- attr(dgeObj, "objDef")$type[[itemType]]
+    # basetype <- attr(dgeObj, "objDef")$type[[itemType]]
+    basetype <- baseType(dgeObj, type=itemType)
+
     switch(basetype,
            row = {if (!itemType == "granges" & is.null(rownames(item)))
                     stop("Row basetypes must have rownames")},
@@ -71,7 +75,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
                      " Use a base type instead (row, col, assay, meta),",
                      " or define a new type.", sep=""))
 
-    #convert call objects to text
+    #convert call objects (from match.call) to text
     if (class(funArgs) == "call")
         # funArgs <- paste(funArgs, collapse="; ")
         funArgs <- paste(funArgs[[1]], "(",
@@ -82,23 +86,28 @@ addItem <- function(dgeObj, item, itemName, itemType,
     if (.dimensionMatch(dgeObj, item, itemType) == FALSE)
         stop("item doesn't match dimension of dgeObj")
 
+    # add custom attributes directly to the item
+    if (!missing("itemAttr"))
+        item <- setAttributes(item, itemAttr)
+
+    #ready to add the item
+    dgeObj[[itemName]] <- item
+
+    #add attributes to the dgeObj
     #set type, basetype, dateCreated and funArgs attributes of item
     stdAttr <- list(
         type = itemType,
         basetype = basetype,
         dateCreated = lubridate::now(),
-        funArgs = funArgs
+        funArgs = funArgs,
+        parent = parent
     )
-    item <- setAttributes(item, stdAttr)
 
-    # if (exists("custAttr")){
-    if (!missing("custAttr")){
-        # print("Adding custom attributes")
-        item <- setAttributes(item, custAttr)
-    }
-
-    #ready to add the item with all its attributes
-    dgeObj[[itemName]] <- item
+    dgeObj <- appendAttributes(dgeObj,
+                               itemName=itemName,
+                               attrNames=as.list(names(stdAttr)),
+                               values=stdAttr
+    )
 
     return(dgeObj)
 } #addItem
@@ -117,7 +126,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 #' @param ItemTypes A list of type values for each item on itemList
 #' @param overwrite Default = FALSE.  Set to TRUE to overwrite the data object
 #'     stored in the itemName slot
-#' @param custAttr A named list of attributes to add to each item (optional)
+#' @param itemAttr A named list of attributes to add to each item (optional)
 #'
 #' @return A DGEobj class object with new items added.
 #'
@@ -128,18 +137,18 @@ addItem <- function(dgeObj, item, itemName, itemType,
 #' @import assertthat
 #'
 #' @export
-addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, custAttr){
+addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, itemAttr){
 
     assert_that(!missing(dgeObj),
                 !missing(itemList),
                 class(dgeObj)[[1]] == "DGEobj",
                 class(itemList)[[1]] == "list")
 
-    if (!missing(custAttr)){
-        attrNames <- names(custAttr)
+    if (!missing(itemAttr)){
+        attrNames <- names(itemAttr)
         for (i in 1:length(itemList))
-            for (j in 1:length(custAttr))
-                attr(itemList[[i]], attrNames[[j]]) <- custAttr[[j]]
+            for (j in 1:length(itemAttr))
+                attr(itemList[[i]], attrNames[[j]]) <- itemAttr[[j]]
     }
 
     itemNames <- names(itemList)

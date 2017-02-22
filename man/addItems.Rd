@@ -4,7 +4,7 @@
 \alias{addItems}
 \title{Function addItem (DGEobj)}
 \usage{
-addItems(dgeObj, itemList, itemTypes, overwrite = FALSE, custAttr)
+addItems(dgeObj, itemList, itemTypes, overwrite = FALSE, itemAttr)
 }
 \arguments{
 \item{dgeObj}{A DGEobj that items will be added to.}
@@ -14,7 +14,7 @@ addItems(dgeObj, itemList, itemTypes, overwrite = FALSE, custAttr)
 \item{overwrite}{Default = FALSE.  Set to TRUE to overwrite the data object
 stored in the itemName slot}
 
-\item{custAttr}{A named list of attributes to add to each item (optional)}
+\item{itemAttr}{A named list of attributes to add to each item (optional)}
 
 \item{ItemTypes}{A list of type values for each item on itemList}
 }
