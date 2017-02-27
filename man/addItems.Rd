@@ -2,16 +2,16 @@
 % Please edit documentation in R/addItem.R
 \name{addItems}
 \alias{addItems}
-\title{Function addItem (DGEobj)}
+\title{Function addItems (DGEobj)}
 \usage{
 addItems(dgeObj, itemList, itemTypes, overwrite = FALSE, itemAttr)
 }
 \arguments{
-\item{dgeObj}{A DGEobj that items will be added to.}
+\item{dgeObj}{A DGEobj that items will be added to (required)}
 
-\item{itemList}{A list of data items to add to dgeObj}
+\item{itemList}{A list of data items to add to dgeObj (required)}
 
-\item{itemTypes}{A list of type values for each item on itemList}
+\item{itemTypes}{A list of type values for each item on itemList (required)}
 
 \item{overwrite}{Default = FALSE.  Set to TRUE to overwrite the data object
 stored in the itemName slot}
@@ -34,4 +34,3 @@ John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{DGEobj}
 \keyword{RNA-Seq,}
-
