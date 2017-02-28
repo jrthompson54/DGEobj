@@ -20,7 +20,7 @@
 #' @param parent ItemName of the parent of this item (optional, but your DGEobj
 #'   won't be well annotated if you don't use this wherever appropriate)
 #'
-#' @return A DGEobj class object with a new DGEList added.
+#' @return A DGEobj class object with a new data item added.
 #'
 #' @examples
 #'    myFunArgs <- match.call() #capture calling function and arguments

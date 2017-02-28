@@ -36,6 +36,7 @@
              designMatrix = "col",
 
              counts ="assay",
+             effectiveLength = "assay",
              Log2CPM = "assay",
              TPM = "assay",
              FPKM = "assay",
@@ -68,6 +69,7 @@
                 "geneData",
                 "isoformData",
                 "exonData",
+                "effectiveLength",
                 "DGEList",
                 "granges"),
 
