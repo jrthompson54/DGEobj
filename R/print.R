@@ -47,7 +47,7 @@ print.DGEobj <- function(dgeObj, verbose=FALSE, ...)  {
 
     print(knitr::kable(df, row.names=FALSE))
 
-    return(invisible(df))
+    invisible(dgeObj)
 }
 
 
@@ -103,7 +103,7 @@ printDGEobj <- function(dgeObj, verbose=FALSE, ...)  {
 
     print(knitr::kable(df, row.names=FALSE))
 
-    return(invisible(df))
+    invisible(dgeObj)
 }
 
 
