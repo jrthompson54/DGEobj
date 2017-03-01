@@ -1,8 +1,8 @@
 Package: DGEobj
 Type: Package
-Title: DGEresult provides a S3 data class to manage and annotate DGE analysis
+Title: DGEobj provides a S3 data class to manage and annotate DGE analysis
     results.
-Version: 0.6.3
+Version: 0.6.4
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
