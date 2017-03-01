@@ -30,7 +30,7 @@ name and arguments used in the current function (optional)}
 won't be well annotated if you don't use this wherever appropriate)}
 }
 \value{
-A DGEobj class object with a new DGEList added.
+A DGEobj class object with a new data item added.
 }
 \description{
 Add a data item to a class DGEobj

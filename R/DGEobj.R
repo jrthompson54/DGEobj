@@ -60,6 +60,7 @@
              granges_orig = "meta",
              counts_orig = "meta",
              design_orig ="meta",
+             effectiveLength_orig = "meta",
              svobj = "meta"
              ),
 
