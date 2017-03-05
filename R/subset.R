@@ -64,3 +64,9 @@ subset.DGEobj <- function(DgeObj, row, col){
 }
 
 
+`[.DGEobj` <- function(dgeObj, row, col){
+    dgeObj <- subset(dgeObj, row, col)
+}
+
+
+
