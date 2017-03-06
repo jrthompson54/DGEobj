@@ -63,7 +63,7 @@ subset.DGEobj <- function(DgeObj, row, col){
     return(DgeObj)
 }
 
-
+#' @export
 `[.DGEobj` <- function(dgeObj, row, col){
     dgeObj <- subset(dgeObj, row, col)
 }
