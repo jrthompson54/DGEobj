@@ -9,7 +9,7 @@ Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
     role = c("aut", "cre"))
 Description: Provides an S3 data class to manage and annotate DGE analysis
     results.  Although authored with differential gene expression in mind,
-    the datatypes are customizable and extensible to accommodate nearly any 
+    the datatypes are customizable and extensible to accommodate nearly any
     data analysis workflow.
 Depends:
     R (>= 3.3.2)
@@ -35,4 +35,4 @@ Collate:
     'attributes.R'
     'as.DGEO.R'
     'subset.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
