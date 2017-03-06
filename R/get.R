@@ -24,7 +24,7 @@ getItems <- function(dgeObj, itemNames){
     )
 
     idx <- names(dgeObj) %in% itemNames
-    result <- dgeObj[idx]  #list of elements
+    result <- unclass(dgeObj)[idx]  #list of elements
     if (length(result) < length (itemNames))
         warning("Some requested items were missing!")
 
@@ -76,12 +76,7 @@ getItem <- function(dgeObj, itemName)
 getType <- function(dgeObj, type, parent){
     #type can be a single named type or a vector or list of types
     idx <- attr(dgeObj, "type") %in% type
-    # if (sum(idx) == 1)
-    #     result <- dgeObj[idx][[1]]
-    # else
-    #   result <- dgeObj[idx]
-
-    result <- dgeObj[idx]
+    result <- unclass(dgeObj)[idx]
 
     #filter for defined parent
     if (!missing("parent")){
@@ -133,7 +128,7 @@ getBaseType <- function(dgeObj, baseType){
     if (sum(idx) < length(baseType))
         warning("Some baseTypes were not found")
 
-    result <- dgeObj[idx]
+    result <- unclass(dgeObj)[idx]
     return(result)
 }
 

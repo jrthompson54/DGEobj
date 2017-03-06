@@ -1,3 +1,43 @@
+### Function summarize ###
+#' Function summarize
+#'
+#' Print a DGEobj object
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq
+#'
+#' @param dgeObj A DGEobj object
+#' @param verbose  Add funArgs to the output (default=FALSE)
+#'
+#' @return a dataframe summarizing the data contained in the DGEobj
+#'
+#' @examples
+#'   Mydf <- summarize(myDGEobj)
+#'   knitr::kable(summarize(myDGEobj))
+#'   Mydf <- summarize(myDGEobj, verbose=TRUE)
+#'
+#' @export
+summarize <- function(dgeObj, verbose=FALSE, ...)  {
+
+    ItemNames <- names(dgeObj)
+    ItemTypes <- attr(dgeObj, "type")
+    BaseTypes <- attr(dgeObj, "basetype")
+    Parents <- attr(dgeObj, "parent")
+    creationDates <- attr(dgeObj, "dateCreated")
+    FunArgs <- attr(dgeObj, "funArgs")
+
+    df <- data.frame(cbind(ItemName=ItemNames,
+    					   ItemType=ItemTypes,
+                           BaseType=BaseTypes,
+                           Parent=Parents,
+                           DateCreated=creationDates),
+                           row.names=NULL)
+    if (verbose==TRUE)
+        df$FunArgs <- unlist(FunArgs)
+
+    return(df)
+}
+
 ### Function print ###
 #' Function print.DGEobj
 #'
@@ -18,92 +58,12 @@
 #' @import knitr
 #'
 #' @export
-print.DGEobj <- function(dgeObj, verbose=FALSE, ...)  {
-
-# print("Entering print.DGEobj")
-# browser()
-
-    ItemNames <- names(dgeObj)
-    ItemTypes <- attr(dgeObj, "type")
-    BaseTypes <- attr(dgeObj, "basetype")
-    Parents <- attr(dgeObj, "parent")
-    creationDates <- attr(dgeObj, "dateCreated")
-   # # CreationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
-   #  creationDates <- lapply (creationDates, strftime)
-    #FunArgs <- attr(dgeObj, "funArgs")
-    FunArgs <- attr(dgeObj, "funArgs")
-
-    df <- data.frame(cbind(ItemName=ItemNames,
-    					   ItemType=ItemTypes,
-                           BaseType=BaseTypes,
-                           Parent=Parents,
-                           DateCreated=creationDates),
-                           row.names=NULL)
-    if (verbose==TRUE)
-        df$FunArgs <- unlist(FunArgs)
-
-    cat(paste("\nDimension: [", dim(dgeObj)[1], ", ", dim(dgeObj)[2], "]", sep=""))
-    cat("")
-
-    print(knitr::kable(df, row.names=FALSE))
-
-    invisible(dgeObj)
+print.dgeObj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
+                          print.gap = NULL, right = FALSE, max = NULL,
+                          useSource = TRUE,
+                          verbose=FALSE,
+                          ...){
+    df <- summarize(dgeObj, verbose=verbose)
+    print(df)
+    return(invisible(dgeObj))
 }
-
-
-#Same function with a distinct name instead of overloading the print function
-#for debugging purposes.
-#
-### Function printDGEobj ###
-#' Function printDGEobj
-#'
-#' Print a DGEobj object
-#'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq
-#'
-#' @param dgeObj A DGEobj object
-#' @param verbose  Add funArgs to the output (default=FALSE)
-#'
-#' @return NULL
-#'
-#' @examples
-#'   print(myDGEobj)
-#'   print(myDGEobj, verbose=TRUE)
-#'
-#' @import knitr
-#'
-#' @export
-printDGEobj <- function(dgeObj, verbose=FALSE, ...)  {
-
-    print("Entering printDGEobj")
-    browser()
-
-    ItemNames <- names(dgeObj)
-    ItemTypes <- attr(dgeObj, "type")
-    BaseTypes <- attr(dgeObj, "basetype")
-    Parents <- attr(dgeObj, "parent")
-    creationDates <- attr(dgeObj, "dateCreated")
-    # # CreationDates <- lapply(attr(dgeObj, "dateCreated"), strftime)
-    #  creationDates <- lapply (creationDates, strftime)
-    #FunArgs <- attr(dgeObj, "funArgs")
-    FunArgs <- attr(dgeObj, "funArgs")
-
-    df <- data.frame(cbind(ItemName=ItemNames,
-                           ItemType=ItemTypes,
-                           BaseType=BaseTypes,
-                           Parent=Parents,
-                           DateCreated=CreationDates),
-                     row.names=NULL)
-    if (verbose==TRUE)
-        df$FunArgs <- unlist(FunArgs)
-
-    cat(paste("\nDimension: [", dim(dgeObj)[1], ", ", dim(dgeObj)[2], "]", sep=""))
-    cat("")
-
-    print(knitr::kable(df, row.names=FALSE))
-
-    invisible(dgeObj)
-}
-
-

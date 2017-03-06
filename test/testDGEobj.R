@@ -3,7 +3,8 @@ rm(list=ls())
 library(magrittr)
 library(SummarizedExperiment)
 library(DGEobj)
-library(assertthat)
+# library(assertthat)
+library(knitr)
 
 RSE <- readRDS("../RSE.RDS")
 
@@ -19,20 +20,20 @@ d <- initDGEobj(counts=MyCounts, colData=Design, rowData=MyGeneAnno, "gene")
 MyContrast <- MyGeneAnno
 d %<>% addItem(MyContrast, "contrastTest", "topTable", overwrite = T)
 
-print(d, verbose=T)
+kable(summarize(d, verbose=T))
 
 dim(d)
 
 # d %<>% rmItem("design")
-print(d)
+kable(summarize(d))
 
 #test trap for overwriting item
 d %<>% addItem(Design, "design", "design")
-print(d)
+kable(summarize(d))
 
 #force overwrite
 d %<>% addItem(Design, "design", "design", overwrite=T)
-print(d)
+kable(summarize(d))
 
 #test trap for adding 2nd instance of unique item
 d %<>% addItem(MyCounts, "counts", "counts")
@@ -42,9 +43,9 @@ d %<>% addItem(MyCounts, "counts", "counts")
 #try to remove a nonexistent item
 d %<>% rmItem("xxx")
 
-print(d)
+kable(summarize(d))
 
-print(d, verbose=T)
+kable(summarize(d, verbose=T))
 
 showTypes(d)
 
@@ -54,7 +55,7 @@ length(d)
 
 myAnnotation <- getItem(d, "design")
 myCounts <- getItem(d, "counts")
-print(d)
+kable(summarize(d))
 
 dimnames(d)
 colnames(d)

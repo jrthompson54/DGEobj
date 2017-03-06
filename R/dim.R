@@ -20,7 +20,7 @@ dim.DGEobj <- function(dgeObj){
     dimension <- c(0,0)
 
     idx <- attr(dgeObj, "basetype") == "assay"
-    myassays <- dgeObj[idx]
+    myassays <- unclass(dgeObj)[idx]
 
     if (length(myassays) > 0)
         dimension <- dim(myassays[[1]])
