@@ -9,6 +9,9 @@
 #' @param dgeObj  A class dgeObj created by function initDGEobj
 #' @param row  row index for the subset
 #' @param col col index for the subset
+#' @param drop Included for compatibility but has no real meaning in the context
+#'    of subsetting a DGEobj.  So drop=FALSE is the default and changing this
+#'    has no effect.
 #'
 #' @return A subsetted DGEobj class object
 #'
@@ -16,7 +19,7 @@
 #'    DgeObj <- subset(DgeObj, 1:10, 100:1000)
 #'
 #' @export
-subset.DGEobj <- function(DgeObj, row, col){
+subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
     #check if both row and col provided.
     assertthat::assert_that(class(DgeObj)[[1]] == "DGEobj")
 
@@ -35,9 +38,6 @@ subset.DGEobj <- function(DgeObj, row, col){
     basetypes <- attr(DgeObj, "basetype")
     for (i in 1:length(DgeObj)){
 
-        #save the item attributes (attributes will be stripped in the subsetting)
-        at <- getAttributes(DgeObj[[i]])
-
         switch(basetypes[[i]],
 
                row = {
@@ -55,17 +55,16 @@ subset.DGEobj <- function(DgeObj, row, col){
                assay = {
                    DgeObj[[i]] <- DgeObj[[i]][row, col]
                })
-        #restore the attributes, if any
-        if (length(at) > 0)
-            DgeObj[[i]] <- setAttributes(DgeObj[[i]], at)
+
     }
 
     return(DgeObj)
 }
 
 #' @export
-`[.DGEobj` <- function(dgeObj, row, col){
-    dgeObj <- subset(dgeObj, row, col)
+`[.DGEobj` <- function(dgeObj, row, col, drop=FALSE){
+    #drop supported for compatibility but has no effect in this context
+    dgeObj <- subset(dgeObj, row, col, drop)
 }
 
 

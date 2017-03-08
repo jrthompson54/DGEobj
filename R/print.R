@@ -12,8 +12,11 @@
 #' @return a dataframe summarizing the data contained in the DGEobj
 #'
 #' @examples
+#'   #capture in a dataframe
 #'   Mydf <- summarize(myDGEobj)
+#'   #print a nicely formatted table
 #'   knitr::kable(summarize(myDGEobj))
+#'   #capture dataframe with verbose output
 #'   Mydf <- summarize(myDGEobj, verbose=TRUE)
 #'
 #' @export
@@ -38,7 +41,7 @@ summarize <- function(dgeObj, verbose=FALSE, ...)  {
     return(df)
 }
 
-### Function print ###
+### Function print.DGEobj ###
 #' Function print.DGEobj
 #'
 #' Print a DGEobj object
@@ -58,7 +61,7 @@ summarize <- function(dgeObj, verbose=FALSE, ...)  {
 #' @import knitr
 #'
 #' @export
-print.dgeObj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
+print.DGEobj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
                           print.gap = NULL, right = FALSE, max = NULL,
                           useSource = TRUE,
                           verbose=FALSE,

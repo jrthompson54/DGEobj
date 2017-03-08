@@ -4,7 +4,8 @@
 \alias{getAttributes}
 \title{Function getAttributes}
 \usage{
-getAttributes(item, excludeList = list("dim", "dimnames"))
+getAttributes(item, excludeList = list("dim", "dimnames", "names",
+  "row.names", "class"))
 }
 \arguments{
 \item{item}{a DGEobj structre}
@@ -28,4 +29,3 @@ John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{DGEobj}
 \keyword{RNA-Seq,}
-
