@@ -61,7 +61,7 @@ summarize <- function(dgeObj, verbose=FALSE, ...)  {
 #' @import knitr
 #'
 #' @export
-print.dgeObj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
+print.DGEobj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
                           print.gap = NULL, right = FALSE, max = NULL,
                           useSource = TRUE,
                           verbose=FALSE,

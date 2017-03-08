@@ -44,7 +44,7 @@ convertDGEobj <- function(dgeObj, Class){
     }
 
     #main
-browser()
+
     supportedClasses <- list("RANGEDSUMMARIZEDEXPERIMENT", "RSE",
                         "EXPRESSIONSET", "ES", "LIST")
     assert_that(!missing(dgeObj),

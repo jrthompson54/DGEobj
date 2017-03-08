@@ -38,9 +38,6 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
     basetypes <- attr(DgeObj, "basetype")
     for (i in 1:length(DgeObj)){
 
-        #save the item attributes (attributes will be stripped in the subsetting)
-        at <- getAttributes(DgeObj[[i]])
-
         switch(basetypes[[i]],
 
                row = {
@@ -58,9 +55,7 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
                assay = {
                    DgeObj[[i]] <- DgeObj[[i]][row, col]
                })
-        #restore the attributes, if any
-        if (length(at) > 0)
-            DgeObj[[i]] <- setAttributes(DgeObj[[i]], at)
+
     }
 
     return(DgeObj)

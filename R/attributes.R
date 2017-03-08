@@ -142,7 +142,9 @@ getItemAttribute <- function(dgeObj, attrName){
 #' @import magrittr assertthat dplyr knitr
 #'
 #' @export
-getAttributes <- function(item, excludeList=list("dim", "dimnames")){
+getAttributes <- function(item, excludeList=list("dim", "dimnames",
+                                                 "names", "row.names",
+                                                 "class")){
       at <- attributes(item)
       idx <- !names(at) %in% excludeList
       return(at[idx])
