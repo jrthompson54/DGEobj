@@ -25,4 +25,3 @@ Print a DGEobj object
 John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{RNA-Seq}
-

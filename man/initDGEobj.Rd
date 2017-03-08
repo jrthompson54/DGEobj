@@ -47,4 +47,3 @@ Initializes DGEobj with base data (counts, gene annotation and sample annotation
 John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{RNA-Seq}
-

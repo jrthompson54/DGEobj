@@ -18,8 +18,11 @@ a dataframe summarizing the data contained in the DGEobj
 Print a DGEobj object
 }
 \examples{
+  #capture in a dataframe
   Mydf <- summarize(myDGEobj)
+  #print a nicely formatted table
   knitr::kable(summarize(myDGEobj))
+  #capture dataframe with verbose output
   Mydf <- summarize(myDGEobj, verbose=TRUE)
 
 }
@@ -27,4 +30,3 @@ Print a DGEobj object
 John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{RNA-Seq}
-

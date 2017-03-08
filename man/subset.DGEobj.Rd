@@ -4,12 +4,16 @@
 \alias{subset.DGEobj}
 \title{Function subset (DGEobj)}
 \usage{
-subset.DGEobj(DgeObj, row, col)
+subset.DGEobj(DgeObj, row, col, drop = FALSE)
 }
 \arguments{
 \item{row}{row index for the subset}
 
 \item{col}{col index for the subset}
+
+\item{drop}{Included for compatibility but has no real meaning in the context
+of subsetting a DGEobj.  So drop=FALSE is the default and changing this
+has no effect.}
 
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
 }
@@ -28,4 +32,3 @@ John Thompson, \email{john.thompson@bms.com}
 }
 \keyword{DGEobj}
 \keyword{RNA-Seq,}
-
