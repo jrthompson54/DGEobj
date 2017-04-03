@@ -118,9 +118,9 @@ getBaseType <- function(dgeObj, baseType){
     if (missing(baseType))
         stop("baseType argument is required")
 
-    if (!baseType %in% attr(dgeObj, "objDef")$basetype)
+    if (!baseType %in% baseTypes(dgeObj))
         stop(paste("baseType must be one of: ",
-                paste(attr(dgeObj, "objDef")$basetype, collapse=", "),
+                paste(baseTypes(dgeObj), collapse=", "),
                 sep=""))
 
     idx <- attr(dgeObj, "basetype") %in% baseType
@@ -162,5 +162,32 @@ baseType <- function(dgeObj, type){
     return (objDef$type[[type]])
 
 }
+
+### Function baseTypes ###
+#' Function baseTypes
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' Return a list of the available basetypes
+#'
+#' @param dgeObj  a class DGEobj object
+#'
+#' @return A list of  basetypes
+#'
+#' @examples
+#'    #global definition of baseTypes
+#'    mybasetypes <- baseTypes()
+#'    #basetypes from a specific DGEobj
+#'    mybasetypes <- baseTypes(myDgeObj)
+#'
+#' @export
+baseTypes <- function(dgeObj, itemNames){
+    if (missing(dgeObj))
+        return(unique(.DGEobjDef$type))
+    else
+        return(unique(attr(dgeObj, "objDef")$type))
+}
+
 
 

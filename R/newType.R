@@ -29,7 +29,7 @@ newType <- function(dgeObj, itemType, baseType, uniqueItem=FALSE){
     result <- FALSE
     assert_that(!missing(dgeObj), !missing(itemType),
                 !missing(baseType), class(dgeObj) == "DGEobj",
-                baseType %in% attr(dgeObj, "objDef")$basetype
+                baseType %in% baseTypes(dgeObj)
     )
 
     #define new type

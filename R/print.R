@@ -1,5 +1,5 @@
-### Function summarize ###
-#' Function summarize
+### Function inventory ###
+#' Function inventory
 #'
 #' Print a DGEobj object
 #'
@@ -20,7 +20,7 @@
 #'   Mydf <- summarize(myDGEobj, verbose=TRUE)
 #'
 #' @export
-summarize <- function(dgeObj, verbose=FALSE, ...)  {
+inventory <- function(dgeObj, verbose=FALSE, ...)  {
 
     ItemNames <- names(dgeObj)
     ItemTypes <- attr(dgeObj, "type")
@@ -66,7 +66,7 @@ print.DGEobj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
                           useSource = TRUE,
                           verbose=FALSE,
                           ...){
-    df <- summarize(dgeObj, verbose=verbose)
+    df <- inventory(dgeObj, verbose=verbose)
     print(df)
     return(invisible(dgeObj))
 }

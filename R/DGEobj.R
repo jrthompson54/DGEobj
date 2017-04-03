@@ -12,10 +12,10 @@
 # The .DGEobjDef describes the structure of the DGE object.
 .DGEobjDef <- list(
     #there are 4 basetypes that fundamentally describe how to subset different items
-    basetype = c(row="row",
-                   col="col",
-                   assay="assay",
-                   meta="meta"),
+    # basetype = c(row="row",
+    #                col="col",
+    #                assay="assay",
+    #                meta="meta"),
     #the value of type is a basetype  All Types must be associated with one
     #of the four basetypes.
     type = c(row="row",
