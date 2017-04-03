@@ -159,9 +159,10 @@ addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, itemAttr){
     #add the items to the
     itemNames <- names(itemList)
     for (i in 1:length(itemList))
-        addItem(dgeObj,
+        dgeObj <- addItem(dgeObj,
                 item=itemList[[i]],
                 itemName=itemNames[[i]],
                 itemType=itemTypes[[i]],
                 overwrite=overwrite)
+    return(dgeObj)
 }
