@@ -50,10 +50,11 @@ funArgs is a text field intended to hold details of creating the object.  Passin
 
 ### Conversion
 
-as.list:  unclass a DGEobj to simple list
-as.RSE:  (pending) convert basedata from DGEobj to RangedSummarizedExperiment format
-as.ES:   (pending) convert basedata from DGEobj to ExpressionSet format
-as.DGEO  convert basedata from an RSE object to a DGEobject
+* as.list:  unclass a DGEobj to simple list
+* convertDGEobj:  convert base data (counts, gene and sample annotation) 
+from DGEobj to RangedSummarizedExperiment or ExpressionSet
+* convertRSE:    convert base data (counts, gene and sample annotation) 
+from RSE to DGEobj or ExpressionSet
 
 ### GRanges Data
 
@@ -63,7 +64,35 @@ If the geneData object (row annotatioon) contains chromosome position informatio
 
 During initialization, a copy of the counts, gene annotation and sample annotation is duplicated and stored in the meta slot with an "_orig" suffix on the itemName.  This preserves the original data after you have subsetted the original data. 
 
-## Installation
+## Installation (New!)
+
+It is best to run the install from a fresh R session before loading any
+packages because loaded packages cannot be updated.
+
+Charles Tilford has created a BMS repository.  Packages from the BMS repository
+can now be installed simply with install.packages (after a little setup).
+
+One time setup :
+
+```
+    #Install Charles' bmsPackageTools to enable the BMS BRAN 
+    #repository (modifies your ~/.Rprofile file)
+    install.packages("bmsPackageTools", repos="http://kraken.pri.bms.com/biohtml/nositeminder/BRAN/")
+    library('bmsPackageTools')
+    setBmsRepo(rprofile=TRUE)
+
+    #if you don't have the devtools package already
+    install.packages("devtools")
+```
+
+Then install or update DGEobj:  
+
+```
+    install.packages("DGEobj")
+
+```
+
+## Installation (backup method)
 
 CRAN and Bioconductor package dependencies should be installed automatically.  
 It is best to run the install from a fresh R session before loading any packages as loaded packages cannot be updated.

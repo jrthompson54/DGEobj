@@ -24,10 +24,14 @@ getItems <- function(dgeObj, itemNames){
     )
 
     idx <- names(dgeObj) %in% itemNames
-    result <- unclass(dgeObj)[idx]  #list of elements
-    if (length(result) < length (itemNames))
-        warning("Some requested items were missing!")
-
+    if (sum(idx) == 0){
+        tsmsg("Warning: No matching item(s) found.")
+        result = NULL
+    } else {
+        result <- unclass(dgeObj)[idx]  #list of elements
+        if (length(result) < length (itemNames))
+            warning("Some requested items were missing!")
+    }
     return(result)
 }
 
@@ -48,8 +52,19 @@ getItems <- function(dgeObj, itemNames){
 #' @import assertthat
 #'
 #' @export
-getItem <- function(dgeObj, itemName)
-    getItems(dgeObj, itemName)[[1]]
+getItem <- function(dgeObj, itemName){
+    assert_that(!missing(dgeObj),
+                !missing(itemName),
+                class(dgeObj)[[1]] == "DGEobj",
+                class(itemName) == "character",
+                length(itemName) == 1
+    )
+    x <- getItems(dgeObj, itemName)
+    if (length(x) > 0)
+        return(x[[1]])
+    else
+        return(NULL)
+}
 
 ### Function getType ###
 #' Function getType
@@ -87,8 +102,14 @@ getType <- function(dgeObj, type, parent){
 
     if (sum(idx) < length(type))
         warning("Some types were not found")
-
-    return(result)
+    if (sum(idx) == 0){
+        tsmsg("Warning: no items of specified type are found.")
+        return(NULL)
+    } else {
+        if (sum(idx) < length(type))
+            warning("Some types were not found")
+        return(result)
+    }
 }
 
 

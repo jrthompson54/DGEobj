@@ -390,4 +390,11 @@ Txt2DF <- function(filename) {
     }
 }
 
+### Function tsmsg ###
+# a timestamped message
+tsmsg <- function(...) {
+    # Works like message() but prepends a timestamp
+    message(date(), ": ", ...)
+}
+
 

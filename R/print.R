@@ -13,11 +13,11 @@
 #'
 #' @examples
 #'   #capture in a dataframe
-#'   Mydf <- summarize(myDGEobj)
+#'   Mydf <- inventory(myDGEobj)
 #'   #print a nicely formatted table
-#'   knitr::kable(summarize(myDGEobj))
+#'   knitr::kable(inventory(myDGEobj))
 #'   #capture dataframe with verbose output
-#'   Mydf <- summarize(myDGEobj, verbose=TRUE)
+#'   Mydf <- inventory(myDGEobj, verbose=TRUE)
 #'
 #' @export
 inventory <- function(dgeObj, verbose=FALSE, ...)  {
@@ -28,11 +28,14 @@ inventory <- function(dgeObj, verbose=FALSE, ...)  {
     Parents <- attr(dgeObj, "parent")
     creationDates <- attr(dgeObj, "dateCreated")
     FunArgs <- attr(dgeObj, "funArgs")
+    Class <- lapply(dgeObj, class)
+    Class <- lapply(Class, `[[`, 1)
 
     df <- data.frame(cbind(ItemName=ItemNames,
     					   ItemType=ItemTypes,
                            BaseType=BaseTypes,
                            Parent=Parents,
+    					   Class,
                            DateCreated=creationDates),
                            row.names=NULL)
     if (verbose==TRUE)

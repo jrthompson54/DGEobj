@@ -19,11 +19,11 @@ Print a DGEobj object
 }
 \examples{
   #capture in a dataframe
-  Mydf <- summarize(myDGEobj)
+  Mydf <- inventory(myDGEobj)
   #print a nicely formatted table
-  knitr::kable(summarize(myDGEobj))
+  knitr::kable(inventory(myDGEobj))
   #capture dataframe with verbose output
-  Mydf <- summarize(myDGEobj, verbose=TRUE)
+  Mydf <- inventory(myDGEobj, verbose=TRUE)
 
 }
 \author{
