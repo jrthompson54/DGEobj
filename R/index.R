@@ -116,14 +116,20 @@ annotateDGEobj <- function(dgeObj, regfile,
     #just first column
     regdat <- regdat[,1, drop=FALSE]
     colnames(regdat) <- "pair"
+
     #just lines with equals signs
-    regdat <- filter(regdat, grepl("=", pair), !grepl("Parameters.", pair))
+    regdat <- dplyr::filter(regdat, str_detect(pair, "="), !str_detect(pair, "Parameters."))
     #now split into key value pairs
-    regdat <- strsplit(regdat$pair, "=") %>% as.data.frame() %>% t
+    regdat <- strsplit(regdat$pair, "=") %>%
+        as.data.frame(stringsAsFactors=FALSE) %>%
+        t %>%
+        as.data.frame(stringsAsFactors=FALSE)
     colnames(regdat) <- c("key", "value")
 
-    MyAttribs <- list()
-    for (i in 1:nrows(regdat))
+    #capture/preserve the existing attributes
+    MyAttribs <- attributes(dgeObj)
+
+    for (i in 1:nrow(regdat))
         if (regdat$key[i] %in% keys)
             MyAttribs[regdat$key[i]] <- regdat$value[i]
 
