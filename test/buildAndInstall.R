@@ -7,7 +7,7 @@ library(devtools)
 document()
 load_all()
 build()
-pkg = "~/R/lib/pkgsrc/DGEobj_0.9.6.tar.gz"
+pkg = "~/R/lib/pkgsrc/DGEobj_0.9.5.tar.gz"
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)
 
