@@ -27,7 +27,7 @@
 #' @examples
 #'    MyDgeObj <- annotateDGEobj(DGEobj, regfile)
 #'
-#' @import magrittr assertthat
+#' @import magrittr assertthat stringr
 #'
 #' @export
 annotateDGEobj <- function(dgeObj, regfile,

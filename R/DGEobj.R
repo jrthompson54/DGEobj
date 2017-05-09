@@ -44,6 +44,7 @@
              AffyRMA = "assay",
              DGEList = "assay",
              Elist = "assay",
+             isoformFrac = "assay",
 
              corFit = "meta",
              topTreat ="meta",
@@ -74,7 +75,13 @@
                 "DGEList",
                 "granges"),
 
-    allowedLevels = c("gene", "isoform", "exon"),
+    allowedLevels = c("gene", "isoform", "exon")
+) #.DGEobjDef
+# Uncomment this block when you need to update the ./data/DGEobj.rda file
+# x = getwd()
+# setwd ("~/R/lib/pkgsrc/DGEobj/")
+# save(.DGEobjDef, file="./data/DGEobj.rda")
+# setwd(x)
 
     #
     #Define allowed values for attributes of each data type to be attached to the data item.
@@ -86,54 +93,46 @@
     ##to add new attributes to the definition.  Also make attribute names case insensitive.
     ##
     ##Define addAttributes to take a named list of attributes and add them with one line.
-    typeAttributes = c(
-         row = c("SeqId", "Source", "Version"), #name of geneid col, source e.g. Ensembl, version e.g. R84
-         col = "SampIdCol",  #name of sampleID column
-         assay = c("normalized", "LowIntFilter"),
-         meta ="",
-
-         geneData = c("SeqId", "Source", "Version"),
-         isoformData = c("SeqId", "Source", "Version"),
-         exonData = c("SeqId", "Source", "Version"),
-         topTable = "",
-         fit = "",
-         DGEList = c("normalization", "LowIntFilter"),
-
-         design ="SampIdCol",
-         designMatrix = "SampIdCol",
-
-         counts =c("normalization", "LowIntFilter"),
-
-         Log2CPM = c("normalized", "LowIntFilter"),
-         TPM = c("normalized", "LowIntFilter"),
-         FPKM = c("normalized", "LowIntFilter"),
-         zFPKM = c("normalized", "LowIntFilter"),
-         AffyRMA = c("normalized", "LowIntFilter"),
-
-         topTreat ="",
-         geneList = "",
-         pathway = "",
-         URL = ""
-         ),
-
-    mainAttributes = c(
-                Platform = c("RNA-Seq", "EdgeSeq", "DNA-Seq",
-                             "Nanostring", "ddPCR", "TaqMan", "Affy"),
-                Instrument = c("NextSeq", "HiSeq", "PacBio", "Nanopore", "IonTorrent"),
-                Vendor = c("BMS", "Rutgers", "CHOP", "EA"),
-                readType = c("PE", "SE"),
-                readLength = "",
-                strandSpecific = c(TRUE, FALSE),
-                AffyChip = ""
-                )
-) #.DGEobjDef
-
-# Uncomment this block when you need to update the ./data/DGEobj.rda file
-# x = getwd()
-# setwd ("~/R/lib/pkgsrc/DGEobj/")
-# save(.DGEobjDef, file="./data/DGEobj.rda")
-# setwd(x)
-
+    # typeAttributes = c(
+    #      row = c("SeqId", "Source", "Version"), #name of geneid col, source e.g. Ensembl, version e.g. R84
+    #      col = "SampIdCol",  #name of sampleID column
+    #      assay = c("normalized", "LowIntFilter"),
+    #      meta ="",
+    #
+    #      geneData = c("SeqId", "Source", "Version"),
+    #      isoformData = c("SeqId", "Source", "Version"),
+    #      exonData = c("SeqId", "Source", "Version"),
+    #      topTable = "",
+    #      fit = "",
+    #      DGEList = c("normalization", "LowIntFilter"),
+    #
+    #      design ="SampIdCol",
+    #      designMatrix = "SampIdCol",
+    #
+    #      counts =c("normalization", "LowIntFilter"),
+    #
+    #      Log2CPM = c("normalized", "LowIntFilter"),
+    #      TPM = c("normalized", "LowIntFilter"),
+    #      FPKM = c("normalized", "LowIntFilter"),
+    #      zFPKM = c("normalized", "LowIntFilter"),
+    #      AffyRMA = c("normalized", "LowIntFilter"),
+    #
+    #      topTreat ="",
+    #      geneList = "",
+    #      pathway = "",
+    #      URL = ""
+    #      ),
+    #
+    # mainAttributes = c(
+    #             Platform = c("RNA-Seq", "EdgeSeq", "DNA-Seq",
+    #                          "Nanostring", "ddPCR", "TaqMan", "Affy"),
+    #             Instrument = c("NextSeq", "HiSeq", "PacBio", "Nanopore", "IonTorrent"),
+    #             Vendor = c("BMS", "Rutgers", "CHOP", "EA"),
+    #             readType = c("PE", "SE"),
+    #             readLength = "",
+    #             strandSpecific = c(TRUE, FALSE),
+    #             AffyChip = ""
+    #             )
 
 ### Function initDGEobj ###
 #' Function initDGEobj
