@@ -1,4 +1,4 @@
-#function in this file relate to annotating DGEobjs and creating a contrast
+#functions in this file relate to annotating DGEobjs and creating a contrast
 #database.
 #Plans are to split this out into a contrastDB package.
 
@@ -57,7 +57,6 @@ annotateDGEobj <- function(dgeObj, regfile,
                                        "ScriptID"
                            )){
 
-
     # Read lines, stripping quotes
     regdat <- read.delim(regfile, sep="\t",
                          quote = "\"",
@@ -90,7 +89,10 @@ annotateDGEobj <- function(dgeObj, regfile,
 ### Function indexDGEobj ###
 #' Function indexDGEobj
 #'
-#' Read Retrieve specified attributes from a DGEobj as a vector
+#' Retrieve specified attributes from a DGEobj as a named vector. This is intended
+#' to return only user added attributes (i.e. NOT type, basetype, parent) who's
+#' value is class character.  You can also use the keys argument to retrieve
+#' a specific subset of attributes.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj, annotation, attributes
@@ -98,7 +100,7 @@ annotateDGEobj <- function(dgeObj, regfile,
 #' @param dgeObj  A class dgeObj created by function initDGEobj
 #' @param keys A list of attribute keys to retrieve
 #'
-#' @return A row of DGEobj annotation (vector)
+#' @return A row of DGEobj Project annotation (1 row data.frame)
 #'
 #' @examples
 #'    MyDgeObj <- indexDGEobj(DGEobj, regfile)
@@ -136,17 +138,18 @@ indexDGEobj <- function(dgeObj,
 
     #get attributes
     DGE_attributes <- attributes(dgeObj)
-    #remove unwanted attributes
-    for (a in names(DGE_attributes))
-        if (!a %in% keys)
-            DGE_attributes[a] <- NULL
 
-    #keep attributes with character data
-    for (i in 1:length(DGE_attributes))
-        if(class(DGE_attributes[[i]])[[1]] != "character")
+    #keep attributes with length(value) = 1
+    for (i in length(DGE_attributes):1)
+        if(length(DGE_attributes[[i]]) > 1)
             DGE_attributes[i] <- NULL
 
-    return(DGE_attributes)
+    #remove unwanted attributes
+    for (aname in names(DGE_attributes))
+        if (!aname %in% keys)
+            DGE_attributes[aname] <- NULL
+
+    return(as.data.frame(DGE_attributes))
 
 }
 
@@ -247,17 +250,56 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
         }
     }
 
-    assert_that(file.exists(inputPath),
-                file.exists(outputPath))
+    .initProjectIndex <- function(){
+        #ProjectDG
+        projectIndex <- data.frame(Doubles=double(),
+                         Ints=integer(),
+                         Factors=factor(),
+                         Logicals=logical(),
+                         Characters=character(),
+                         stringsAsFactors=FALSE)
+        return(projectIndex)
+    }
+    .initContrastIndex <- function(){
+        contrastIndex <- data.frame(ItemName=character(),
+                                    DateCreated=character(),
+                                    Level=character(),
+                                    stringsAsFactors=FALSE)
+        return(contrastIndex)
+    }
+    .initContrastData <- function(){
+        contrastData <- data.frame(logFC=double(),
+                                   CI.L=double(),
+                                   CI.R=double(),
+                                   AveExpr=double(),
+                                   t=double(),
+                                   P.Value=double(),
+                                   adj.P.Val=double(),
+                                   B=double(),
+                                   Qvalue=double(),
+                                   qvalue.lfdr=double(),
+                                   ihw.adj_pvalue=double(),
+                                   ihw.weight=double(),
+                                   stringsAsFactors=FALSE)
+    return(contrastData)
+    }
 
-    #initilize or load ProjectIdx, ContrastIdx, ContrastData dataframes
+    assert_that(file.exists(outputPath),
+                file.exists(inputPath ))
+
+    #initilize or load projectIndex, contrastIndex, contrastData dataframes
     if (rebuild == TRUE){
-        #initialize
+        #initialize Project, Contrast and ContrastData databases
+        projectIndex <- .initProjectIndex()
+        contrastIndex <- .initContrastIndex()
+        contrastData <- .initContrastData()
+        processedFiles <- list()
     } else {
         #load from RDS files in outputPath
-        projectIdx <- readRDS(file.path(outputPath, "projectIdx.RDS"))
-        contrastIdx <- readRDS(file.path(outputPath, "contrastIdx.RDS"))
+        projectIndex <- readRDS(file.path(outputPath, "projectIndex.RDS"))
+        contrastIndex <- readRDS(file.path(outputPath, "contrastIndex.RDS"))
         contrastData <- readRDS(file.path(outputPath, "contrastData.RDS"))
+        processedFiles <- readRDS(file.path(outputPath, "processedFiles.RDS"))
     }
 
     errlog <- list()
@@ -265,7 +307,12 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
 
     # Get a list of .RDS files to process
     rdsPattern <- ".*\\.rds$"
-    rdsFiles <- list.files(inputPath, pattern=rdsPattern, ignore.case=TRUE)
+    rdsFiles <- as.list(list.files(inputPath, pattern=rdsPattern, ignore.case=TRUE))
+
+    #dropped already processed files
+    if (rebuild == FALSE)
+        rdsFiles <- setdiff(rdsFiles, processedFiles)
+
 
     #skip prior indexed files
     if (file.exists(file.path(outputPath, "projects.txt"))){
@@ -274,9 +321,10 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
     }
 
     for (dfile in rdsFiles){
-        dgeObj <- readRDS()
+        dgeObj <- readRDS(file.path(inputPath, dfile))
+
         if(class(dgeObj)[[1]] != "DGEobj"){
-            errlog$classErr <- paste(dgeObj, "does not contain a DGEobj.", sep=" ")
+            errlog$classErr <- paste(dfile, "does not contain a DGEobj.", sep=" ")
             failCount <- failCount + 1
         } else { #index this object
             thisContrastIdx <- indexType(dgeObj, "topTable")
@@ -291,6 +339,7 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
                                              )
         }
     }
+}
 
 ## Loop among a list of DGEobj
 
@@ -305,4 +354,17 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
 ## Add queryContrast function (given a list of contrastID, pull out a tall skinny result table.)
 ##
 ## Use rbind.fill to merge new rows that might not be in the same order
-}
+
+
+
+# https://www.r-bloggers.com/converting-a-list-to-a-data-frame/
+#
+#     Example Three: combine a list of named vectors with
+#
+# This example has two named vectors, but only have one overlapping named element.
+#
+# > test3 <- list('Row1'=c(a='a',b='b',c='c'), 'Row2'=c(a='d',var2='e',var3='f'))
+# > as.data.frame(test3)
+# a    b    c var2 var3
+# Row1 a    b    c <NA> <NA>
+# Row2 d <NA> <NA>    e    f

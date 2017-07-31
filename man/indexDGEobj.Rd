@@ -16,10 +16,13 @@ indexDGEobj(dgeObj, keys = list("ID", "BMS_PID", "Title", "Description",
 \item{keys}{A list of attribute keys to retrieve}
 }
 \value{
-A row of DGEobj annotation (vector)
+A row of DGEobj Project annotation (1 row data.frame)
 }
 \description{
-Read Retrieve specified attributes from a DGEobj as a vector
+Retrieve specified attributes from a DGEobj as a named vector. This is intended
+to return only user added attributes (i.e. NOT type, basetype, parent) who's
+value is class character.  You can also use the keys argument to retrieve
+a specific subset of attributes.
 }
 \examples{
    MyDgeObj <- indexDGEobj(DGEobj, regfile)
