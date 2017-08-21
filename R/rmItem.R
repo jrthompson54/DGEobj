@@ -29,5 +29,13 @@ rmItem <- function(dgeObj, itemName){
 
     dgeObj[itemName] <- NULL
 
+    #fix the main attributes
+    attr(dgeObj, "basetype")[itemName] <- NULL
+    attr(dgeObj, "type")[itemName] <- NULL
+    attr(dgeObj, "parent")[itemName] <- NULL
+    attr(dgeObj, "funArgs")[itemName] <- NULL
+    attr(dgeObj, "dateCreated")[itemName] <- NULL
+
+
     return(dgeObj)
 }

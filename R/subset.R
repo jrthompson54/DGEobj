@@ -36,8 +36,9 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
         stop("col coordinates out of range")
 
     basetypes <- attr(DgeObj, "basetype")
-    for (i in 1:length(DgeObj)){
 
+    for (i in 1:length(DgeObj)){
+        browser()
         switch(basetypes[[i]],
 
                row = {
