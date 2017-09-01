@@ -18,7 +18,8 @@
 #'
 #' @export
 ### attributes.DGEobj
-showAttributes <- function(dgeObj, skip) {
+showAttributes <- function(dgeObj, skip=c("dim", "dimnames", "rownames",
+                                          "colnames", "listData", "objDef")) {
 
     #first show the main DGEobj attributes (omitting assayDimnames):
     # at <- attributes(unclass(dgeObj))C
@@ -34,8 +35,7 @@ showAttributes <- function(dgeObj, skip) {
 
         atnames <- names(attributes(dgeObj[[i]]))
         #drop dimnames. we're interested in other custom attributes here
-        atnames <- dplyr::setdiff(atnames, c("dim", "dimnames", "rownames",
-                                             "colnames", "listData", "objDef"))
+        atnames <- dplyr::setdiff(atnames, skip)
         print(paste("atnames:", paste(atnames, collapse=", "),sep=" "))
 
         for (j in atnames) #print the name then the attribute value
@@ -143,8 +143,7 @@ getItemAttribute <- function(dgeObj, attrName){
 #'
 #' @export
 getAttributes <- function(item, excludeList=list("dim", "dimnames",
-                                                 "names", "row.names",
-                                                 "class")){
+                                                 "names", "row.names")){
       at <- attributes(item)
       idx <- !names(at) %in% excludeList
       return(at[idx])
@@ -231,4 +230,35 @@ appendAttributes <- function(dgeObj, itemName, attribs){
     return(dgeObj)
 }
 
-
+### Function showMeta ###
+#' Function showMeta
+#'
+#' Prints the attributes associated with a object with a limit on the length of
+#' the values stored in the attributes.  Use this to examine the key=value meta
+#' data associated with a DGEobj.  Should function on any object with attributes though.
+#'
+#' @author John Thompson, \email{john.thompson@@bms.com}
+#' @keywords RNA-Seq, DGEobj
+#'
+#' @param obj  A object with attributes to examine created by function initDGEobj
+#'
+#' @return A data frame with the key value pairs from the object's attributes.
+#'
+#' @examples
+#'    df <- showMeta(MydgeObj)
+#'
+#' @export
+showMeta <- function(obj) {
+    #print length==1 attributes in a table
+    alist <- attributes(obj)
+    #filter for attributes that are simple key/value pairsinventory
+    idx <- lapply(alist, length) == 1
+    if(sum(idx) > 0){
+        df <- stack(alist[idx])
+        colnames(df) <- c("Value", "Attribute")
+        df <- select(df, Attribute, Value)
+        return(df)
+    } else {
+        return(NULL)
+    }
+}

@@ -5,7 +5,7 @@
 \title{Function getAttributes}
 \usage{
 getAttributes(item, excludeList = list("dim", "dimnames", "names",
-  "row.names", "class"))
+  "row.names"))
 }
 \arguments{
 \item{item}{a DGEobj structre}
