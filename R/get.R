@@ -91,14 +91,18 @@ getItem <- function(dgeObj, itemName){
 getType <- function(dgeObj, type, parent){
     #type can be a single named type or a vector or list of types
     idx <- attr(dgeObj, "type") %in% type
+    if (!missing(parent)){
+    	pidx <- attr(dgeObj, "parent") == parent
+    	idx <- idx & pidx
+    }
     result <- unclass(dgeObj)[idx]
 
-    #filter for defined parent
-    if (!missing("parent")){
-        #Get the names of items
-        itemNames <- names(lapply(result, attr, "parent"))
-        result <- result[itemNames]
-    }
+##    filter for defined parent
+#    if (!missing("parent")){
+##        Get the names of items
+#        itemNames <- names(lapply(result, attr, "parent"))
+#        result <- result[itemNames]
+#    }
 
     if (sum(idx) < length(type))
         warning("Some types were not found")
