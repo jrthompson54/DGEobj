@@ -1,6 +1,6 @@
 ---
 title: "DGEobj S3 Object to Capture DGE Workflows"
-author: "John Thompson"
+author: "John Thompson (john.thompson@bms.com)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -8,14 +8,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-```{r setup, echo=FALSE, eval=FALSE}
-library(DGEobj)
-library(magrittr)
-library(here)
-setwd(file.path(here(), "vignettes"))
-load("../data/DGEobj.Rda")
-```
 
 # Introduction   
 
@@ -418,6 +410,19 @@ as a two column dataframe of Attribute/Value pairs.
 MyAnnotation <- showMeta(MyDgeObj)
 ```
 
-### Function under development
+### Functions under development
+
+The main DGEobj functions described above are relatively stable at this point.  Other functions in the package are either utility functions used by other functions and not really intended for end user use or functions under active development.  
+
+One group of functions in this latter category (active development) is a set of functions designed to query a collection of DGEobj objects and then extract all contrast data and assemble the contrasts into a contrast database.  These are under active development, may change substantially with future versions and will likely be migrated to a separate package.  These include:    
+
+* indexDGEobj               
+* indexType   
+* buildContrastDB   
+
+# Questions, bug reports, feature requests
+
+Contact John Thompson: john.thompson@bms.com
+
 
 
