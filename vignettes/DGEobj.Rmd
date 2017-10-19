@@ -41,8 +41,8 @@ A limitation of the RSE object however, is that the RSE can capture only 1 insta
 annotation) and 1 instance of column data (sample annotation with one row for
 every column of data in the assay slot).  This limits the RSE in terms of it's
 ability to hold downstream data objects because many of those objects meet the
-definition of row data also (e.g. DGEList, design matrices, Fit object, topTable
-output).  Other types of data (e.g. sample QC) meet the definition of column data.  
+definition of row data also (e.g. DGEList, Fit object, topTable
+output).  Other types of data (e.g. design matrices, sample QC) meet the definition of column data.  
 Thus, the DGEobj was modeled after the RSE object, but extended to accommodate
 multiple row and column data types.  The DGEobj is thus uniquely suited to
 capturing the entire workflow of a DGE analysis.
@@ -65,12 +65,12 @@ Fundamentally, the base type defines how an item should be subsetted.
 ## DGEobj Nomenclature: Items, Types and Base Types
 
 We accommodate multiple instances of a base type by defining data types and
-items.   Each data type is assigned a base type (e.g. geneData, DGEList and
-designMatrix are all "types" of "basetype"" = rowData).  
+items.   Each data type is assigned a base type (e.g. geneData, granges and
+fit are all "types" of "basetype"" = rowData).  
 
 You can have multiple instances of each type (with some exceptions).  We therefore 
 describe each instance of a "type" as an "item" and each item must have a user-defined
-item name.   
+item name and the item name must be unique within a DGEobj.   
 
 ## Unique Items
 
@@ -298,45 +298,126 @@ If you just need the item names of data stored in the DGEobj uses the names func
 names(MyDgeObj)
 ```
 
-
 ## Adding a new data type
 
 A set of data types has already been defined based on data types I encounter
 in my typical edgeR/Voom workflow.  Certainly, I haven't thought of everything that someone might want to capture.  Therefore, new types can be defined on the fly.
 
 ```
-    #see predefined data types
-    showTypes(MyDgeObj)
-    
-    #add a new colData datatype called "sampleQC"
-    MyDgeObj <- newType(MyDgeObj,
-                        itemType="sampleQC",
-                        baseType="col",
-                        uniqueItem=FALSE)
+#see predefined data types
+showTypes(MyDgeObj)
+
+#add a new colData datatype called "sampleQC"
+MyDgeObj <- newType(MyDgeObj,
+                    itemType="sampleQC",
+                    baseType="col",
+                    uniqueItem=FALSE)
 
 ```
 ## Accessing data in a DGEobj
 
-getItem
+You'll likely need to access various components of the DGEobj as you progress through you workflow.  Therea are several ways to extract one or more components from the DGEobj for use in your analysis.
 
-getItems
+### Retrieve a single item
 
-getType
+The getItem function allows you to retrieve any item in a DGEobj by referencing it's name. Use the inventory function (described above) to check the contents of the DGEobj.
 
-getBaseType
+```
+MyCounts <- getItem(MyDgeObj, "counts")
+```
 
-## Ancillary Functions
+### Retrive multiple items
 
-appendAttributes        Function appendAttributes
-as.list.DGEobj          ### Function as.list.DGEobj ### Function
-                        as.list.DGEobj
-baseType                Function BaseType
-baseTypes               Function baseTypes
-getAttribute            Function getAttribute
-getAttributes           Function getAttributes
-getItemAttribute        Function getItemAttribute
+There are several ways to retrieve multiple items as a list or data objects.
 
-rmItem                  Function as.list
-setAttributes           Function setAttributes
-showAttributes          Function showAttributes
-showMeta                Function showMeta
+You can supply a list of item names to retreive specific items.  The items requested are returned in a list.  
+```
+MyItems <- getItems(MyDgeObj, list("counts", "geneData"))
+```
+If all the items you wish to retrieve are of the same type, you can use the
+getType function to retreive them as a list.  For example, you might want to
+retrieve a set of contrast results present as topTable output.  
+```
+MyContrasts <- getType(MyDgeObj, "topTable")
+```
+Similarly, you can retrieve all items of the same basetype as a list.
+```
+MyRowData <- getBaseType(MyDgeObj, "row")
+```
+Finally, should you need to retrieve all the items in a DGEobj as a simple list,
+you can recast the DGEobj as a simple list.
+```
+MyList <- as.list(MyDgeObj)
+```
+
+## Ancillary Functions  
+
+### Function showTypes  
+
+Shows all the pre-defined types in a DGEobj.  This shows all types whether or
+not the DGEobj contains data associated with a given type.
+```
+showTypes(MyDgeObj)
+```
+
+### Function baseType
+
+Returns the baseType for a given Type
+```
+baseType(MyDgeObj, "DGEList")
+```
+### Function getAttribute and getAttributes
+
+These are for retrieving attributes from an individual item.  So far,  the only 
+place where I've used attributes attached to an item (as opposed to the DGEobj itself) 
+is the design matrix.  In my workflow I attach the formula as an attribute of 
+the design matrix.
+
+```
+getAttribute(MyDgeObj$designMatrix, "formula")
+```
+
+If an item had multiple attributes, you could retrieve the list of attributes
+with getAttributes.  getAttributes by default excluded common attributes including
+dim and dimnames which already have base functions for accessing.
+
+### Function getItemAttributes
+
+This function will retrieve a requested attribute from all items in a dgeobj, 
+returned as a list. So far I haven't been assigning any common attributes to all items.
+```
+getItemAttribute(MyDgeObj, "attributeName")
+```
+
+### Function rmItem
+
+For the most part, you'll be collecting and adding new object to a DGEobj
+in the course of an analysis.  The rmItem function is added for the case 
+where you might need to delete a particular item.  
+
+To delete an item from a DGEobj:
+```
+MyDgeObj <- rmItem(MyDgeObj, "itemName")
+```
+
+### Function setAttributes
+
+You can add attributes to an item with the addItem function.  This function 
+provides an alternate mechanism to add attributes to an item which would
+typically be done before adding the item to a DGEobj.
+```
+MyItem <- setAttributes(MyItem, list(date=date(), analyst="JRT"))
+```
+### Function showMeta
+
+This function is intended to return any project oriented attributes assigned
+to the DGEobj using function annotateDGEobj.   It returns the attributes
+as a two column dataframe of Attribute/Value pairs.
+
+```
+MyAnnotation <- showMeta(MyDgeObj)
+```
+
+### Function under development
+
+
