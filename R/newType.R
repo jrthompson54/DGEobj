@@ -13,7 +13,7 @@
 #' @param uniqueItem If set to TRUE, only one instance of the new type is
 #'    allowed in a DGEobj
 #'
-#' @return A DGEobj definition object
+#' @return A DGEobj with a new type definition embedded
 #'
 #' @examples
 #'     MyDgeObj <- newType(MyDgeObj,

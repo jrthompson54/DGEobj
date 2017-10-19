@@ -17,7 +17,7 @@ newType(dgeObj, itemType, baseType, uniqueItem = FALSE)
 allowed in a DGEobj}
 }
 \value{
-A DGEobj definition object
+A DGEobj with a new type definition embedded
 }
 \description{
 Used to customiza a DGEobj definition by adding new types.  A basetype

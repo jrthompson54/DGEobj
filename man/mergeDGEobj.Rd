@@ -29,7 +29,7 @@ data.  This will **NOT** try to capture the workflows from both objects.  Rather
 it will capture just the counts, row and col annotation and merge those items
 into a new combined DGEobj.  Row (gene) annotation will be taken from the 1st
 DGEobj.  Sample annotation must have at least one common colname to merged.
-Only columns present in both datasets will be
+Only columns present in both datasets will be kept.
 }
 \examples{
    MyCombinedDGEobj <- mergeDGEobj(dgeObj1, dgeObj2, join="inner", orig=TRUE)

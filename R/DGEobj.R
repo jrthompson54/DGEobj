@@ -72,7 +72,7 @@
                 "isoformData",
                 "exonData",
                 "effectiveLength",
-                "DGEList",
+                # "DGEList",
                 "granges"),
 
     allowedLevels = c("gene", "isoform", "exon")

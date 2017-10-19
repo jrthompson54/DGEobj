@@ -7,7 +7,7 @@
 #' it will capture just the counts, row and col annotation and merge those items
 #' into a new combined DGEobj.  Row (gene) annotation will be taken from the 1st
 #' DGEobj.  Sample annotation must have at least one common colname to merged.
-#' Only columns present in both datasets will be
+#' Only columns present in both datasets will be kept.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
@@ -102,7 +102,7 @@ mergeDGEobj <- function(d1, d2, join="inner", orig=TRUE){
 
         #Sort Genes to make sure geneData and counts are properly sorted.
         idx <- sort(rownames(geneData), index.return=TRUE)$ix
-        genedata <- geneData[idx,]
+        geneData <- geneData[idx,]
         idx <- sort(rownames(counts), index.return=TRUE)$ix
         counts <- counts[idx,]
 

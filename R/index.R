@@ -78,8 +78,12 @@ annotateDGEobj <- function(dgeObj, regfile,
     MyAttribs <- attributes(dgeObj)
 
     for (i in 1:nrow(regdat))
-        if (regdat$key[i] %in% keys)
+        if (is.null(keys)){ #add all keys
             MyAttribs[regdat$key[i]] <- regdat$value[i]
+        } else {#just add specified keys
+            if (regdat$key[i] %in% keys)
+                MyAttribs[regdat$key[i]] <- regdat$value[i]
+        }
 
     #now attach the attributes to the DGEobj
     attributes(dgeObj) <- MyAttribs

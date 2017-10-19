@@ -4,7 +4,7 @@
 \alias{addItems}
 \title{Function addItems (DGEobj)}
 \usage{
-addItems(dgeObj, itemList, itemTypes, overwrite = FALSE, itemAttr)
+addItems(dgeObj, itemList, itemTypes, parents, overwrite = FALSE, itemAttr)
 }
 \arguments{
 \item{dgeObj}{A DGEobj that items will be added to (required)}
@@ -13,10 +13,13 @@ addItems(dgeObj, itemList, itemTypes, overwrite = FALSE, itemAttr)
 
 \item{itemTypes}{A list of type values for each item on itemList (required)}
 
+\item{parents}{A list of parent values for each item on itemList (optional but highly recommended)}
+
 \item{overwrite}{Default = FALSE.  Set to TRUE to overwrite the data object
 stored in the itemName slot}
 
-\item{itemAttr}{A named list of attributes to add to each item (optional)}
+\item{itemAttr}{An named list of attributes to add to each item (optional). The
+same set of attributes will be added to each item.}
 }
 \value{
 A DGEobj class object with new items added.

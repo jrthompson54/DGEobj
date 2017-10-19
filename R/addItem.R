@@ -124,9 +124,11 @@ addItem <- function(dgeObj, item, itemName, itemType,
 #' @param dgeObj A DGEobj that items will be added to (required)
 #' @param itemList  A list of data items to add to dgeObj (required)
 #' @param itemTypes A list of type values for each item on itemList (required)
+#' @param parents A list of parent values for each item on itemList (optional but highly recommended)
 #' @param overwrite Default = FALSE.  Set to TRUE to overwrite the data object
 #'     stored in the itemName slot
-#' @param itemAttr A named list of attributes to add to each item (optional)
+#' @param itemAttr An named list of attributes to add to each item (optional). The
+#'    same set of attributes will be added to each item.
 #'
 #' @return A DGEobj class object with new items added.
 #'
@@ -137,7 +139,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 #' @import assertthat
 #'
 #' @export
-addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, itemAttr){
+addItems <- function(dgeObj, itemList, itemTypes, parents, overwrite=FALSE, itemAttr){
 
     assert_that(!missing(dgeObj),
                 !missing(itemList),
@@ -147,6 +149,10 @@ addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, itemAttr){
                 class(itemTypes)[[1]] == "list",
                 length(itemList) == length(itemTypes)
                 )
+
+    if (!is.null(parents))
+        assert_that(class(parents)[[1]] == "list",
+                    length(parents) == length(itemList))
 
     #attach the item attributes to every item
     if (!missing(itemAttr)){
@@ -158,11 +164,22 @@ addItems <- function(dgeObj, itemList, itemTypes, overwrite=FALSE, itemAttr){
 
     #add the items to the
     itemNames <- names(itemList)
-    for (i in 1:length(itemList))
-        dgeObj <- addItem(dgeObj,
+    for (i in 1:length(itemList)){
+        if (is.null(parents)){
+            dgeObj <- addItem(dgeObj,
                 item=itemList[[i]],
                 itemName=itemNames[[i]],
                 itemType=itemTypes[[i]],
                 overwrite=overwrite)
+        } else {
+            dgeObj <- addItem(dgeObj,
+                  item=itemList[[i]],
+                  itemName=itemNames[[i]],
+                  itemType=itemTypes[[i]],
+                  parent=parents[[i]],
+                  overwrite=overwrite)
+        }
+    }
+
     return(dgeObj)
 }
