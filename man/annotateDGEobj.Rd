@@ -15,7 +15,14 @@ annotateDGEobj(dgeObj, regfile, keys = list("ID", "BMS_PID", "Title",
 
 \item{regfile}{An omicsoft registration file (text not Excel!)}
 
-\item{keys}{A list of keys to look for and transfer to the DGEobj}
+\item{keys}{A list of keys to look for in the regfile and transfer to the DGEobj.
+Use keys=NULL to accept all keys in a regfile file.  The following keys
+from our Omicsoft registration files are used by default: "ID",
+"BMS_PID", "Title", "Description", "Keywords", "Business Unit", "Functional
+Area", "Disease", "Vendor", "PlatformType", "Technology", "LibraryPrep",
+"Organism", "Tissue", "AlignmentReference", "GeneModel", "TBio_Owner",
+"TA_Owner", "LoadData", "ReadLength", "ReadType", "Pipeline",
+"AlignmentAlgorithm", "ScriptID"}
 }
 \value{
 A DGEobj annotated with attributes.
