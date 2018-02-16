@@ -45,51 +45,16 @@ addItem <- function(dgeObj, item, itemName, itemType,
                 !missing(itemName),
                 !missing(itemType))
 
-    #confirm dimensions consistent before adding
-    if (.dimensionMatch(dgeObj, item, itemType) == FALSE)
-        stop("item doesn't match dimension of dgeObj")
-
     # basetype <- attr(dgeObj, "objDef")$type[[itemType]]
     basetype <- baseType(dgeObj, type=itemType)
 
     switch(basetype,
            row = {if (!itemType == "granges" & is.null(rownames(item)))
-               stop("Row basetypes must have rownames")
-               #confirm row order
-               if (!all(rownames(dgeObj) == rownames(item))){
-                   #attempt to reorder and check again
-                   item <- item[rownames(dgeObj),]
-                   if (!all(rownames(dgeObj) == rownames(item)))
-                       stop("Rownames of Item could not be aligned with the DGEobj")
-               }
-           },
+                    stop("Row basetypes must have rownames")},
            col = {if (is.null(rownames(item)))
-               stop("Col basetypes must have rownames")
-               #confirm row order matches colorder of dgeobj
-               if (!all(colnames(dgeObj) == rownames(item))){
-                   #attempt to reorder and check again
-                   item <- item[colnames(dgeObj),]
-                   if (!all(colnames(dgeObj) == rownames(item)))
-                       stop("Rownames of Item could not be aligned with the colnames of the DGEobj")
-               }
-           },
+                    stop("Col basetypes must have rownames")},
            assay = {if (is.null(rownames(item)) | is.null(colnames(item)))
-               stop("Assay basetypes must have row and column names")
-               #confirm row order
-               if (!all(rownames(dgeObj) == rownames(item))){
-                   #attempt to reorder and check again
-                   item <- item[rownames(dgeObj),]
-                   if (!all(rownames(dgeObj) == rownames(item)))
-                       stop("Rownames of Item could not be aligned with the DGEobj")
-               }
-               #confirm col order
-               if (!all(colnames(dgeObj) == colnames(item))){
-                   #attempt to reorder and check again
-                   item <- item[, colnames(dgeObj)]
-                   if (!all(colnames(dgeObj) == colnames(item)))
-                       stop("Colnames of Item could not be aligned with the DGEobj")
-               }
-           }
+                        stop("Assay basetypes must have row and column names")}
     )
 
     #enforce itemType
@@ -117,6 +82,10 @@ addItem <- function(dgeObj, item, itemName, itemType,
         funArgs <- paste(funArgs[[1]], "(",
                         paste(funArgs[2:length(funArgs)], collapse=", "),
                         ")", sep="")
+
+    #confirm dimensions consistent before adding
+    if (.dimensionMatch(dgeObj, item, itemType) == FALSE)
+        stop("item doesn't match dimension of dgeObj")
 
     # add custom attributes directly to the item
     if (!missing("itemAttr"))
@@ -147,7 +116,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 ### Function addItems ###
 #' Function addItems (DGEobj)
 #'
-#' Add multiple data items to a class DGEobj
+#' Add a data item to a class DGEobj
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
