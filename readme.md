@@ -1,12 +1,12 @@
 # DGEobj: An S3 data object to capture results from Differential Gene Expression analysis
 
-**Note: DGEobj is in early beta phase.  Most of all of the implemented tools work.  Check back often.  I'll increment the version number each time I make changes.**
+**Note: DGEobj is fairly mature but a few functions not needed for normal workflows are under development.**
 
 DGEobj is an S3 data class that provides a flexible container for DGE analysis results.  
 The DGEobj is designed to be extensible allowing definition of new data types as needed. 
 A set of accessory functions to deposit, query and retrieve subsets of a data workflow has been provided.  Attributes are used to capture metadata such as species and genemodel and including reproducibility information such that a 3rd party can access a DGEobj history to see how each data object was created. 
 
-Structurally, much like a RangedSummarizedExperiment (RSE), the DGEobj has data slots for row (gene), col (samples), assays (anything with row X sample dimensions) and meta data (anything that can't be keyed to row, col or assay).  One of the motivations for creating the DGEobj data structure is that the RSE only allows one data item in the row and col slots.  The DGEresult object can hold any number of row and col data objects.  Thus, the DGEobj data structure is suitable for capturing multiple steps of a downstream analysis.  For example, fit objects and topTable results are accommodated by the row type object. 
+Operationally, the DGEobj is styled after the RangedSummarizedExperiment (RSE).  The DGEobj has data slots for row (gene), col (samples), assays (anything with n rows X m samples dimensions) and meta data (anything that can't be keyed to row, col or assay).  The key motivations for creating the DGEobj data structure is that the RSE only allows one data item each in the row and col slots and thus is unsuitable for capturing the plethora of data objects created during a typical DGE workflow.   The DGEobj data structure then can hold any number of row and col data objects.  Thus, the DGEobj data structure is engineered for capturing multiple steps of a downstream analysis.  For example, fit objects and topTable results are accommodated by the row type object. 
 
 Certain object types, primarily the count matrix and associated row and column info, are defined as unique which means only one instance of that type may be added to the DGEobj.  
 
@@ -39,7 +39,7 @@ funArgs is a text field intended to hold details of creating the object.  Passin
 * dimnames:  Return the row (gene) and column (sample) names  
 * itemNames:  Return a character vector of data item names  
 * showTypes:  Show the type definitions of a DGEobj (all currently defined  types)  
-* print:  Print a summary of the contents of a DGEobj, date created and optionally the funArg history  
+* inventory:  Print a summary of the contents of a DGEobj, date created and optionally the funArg history  
 
 ### Data retrieval  
 
@@ -74,28 +74,17 @@ can now be installed simply with install.packages (after a little setup).
 
 One time setup :
 
-```
-    #Install Charles' bmsPackageTools to enable the BMS BRAN 
-    #repository (modifies your ~/.Rprofile file)
-    install.packages("bmsPackageTools", repos="http://kraken.pri.bms.com/biohtml/nositeminder/BRAN/")
-    library('bmsPackageTools')
-    setBmsRepo(rprofile=TRUE)
-
-    #if you don't have the devtools package already
-    install.packages("devtools")
-```
-
-Then install or update DGEobj:  
+Install or update DGEobj:  
 
 ```
-    install.packages("DGEobj")
+    install.packages("DGEobj", repos="http://BRAN.pri.bms.com")
 
 ```
 
 ## Installation (backup method)
 
-CRAN and Bioconductor package dependencies should be installed automatically.  
-It is best to run the install from a fresh R session before loading any packages as loaded packages cannot be updated.
+CRAN and Bioconductor package dependencies should be installed automatically.  Sometimes this doesn't work.  Watch the error message and install any package that are reported missing. Then try again.
+
 
 ```r
     #if you don't have the devtools package already
