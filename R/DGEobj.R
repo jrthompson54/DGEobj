@@ -183,7 +183,8 @@ initDGEobj <- function(counts, rowData, colData, #required
                 level %in% DGEobjDef$allowedLevels,
                 !is.null(rownames(counts)),
                 !is.null(colnames(counts)),
-                !is.null(rownames(rowData))
+                !is.null(rownames(rowData)),
+                !is.null(rownames(colData))
                 )
 
     #some reality checking before we build the DGEobj
@@ -229,7 +230,6 @@ initDGEobj <- function(counts, rowData, colData, #required
     attr(dgeObj, "parent") <- list()
     attr(dgeObj, "funArgs") <- list()
     attr(dgeObj, "dateCreated") <- list()
-
 
     #load required items
     #
@@ -395,5 +395,9 @@ tsmsg <- function(...) {
     # Works like message() but prepends a timestamp
     message(date(), ": ", ...)
 }
+
+
+
+
 
 
