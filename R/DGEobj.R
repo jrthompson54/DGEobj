@@ -239,14 +239,17 @@ initDGEobj <- function(counts, rowData, colData, #required
                       itemName="counts_orig",
                       itemType="counts_orig",
                       funArgs = funArgs,
-                      parent = "")
+                      parent = "",
+                      init=TRUE
+    )
 
     dgeObj <- addItem(dgeObj,
                       item=counts,
                       itemName="counts",
                       itemType="counts",
                       funArgs= funArgs,
-                      parent = "counts_orig"
+                      parent = "counts_orig",
+                      init=TRUE
     )
 
     #colData

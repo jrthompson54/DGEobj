@@ -37,7 +37,8 @@ addItem <- function(dgeObj, item, itemName, itemType,
                               overwrite=FALSE,
                               funArgs=match.call(),
                               itemAttr,
-                              parent=""
+                              parent="",
+                              init=FALSE  #used only by initDGEobj to disable dimension checks
                               ){
 
     assert_that(!missing(dgeObj),
@@ -84,12 +85,16 @@ addItem <- function(dgeObj, item, itemName, itemType,
                         ")", sep="")
 
     #confirm dimensions consistent before adding
-    if (.dimensionMatch(dgeObj, item, itemType) == FALSE)
-        stop("item doesn't match dimension of dgeObj")
+    if (init==FALSE){
+        if(.dimensionMatch(dgeObj, item, itemType) == FALSE)
+            stop("item doesn't match dimension of dgeObj")
+    }
 
     #confirm order of rownames and colnames
-    if(.checkDimnames(dgeObj, item, baseType(itemType)) == FALSE)
-        stop("item row and/or column names out of order with dgeObj")
+    if (init==FALSE){
+        if (! .checkDimnames(dgeObj, item = item, basetype = basetype))
+            stop("item row and/or column names out of order with dgeObj")
+    }
 
     # add custom attributes directly to the item
     if (!missing("itemAttr"))
@@ -125,7 +130,8 @@ addItem <- function(dgeObj, item, itemName, itemType,
                      col = all(rownames(item) == colnames(dgeObj)),
                      row = all(rownames(item) == rownames(dgeObj)),
                      assay = all(rownames(item) == rownames(dgeObj)) &
-                         all(colnames(item) == colnames(dgeObj))
+                         all(colnames(item) == colnames(dgeObj)),
+                     meta = TRUE
     )
     return(result)
 }

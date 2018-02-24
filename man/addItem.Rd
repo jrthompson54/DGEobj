@@ -5,7 +5,7 @@
 \title{Function addItem (DGEobj)}
 \usage{
 addItem(dgeObj, item, itemName, itemType, overwrite = FALSE,
-  funArgs = match.call(), itemAttr, parent = "")
+  funArgs = match.call(), itemAttr, parent = "", init = FALSE)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
