@@ -18,9 +18,12 @@
 #' @examples
 #'    DgeObj <- subset(DgeObj, 1:10, 100:1000)
 #'
+#' @importFrom assertthat assert_that
+#' @importFrom stringr str_c
+#'
 #' @export
 subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
-    #check if both row and col provided.
+
     assertthat::assert_that(class(DgeObj)[[1]] == "DGEobj")
 
     #fill in missing row/col args
@@ -30,10 +33,24 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
         col <- 1:ncol(DgeObj)
 
     #make sure row and col in range
-    if (max(row) > max(nrow(DgeObj)))
+    if (class(row)[[1]] %in% c("numeric", "integer") & max(row) > max(nrow(DgeObj)))
         stop ("row coordinates out of range")
-    if (max(col) > max(ncol(DgeObj)))
+    if (class(col)[[1]] %in% c("numeric", "integer") & max(col) > max(ncol(DgeObj)))
         stop("col coordinates out of range")
+
+    #warn if named items don't exist
+    if (class(row)[[1]] == "character"){
+        count <- length(row)
+        foundcount <- sum(row %in% rownames(DgeObj))
+        if (foundcount < count)
+            warning(str_c((count - foundcount), " items in row index not found in rownames(DgeObj)"))
+    }
+    if (class(col)[[1]] == "character"){
+        count <- length(col)
+        foundcount <- sum(col %in% colnames(DgeObj))
+        if (foundcount < count)
+            warning(str_c((count - foundcount), " items in col index not found in colnames(DgeObj)"))
+    }
 
     basetypes <- attr(DgeObj, "basetype")
 
