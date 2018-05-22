@@ -1,5 +1,5 @@
 ---
-title: "DGEobj S3 Object to Capture DGE Workflows"
+title: "DGEobj: An S3 Object to Capture DGE Workflows"
 author: "John Thompson (john.thompson@bms.com)"
 date: "`r Sys.Date()`"
 output: 
