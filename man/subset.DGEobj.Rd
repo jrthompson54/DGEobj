@@ -4,7 +4,7 @@
 \alias{subset.DGEobj}
 \title{Function subset (DGEobj)}
 \usage{
-subset.DGEobj(DgeObj, row, col, drop = FALSE)
+subset.DGEobj(DgeObj, row, col, drop = FALSE, debug = FALSE)
 }
 \arguments{
 \item{row}{row index for the subset}
@@ -14,6 +14,9 @@ subset.DGEobj(DgeObj, row, col, drop = FALSE)
 \item{drop}{Included for compatibility but has no real meaning in the context
 of subsetting a DGEobj.  So drop=FALSE is the default and changing this
 has no effect.}
+
+\item{debug}{Default=FALSE.  Set to TRUE to get more information is subsetting a
+DGEobj fails with a dimension error.}
 
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
 }

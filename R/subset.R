@@ -12,6 +12,8 @@
 #' @param drop Included for compatibility but has no real meaning in the context
 #'    of subsetting a DGEobj.  So drop=FALSE is the default and changing this
 #'    has no effect.
+#' @param debug Default=FALSE.  Set to TRUE to get more information is subsetting a
+#'    DGEobj fails with a dimension error.
 #'
 #' @return A subsetted DGEobj class object
 #'
@@ -22,7 +24,7 @@
 #' @importFrom stringr str_c
 #'
 #' @export
-subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
+subset.DGEobj <- function(DgeObj, row, col, drop=FALSE, debug=FALSE){
 
     assertthat::assert_that(class(DgeObj)[[1]] == "DGEobj")
 
@@ -58,7 +60,12 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
     # Convert the names into a boolean index.  This also solves note1 problem as you can
     # subset a matrix with a boolean index.
 
+    #need basetype to define how to subset an object
     basetypes <- attr(DgeObj, "basetype")
+
+    #classes for which the drop argument is valid.
+
+    dropClasses <- c("data.frame", "matrix")
 
     #if row or col is a character vector, convert to boolean index.
     if (class(row)[[1]] == "character")
@@ -68,16 +75,24 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
 
     for (i in 1:length(DgeObj)){
 
-        # cat(str_c("subsetting", names(DgeObj)[i], basetypes[[i]], "\n", sep=" ")) #debug
-        # cat(str_c("row length", length(row), class(row), "\n", sep=" "))
-        # cat(str_c("col length", length(col), class(col), "\n", sep=" "))
+        if (debug == TRUE) {
+            cat(str_c("subsetting", names(DgeObj)[i], basetypes[[i]], "\n", sep=" ")) #debug
+            cat(str_c("row arg length", length(row), class(row), "\n", sep=" "))
+            cat(str_c("col arg length", length(col), class(col), "\n", sep=" "))
+            cat(str_c("object dim: ", nrow(DgeObj[[i]]), ":", ncol(DgeObj[[i]])))
+        }
 
+        objectClass <- class(DgeObj[[i]])[[1]]
+
+        #select action dependent on basetype.  Do nothing for basetype = meta
         switch(basetypes[[i]],
 
                row = {
 
                    if (is.null(dim(DgeObj[[i]]))){ #not a matrix type object
                        DgeObj[[i]] <- DgeObj[[i]][row]
+                   } else if (objectClass %in% dropClasses) {
+                       DgeObj[[i]] <- DgeObj[[i]][row, , drop=drop]
                    } else {
                        DgeObj[[i]] <- DgeObj[[i]][row,]
                    }
@@ -86,13 +101,19 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
                col = {
                    if (is.null(dim(DgeObj[[i]]))){
                        DgeObj[[i]] <- DgeObj[[i]][col]
+                   } else if (objectClass %in% dropClasses){
+                       DgeObj[[i]] <- DgeObj[[i]][col, , drop=drop]
                    } else {
                        DgeObj[[i]] <- DgeObj[[i]][col,]
                    }
                },
 
                assay = {
-                   DgeObj[[i]] <- DgeObj[[i]][row, col]
+                   if (objectClass %in% dropClasses){
+                       DgeObj[[i]] <- DgeObj[[i]][row, col, drop=drop]
+                   } else {
+                       DgeObj[[i]] <- DgeObj[[i]][row, col]
+                   }
                })
 
     }
@@ -100,9 +121,9 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE){
 }
 
 #' @export
-`[.DGEobj` <- function(dgeObj, row, col, drop=FALSE){
+`[.DGEobj` <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
     #drop supported for compatibility but has no effect in this context
-    dgeObj <- subset(dgeObj, row, col, drop)
+    dgeObj <- subset(dgeObj, row, col, drop, debug)
 }
 
 
