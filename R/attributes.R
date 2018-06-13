@@ -1,7 +1,10 @@
 ### Function showAttributes ###
 #' Function showAttributes
 #'
-#' Prints the attributes associated with a DEGobj.
+#' Prints the attributes associated with a DEGobj.  This prints
+#' all attributes regardless of the class of the attribute value.
+#' Use showMeta if you are only interested in attributes that are
+#' key/value pairs.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
@@ -16,6 +19,7 @@
 #' @examples
 #'    showAttributes(MydgeObj)
 #'
+#' @importFrom dplyr setdiff
 #' @export
 ### attributes.DGEobj
 showAttributes <- function(dgeObj, skip=c("dim", "dimnames", "rownames",
@@ -46,7 +50,10 @@ showAttributes <- function(dgeObj, skip=c("dim", "dimnames", "rownames",
 ### Function setAttributes ###
 #' Function setAttributes
 #'
-#' Set one or more attributes on an object
+#' Set one or more attributes on an object.  You can use this to
+#' add attribute annotation(s) to a DGEobj or to a specific item
+#' within a DGEobj.  The function is generic in that it should work
+#' on other datatypes/classes, not just the DGEobj.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
@@ -90,7 +97,11 @@ setAttributes <- function(item, attribs){
 ### Function getItemAttribute ###
 #' Function getItemAttribute
 #'
-#' get a named attribute from all items
+#' Get a named attribute (key) from all items on a list.
+#'
+#' At present, there are no attributes common to all items in a
+#' DGEobj.  This will work on generic lists also where each list
+#' has a common set of attribute keys.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
@@ -113,7 +124,7 @@ getItemAttribute <- function(dgeObj, attrName){
     assert_that(
         !missing(dgeObj),
         !missing(attrName),
-        class(dgeObj)[[1]] == "DGEobj",
+        class(dgeObj)[[1]] %in% c("DGEobj", "list"),
         class(attrName)[[1]] == "character"
     )
 
@@ -131,15 +142,13 @@ getItemAttribute <- function(dgeObj, attrName){
 #'
 #' @param item  a DGEobj structre
 #' @param excludeList A list of attribute names to exclude from the output
-#'     (default = list("dim", "dimnames"))
+#'     (default = list("dim", "dimnames", "names", "row.names"))
 #'
 #' @return a list of attribute values for the items
 #'
 #' @examples
 #'    #assign attributes to a DGEobj
 #'    MyAttr <- getAttributes(dgeObj$counts)
-#'
-#' @import magrittr assertthat dplyr knitr
 #'
 #' @export
 getAttributes <- function(item, excludeList=list("dim", "dimnames",
@@ -191,6 +200,9 @@ getAttribute <- function(item, attrName){
 #' number of items.  This function is used by DGEobj::addItem to update these
 #' attributes when a new item is added.
 #'
+#' This was written to work on DGEobjs but is generalized to work with any object
+#' that can accept attributes.
+#'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
 #'
@@ -213,7 +225,6 @@ appendAttributes <- function(dgeObj, itemName, attribs){
     assert_that(!missing(dgeObj),
                 !missing(itemName),
                 !missing(attribs),
-                class(dgeObj)[[1]] == "DGEobj",
                 class(itemName)[[1]] == "character",
                 class(attribs)[[1]] == "list"
     )
@@ -235,7 +246,8 @@ appendAttributes <- function(dgeObj, itemName, attribs){
 #'
 #' Prints the attributes associated with a object with a limit on the length of
 #' the values stored in the attributes.  Use this to examine the key=value meta
-#' data associated with a DGEobj.  Should function on any object with attributes though.
+#' data associated with a DGEobj.  Written for use with DGEobjs but
+#' should function generically on any object with key/value pair attributes.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
