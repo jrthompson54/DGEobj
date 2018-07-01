@@ -22,6 +22,10 @@ parent, funArgs, dateCreated.  The names and length match the names and
 number of items.  This function is used by DGEobj::addItem to update these
 attributes when a new item is added.
 }
+\details{
+This was written to work on DGEobjs but is generalized to work with any object
+that can accept attributes.
+}
 \examples{
    #get an attribute from a DGEobj
    MyDgeObj <- appendAttributes(dgeObj, "counts",

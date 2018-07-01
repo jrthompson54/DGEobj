@@ -11,7 +11,7 @@ getAttributes(item, excludeList = list("dim", "dimnames", "names",
 \item{item}{a DGEobj structre}
 
 \item{excludeList}{A list of attribute names to exclude from the output
-(default = list("dim", "dimnames"))}
+(default = list("dim", "dimnames", "names", "row.names"))}
 }
 \value{
 a list of attribute values for the items

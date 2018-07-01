@@ -15,7 +15,8 @@ A data frame with the key value pairs from the object's attributes.
 \description{
 Prints the attributes associated with a object with a limit on the length of
 the values stored in the attributes.  Use this to examine the key=value meta
-data associated with a DGEobj.  Should function on any object with attributes though.
+data associated with a DGEobj.  Written for use with DGEobjs but
+should function generically on any object with key/value pair attributes.
 }
 \examples{
    df <- showMeta(MydgeObj)

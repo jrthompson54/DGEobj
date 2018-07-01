@@ -15,7 +15,12 @@ getItemAttribute(dgeObj, attrName)
 a list of attribute values for the items
 }
 \description{
-get a named attribute from all items
+Get a named attribute (key) from all items on a list.
+}
+\details{
+At present, there are no attributes common to all items in a
+DGEobj.  This will work on generic lists also where each list
+has a common set of attribute keys.
 }
 \examples{
    #assign attributes to a DGEobj

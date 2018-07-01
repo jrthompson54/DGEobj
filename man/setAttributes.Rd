@@ -15,7 +15,10 @@ setAttributes(item, attribs)
 the item with new attributes
 }
 \description{
-Set one or more attributes on an object
+Set one or more attributes on an object.  You can use this to
+add attribute annotation(s) to a DGEobj or to a specific item
+within a DGEobj.  The function is generic in that it should work
+on other datatypes/classes, not just the DGEobj.
 }
 \examples{
    #assign attributes to a DGEobj

@@ -18,7 +18,10 @@ dimnames", "rownames", "colnames", "listData", "objDef")}
 Prints a list of attributes and values.
 }
 \description{
-Prints the attributes associated with a DEGobj.
+Prints the attributes associated with a DEGobj.  This prints
+all attributes regardless of the class of the attribute value.
+Use showMeta if you are only interested in attributes that are
+key/value pairs.
 }
 \examples{
    showAttributes(MydgeObj)

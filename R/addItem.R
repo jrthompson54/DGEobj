@@ -175,7 +175,7 @@ addItems <- function(dgeObj, itemList, itemTypes, parents, overwrite=FALSE, item
                 length(itemList) == length(itemTypes)
                 )
 
-    if (!is.null(parents))
+    if (!missing(parents))
         assert_that(class(parents)[[1]] == "list",
                     length(parents) == length(itemList))
 
@@ -187,23 +187,18 @@ addItems <- function(dgeObj, itemList, itemTypes, parents, overwrite=FALSE, item
                 attr(itemList[[i]], attrNames[[j]]) <- itemAttr[[j]]
     }
 
+    if (missing(parents))
+        parents <- as.list(rep("", length(itemList)))
+
     #add the items to the
     itemNames <- names(itemList)
     for (i in 1:length(itemList)){
-        if (is.null(parents)){
-            dgeObj <- addItem(dgeObj,
-                item=itemList[[i]],
-                itemName=itemNames[[i]],
-                itemType=itemTypes[[i]],
-                overwrite=overwrite)
-        } else {
-            dgeObj <- addItem(dgeObj,
-                  item=itemList[[i]],
-                  itemName=itemNames[[i]],
-                  itemType=itemTypes[[i]],
-                  parent=parents[[i]],
-                  overwrite=overwrite)
-        }
+        dgeObj <- addItem(dgeObj,
+                          item=itemList[[i]],
+                          itemName=itemNames[[i]],
+                          itemType=itemTypes[[i]],
+                          parent=parents[[i]],
+                          overwrite=overwrite)
     }
 
     return(dgeObj)
