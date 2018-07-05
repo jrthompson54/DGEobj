@@ -21,7 +21,7 @@ from our Omicsoft registration files are used by default: "ID",
 "BMS_PID", "Title", "Description", "Keywords", "Business Unit", "Functional
 Area", "Disease", "Vendor", "PlatformType", "Technology", "LibraryPrep",
 "Organism", "Tissue", "AlignmentReference", "GeneModel", "TBio_Owner",
-"TA_Owner", "LoadData", "ReadLength", "ReadType", "Pipeline",
+"TA_Owner", "LoadDate", "ReadLength", "ReadType", "Pipeline",
 "AlignmentAlgorithm", "ScriptID"}
 }
 \value{
