@@ -84,7 +84,7 @@ annotateDGEobj <- function(dgeObj, regfile,
     colnames(regdat) <- c("key", "value")
 
     #squeeze spaces out of keys
-    regdat$key <- str_remove(regdat$Key)
+    regdat$key <- str_remove_all(regdat$key, " ")
 
     #capture/preserve the existing attributes
     MyAttribs <- attributes(dgeObj)
