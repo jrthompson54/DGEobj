@@ -30,6 +30,10 @@ annotateDGEobj first and then saved as .RDS files and placed in the inputPath.
 Each time buildContrastDB is run, it skips RDS files that have already
 been indexed.  Use rebuild=TRUE to force indexing of all RDS files.
 }
+\examples{
+   success <- buildContrastDB("~/R/RDS", "~/R/contrastDB")
+
+}
 \author{
 John Thompson, \email{john.thompson@bms.com}
 }

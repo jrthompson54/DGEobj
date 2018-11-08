@@ -63,25 +63,34 @@ annotateDGEobj <- function(dgeObj, regfile,
                                        "ReadType",
                                        "Pipeline",
                                        "AlignmentAlgorithm",
-                                       "ScriptID"
+                                       "ScriptID",
+                                       "BioGitURL",
+                                       "source",
+                                       "XpressID"
                            )){
 
     # Read lines, stripping quotes
     regdat <- read.delim(regfile, sep="\t",
                          quote = "\"",
-                         stringsAsFactors = FALSE)
+                         stringsAsFactors = FALSE,
+                         header=FALSE)
     #just first column
     regdat <- regdat[,1, drop=FALSE]
     colnames(regdat) <- "pair"
 
     #just lines with equals signs
     regdat <- dplyr::filter(regdat, str_detect(pair, "="), !str_detect(pair, "Parameters."))
+
     #now split into key value pairs
     regdat <- strsplit(regdat$pair, "=") %>%
         as.data.frame(stringsAsFactors=FALSE) %>%
         t %>%
         as.data.frame(stringsAsFactors=FALSE)
     colnames(regdat) <- c("key", "value")
+
+    #after splitting, key without values get the key names inserted as the value.  Convert those to empty strings.
+    idx <- regdat$key == regdat$value
+    regdat$value[idx] <- ""
 
     #squeeze spaces out of keys
     regdat$key <- str_remove_all(regdat$key, " ")
@@ -249,7 +258,7 @@ indexType <- function(dgeObj, type, moreAttr){
 #' @return TRUE (success) or FALSE (Failure)
 #'
 #' @examples
-#'    success <- buildContrastDB("~/R/RDS", ~/R/contrastDB")
+#'    success <- buildContrastDB("~/R/RDS", "~/R/contrastDB")
 #'
 #' @import magrittr assertthat dplyr
 #'

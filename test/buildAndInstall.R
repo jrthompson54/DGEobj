@@ -6,9 +6,9 @@ setwd ("~/R/lib/pkgsrc/DGEobj/")
 library(devtools)
 document()
 load_all()
-build_vignettes()
+# build_vignettes()
 build()
-pkg = "~/R/lib/pkgsrc/DGEobj_0.9.22.tar.gz"
+pkg = "~/R/lib/pkgsrc/DGEobj_0.9.23.tar.gz"
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)
 
@@ -19,4 +19,5 @@ install_git("http://biogit.pri.bms.com/thompj27/DGEobj", repos=BiocInstaller::bi
 
 #for dev
 install_git("http://biogit.pri.bms.com/thompj27/DGE.Tools", branch="dev", repos=BiocInstaller::biocinstallRepos())
+
 
