@@ -4,7 +4,7 @@
 \alias{subset.DGEobj}
 \title{Function subset (DGEobj)}
 \usage{
-subset.DGEobj(DgeObj, row, col, drop = FALSE, debug = FALSE)
+\method{subset}{DGEobj}(DgeObj, row, col, drop = FALSE, debug = FALSE)
 }
 \arguments{
 \item{row}{row index for the subset}

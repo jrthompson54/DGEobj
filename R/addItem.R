@@ -30,7 +30,7 @@
 #'                                  itemType = "counts",
 #'                                  funArgs = myFunArgs)
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 addItem <- function(dgeObj, item, itemName, itemType,
@@ -161,7 +161,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 #'    #replace a set of contrasts after adding something to each
 #'    myDgeObj <- addItems(myDgeObj, mycontrastList, overwrite=TRUE)
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 addItems <- function(dgeObj, itemList, itemTypes, parents, overwrite=FALSE, itemAttr){

@@ -26,12 +26,13 @@
 #' @examples
 #'    MyCombinedDGEobj <- mergeDGEobj(dgeObj1, dgeObj2, join="inner", orig=TRUE)
 #'
-#' @import assertthat dplyr
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr left_join
 #'
 #' @export
 mergeDGEobj <- function(d1, d2, join="inner", orig=TRUE){
 
-        assert_that(!missing(d1),
+        assertthat::assert_that(!missing(d1),
                     !missing(d2),
                     class(d1)[[1]] == "DGEobj",
                     class(d2)[[1]] == "DGEobj",
@@ -94,7 +95,7 @@ mergeDGEobj <- function(d1, d2, join="inner", orig=TRUE){
         #make rownames a col so we can use dplyr
         c1$.ID <- rownames(c1)
         c2$.ID <- rownames(c2)
-        counts <- left_join(c1, c2, by=".ID")
+        counts <- dplyr::left_join(c1, c2, by=".ID")
         #put the rownames back
         rownames(counts) <- counts$.ID
         counts$.ID = NULL

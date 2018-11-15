@@ -45,13 +45,13 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE, debug=FALSE){
         count <- length(row)
         foundcount <- sum(row %in% rownames(DgeObj))
         if (foundcount < count)
-            warning(str_c((count - foundcount), " items in row index not found in rownames(DgeObj)"))
+            warning(stringr::str_c((count - foundcount), " items in row index not found in rownames(DgeObj)"))
     }
     if (class(col)[[1]] == "character"){
         count <- length(col)
         foundcount <- sum(col %in% colnames(DgeObj))
         if (foundcount < count)
-            warning(str_c((count - foundcount), " items in col index not found in colnames(DgeObj)"))
+            warning(stringr::str_c((count - foundcount), " items in col index not found in colnames(DgeObj)"))
     }
     #
     # Note1: subsetting a matrix with a vector of rownames doesn't work
@@ -76,10 +76,10 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE, debug=FALSE){
     for (i in 1:length(DgeObj)){
 
         if (debug == TRUE) {
-            cat(str_c("subsetting", names(DgeObj)[i], basetypes[[i]], "\n", sep=" ")) #debug
-            cat(str_c("row arg length", length(row), class(row), "\n", sep=" "))
-            cat(str_c("col arg length", length(col), class(col), "\n", sep=" "))
-            cat(str_c("object dim: ", nrow(DgeObj[[i]]), ":", ncol(DgeObj[[i]])))
+            cat(stringr::str_c("subsetting", names(DgeObj)[i], basetypes[[i]], "\n", sep=" ")) #debug
+            cat(stringr::str_c("row arg length", length(row), class(row), "\n", sep=" "))
+            cat(stringr::str_c("col arg length", length(col), class(col), "\n", sep=" "))
+            cat(stringr::str_c("object dim: ", nrow(DgeObj[[i]]), ":", ncol(DgeObj[[i]])))
         }
 
         objectClass <- class(DgeObj[[i]])[[1]]

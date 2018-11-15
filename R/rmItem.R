@@ -14,12 +14,12 @@
 #' @examples
 #'    MyDgeObj <- rmItem(MyDgeObj, "design")
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 rmItem <- function(dgeObj, itemName){
 
-    assert_that(class(dgeObj)[[1]] == "DGEobj",
+    assertthat::assert_that(class(dgeObj)[[1]] == "DGEobj",
                 !missing(itemName),
                 class(itemName)[[1]] == "character")
 

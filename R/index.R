@@ -34,7 +34,11 @@
 #' @examples
 #'    MyDgeObj <- annotateDGEobj(DGEobj, regfile)
 #'
-#' @import magrittr assertthat stringr
+#' @import magrittr
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter
+#' @importFrom stringr str_detect str_remove_all
+#' @importFrom utils read.delim
 #'
 #' @export
 annotateDGEobj <- function(dgeObj, regfile,
@@ -79,7 +83,7 @@ annotateDGEobj <- function(dgeObj, regfile,
     colnames(regdat) <- "pair"
 
     #just lines with equals signs
-    regdat <- dplyr::filter(regdat, str_detect(pair, "="), !str_detect(pair, "Parameters."))
+    regdat <- dplyr::filter(regdat, stringr::str_detect(pair, "="), !stringr::str_detect(pair, "Parameters."))
 
     #now split into key value pairs
     regdat <- strsplit(regdat$pair, "=") %>%
@@ -93,7 +97,7 @@ annotateDGEobj <- function(dgeObj, regfile,
     regdat$value[idx] <- ""
 
     #squeeze spaces out of keys
-    regdat$key <- str_remove_all(regdat$key, " ")
+    regdat$key <- stringr::str_remove_all(regdat$key, " ")
 
     #capture/preserve the existing attributes
     MyAttribs <- attributes(dgeObj)
@@ -130,7 +134,8 @@ annotateDGEobj <- function(dgeObj, regfile,
 #' @examples
 #'    MyDgeObj <- indexDGEobj(DGEobj, regfile)
 #'
-#' @import magrittr assertthat
+#' @import magrittr
+#' @importFrom assertthat assert_that
 #'
 #' @export
 indexDGEobj <- function(dgeObj,
@@ -201,12 +206,14 @@ indexDGEobj <- function(dgeObj,
 #'    # Index topTable contrast data
 #'    MyIndexDF <- indexType(dgeObj, "topTable")
 #'
-#' @import assertthat magrittr
+#' @importFrom assertthat assert_that
+#' @import magrittr
+#' @importFrom dplyr filter
 #'
 #' @export
 indexType <- function(dgeObj, type, moreAttr){
     #return a dataframe of metadata about the specified data types
-    assert_that(!missing(dgeObj),
+    assertthat::assert_that(!missing(dgeObj),
                 !missing(type),
                 class(dgeObj)[[1]] == "DGEobj",
                 class(type)[[1]] %in% list("character", "list")
@@ -260,7 +267,9 @@ indexType <- function(dgeObj, type, moreAttr){
 #' @examples
 #'    success <- buildContrastDB("~/R/RDS", "~/R/contrastDB")
 #'
-#' @import magrittr assertthat dplyr
+#' @import magrittr
+#' @importFrom assertthat assert_that
+#' @importFrom utils read.delim
 #'
 #' @export
 buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
@@ -336,13 +345,13 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
 
     #dropped already processed files
     if (rebuild == FALSE)
-        rdsFiles <- setdiff(rdsFiles, processedFiles)
+        rdsFiles <- base::setdiff(rdsFiles, processedFiles)
 
 
     #skip prior indexed files
     if (file.exists(file.path(outputPath, "projects.txt"))){
         projects <- read.delim(file.path(outputPath, "projects.txt"))
-        rdsFiles <- setdiff(rdsFiles, projects$filename)
+        rdsFiles <- base::setdiff(rdsFiles, projects$filename)
     }
 
     for (dfile in rdsFiles){

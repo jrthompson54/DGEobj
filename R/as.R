@@ -19,7 +19,10 @@
 #'    MyES <- convertDGEobj(dgeObj, "ES")
 #'    MyList <- convertDGEobj(dgeObj, "list")
 #'
-#' @import assertthat SummarizedExperiment
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom assertthat assert_that
+#' @importFrom S4Vectors DataFrame SimpleList
+#' @importFrom methods as
 #'
 #' @export
 convertDGEobj <- function(dgeObj, Class){
@@ -97,19 +100,22 @@ convertDGEobj <- function(dgeObj, Class){
 #'    MyDGEobj <- convertRSE(MyRSE, "DGEobj")
 #'    MyES <- convertRSE(MyRSE, "ES")
 #'
-#' @import magrittr SummarizedExperiment
+#' @import magrittr
+#' @importFrom SummarizedExperiment rowRanges colData assay
+#' @importFrom S4Vectors metadata
+#' @importFrom methods as
 #'
 #' @export
 convertRSE <- function(RSE, Class){
 
     .toDGEobj <- function(RSE){
-        counts <- assay(RSE, "Counts")
-        design <- colData(RSE) %>% as.data.frame
+        counts <- SummarizedExperiment::assay(RSE, "Counts")
+        design <- SummarizedExperiment::colData(RSE) %>% as.data.frame
         # geneAnnotation = mcols(RSE) %>% as.data.frame
         # rownames(geneAnnotation) <- geneAnnotation$ID
-        geneAnnotation = rowRanges(RSE) %>% as.data.frame
+        geneAnnotation = SummarizedExperiment::rowRanges(RSE) %>% as.data.frame
 
-        level <-  metadata(RSE)[["Level"]] %>% tolower
+        level <-  S4Vectors::metadata(RSE)[["Level"]] %>% tolower
 
         dgeObj <- initDGEobj(counts=counts,
                              rowData=geneAnnotation,

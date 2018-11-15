@@ -166,8 +166,9 @@
 #'                                                GeneModel = "Ensembl.R84")
 #'                            )
 #'
-#' @import assertthat magrittr
-#'
+#' @import magrittr
+#' @importFrom assertthat assert_that
+#' @importFrom methods as
 #' @export
 ### # Constructor function for the class
 initDGEobj <- function(counts, rowData, colData, #required
@@ -342,7 +343,10 @@ initDGEobj <- function(counts, rowData, colData, #required
 #GRanges object.  This  works with Omicsoft data.  Haven't tested Xpress data yet.
 #
 ### Function df2GR ###
-#' @import magrittr IRanges GenomicRanges
+#' @import magrittr
+#' @importFrom stats na.omit
+#' @importFrom IRanges IRanges
+#' @importFrom GenomicRanges GRanges mcols
 df2GR <- function(df, seqnames=c("seqnames", "chr", "chromosome"),
                   start="start", end="end", strand="strand",
                   start.offset=1, end.offset=start.offset) {
@@ -352,11 +356,11 @@ df2GR <- function(df, seqnames=c("seqnames", "chr", "chromosome"),
     #for these fields
     #
     #These lines return the colnames used in your datafile.
-    seqnames.col <- match(seqnames, tolower(colnames(df))) %>% na.omit %>% .[1]
-    start.col <- match(start, tolower(colnames(df))) %>% na.omit %>% .[1]
-    end.col <- match(end, tolower(colnames(df))) %>% na.omit %>% .[1]
-    strand.col <- match(strand, tolower(colnames(df))) %>% na.omit %>% .[1]
-    other.cols <- setdiff(seq_along(colnames(df)), c(seqnames.col, start.col, end.col, strand.col))
+    seqnames.col <- base::match(seqnames, tolower(colnames(df))) %>% na.omit %>% .[1]
+    start.col <- base::match(start, tolower(colnames(df))) %>% na.omit %>% .[1]
+    end.col <-base:: match(end, tolower(colnames(df))) %>% na.omit %>% .[1]
+    strand.col <- base::match(strand, tolower(colnames(df))) %>% na.omit %>% .[1]
+    other.cols <- base::setdiff(seq_along(colnames(df)), c(seqnames.col, start.col, end.col, strand.col))
 
     #make sure start and end are numeric; if not, remove commas and convert to numeric
     if (is.character(df[[start.col]])) {
@@ -379,6 +383,7 @@ df2GR <- function(df, seqnames=c("seqnames", "chr", "chromosome"),
 }
 
 ### Function Txt2DF ###
+#' @importFrom utils read.table
 Txt2DF <- function(filename) {
     #configured to read Omicsoft .txt files correctly capturing GeneIDs as rownames
     if (file.exists(filename)) {

@@ -61,8 +61,6 @@ inventory <- function(dgeObj, verbose=FALSE, ...)  {
 #'   print(myDGEobj)
 #'   print(myDGEobj, verbose=TRUE)
 #'
-#' @import knitr
-#'
 #' @export
 print.DGEobj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
                           print.gap = NULL, right = FALSE, max = NULL,

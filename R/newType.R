@@ -21,13 +21,13 @@
 #'                         baseType="assay",
 #'                         uniqueItem=TRUE)
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 newType <- function(dgeObj, itemType, baseType, uniqueItem=FALSE){
     #Set uniqueItem to TRUE to allow only one instance of itemType
     result <- FALSE
-    assert_that(!missing(dgeObj), !missing(itemType),
+    assertthat::assert_that(!missing(dgeObj), !missing(itemType),
                 !missing(baseType), class(dgeObj) == "DGEobj",
                 baseType %in% baseTypes(dgeObj)
     )

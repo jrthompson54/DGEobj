@@ -5,7 +5,7 @@
 \title{### Function as.list.DGEobj ###
 Function as.list.DGEobj}
 \usage{
-as.list.DGEobj(dgeObj)
+\method{as.list}{DGEobj}(dgeObj)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}

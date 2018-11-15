@@ -15,7 +15,10 @@
 #' @examples
 #'    showTypes(MyDgeObj)
 #'
-#' @import magrittr assertthat dplyr knitr
+#' @import magrittr
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr select
+#' @importFrom knitr kable
 #'
 #' @export
 showTypes <- function(dgeObj, pretty=TRUE){

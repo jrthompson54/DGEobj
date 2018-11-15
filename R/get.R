@@ -12,7 +12,7 @@
 #' @examples
 #'    MyCounts <- getItem(dgeObj, "counts")
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 getItems <- function(dgeObj, itemNames){
@@ -49,7 +49,7 @@ getItems <- function(dgeObj, itemNames){
 #' @examples
 #'    MyCounts <- getItem(dgeObj, "counts")
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 getItem <- function(dgeObj, itemName){
@@ -173,7 +173,7 @@ getBaseType <- function(dgeObj, baseType){
 #' @examples
 #'    MyBaseType <- baseType(dgeObj, type="DGEList")
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 baseType <- function(dgeObj, type){

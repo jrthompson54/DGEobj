@@ -8,7 +8,7 @@ document()
 load_all()
 # build_vignettes()
 build()
-pkg = "~/R/lib/pkgsrc/DGEobj_0.9.23.tar.gz"
+pkg = "~/R/lib/pkgsrc/DGEobj_0.9.24.tar.gz"
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)
 
@@ -19,5 +19,11 @@ install_git("http://biogit.pri.bms.com/thompj27/DGEobj", repos=BiocInstaller::bi
 
 #for dev
 install_git("http://biogit.pri.bms.com/thompj27/DGE.Tools", branch="dev", repos=BiocInstaller::biocinstallRepos())
+
+
+
+> flist <- list.functions.in.file("R/dimensionMatch.R", alphabetic=T)
+> x <- cbind(names(flist), flist) %>% as.data.frame()
+
 
 

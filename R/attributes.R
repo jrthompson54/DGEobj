@@ -78,7 +78,9 @@ showAttributes <- function(dgeObj, skip=c("dim", "dimnames", "rownames",
 #'                         LowIntFilter = "FPK >5 in >= 1 group"),
 #'    MyDGEObj[["counts"]] <- setAttributes(MyDGEObj[["counts"]], MyAttributes)
 #'
-#' @import magrittr assertthat dplyr knitr
+#' @import magrittr
+#' @importFrom assertthat assert_that
+#'
 #'
 #' @export
 setAttributes <- function(item, attribs){
@@ -117,7 +119,8 @@ setAttributes <- function(item, attribs){
 #'    MyBaseTypes <- getItemAttribute(dgeObj, "basetype")
 #'    MyCreationDates <- getItemAttribute(dgeObj, "dateCreated")
 #'
-#' @import magrittr assertthat dplyr knitr
+#' @import magrittr
+#' @importFrom assertthat assert_that
 #'
 #' @export
 getItemAttribute <- function(dgeObj, attrName){
@@ -180,7 +183,7 @@ getAttributes <- function(item, excludeList=list("dim", "dimnames",
 #'    #get an attribute from a DGEobj item
 #'    MyAttr <- getAttribute(dgeObj$designMatrix, "formula")
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 getAttribute <- function(item, attrName){
@@ -218,7 +221,7 @@ getAttribute <- function(item, attrName){
 #'                    list("type", "basetype"),
 #'                    list("counts", "counts"))
 #'
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #'
 #' @export
 appendAttributes <- function(dgeObj, itemName, attribs){
@@ -258,6 +261,8 @@ appendAttributes <- function(dgeObj, itemName, attribs){
 #'
 #' @examples
 #'    df <- showMeta(MydgeObj)
+#'
+#' @importFrom utils stack
 #'
 #' @export
 showMeta <- function(obj) {
