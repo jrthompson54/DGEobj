@@ -342,45 +342,44 @@ initDGEobj <- function(counts, rowData, colData, #required
 #Notcurrently used:  I'm using as(rowData, "GRanges") to cast rowData as a
 #GRanges object.  This  works with Omicsoft data.  Haven't tested Xpress data yet.
 #
-### Function df2GR ###
-#' @import magrittr
-#' @importFrom stats na.omit
-#' @importFrom IRanges IRanges
-#' @importFrom GenomicRanges GRanges mcols
-df2GR <- function(df, seqnames=c("seqnames", "chr", "chromosome"),
-                  start="start", end="end", strand="strand",
-                  start.offset=1, end.offset=start.offset) {
-    #Convert a Annotation DF to a genomic Ranges object
-    #Optional parameters for seqnames, start, end, strand anticipate possible you might have for these
-    #fields in your annotation file.  Only need to modify these if your annotation uses differenc colnames
-    #for these fields
-    #
-    #These lines return the colnames used in your datafile.
-    seqnames.col <- base::match(seqnames, tolower(colnames(df))) %>% na.omit %>% .[1]
-    start.col <- base::match(start, tolower(colnames(df))) %>% na.omit %>% .[1]
-    end.col <-base:: match(end, tolower(colnames(df))) %>% na.omit %>% .[1]
-    strand.col <- base::match(strand, tolower(colnames(df))) %>% na.omit %>% .[1]
-    other.cols <- base::setdiff(seq_along(colnames(df)), c(seqnames.col, start.col, end.col, strand.col))
-
-    #make sure start and end are numeric; if not, remove commas and convert to numeric
-    if (is.character(df[[start.col]])) {
-        df[[start.col]] = gsub(",", "", df[[start.col]]) %>% as.numeric
-    }
-    if (is.character(df[[end.col]])) {
-        df[[end.col]] = gsub(",", "", df[[end.col]]) %>% as.numeric
-    }
-
-    MyRanges = IRanges::IRanges(start=df[[start.col]] - start.offset + 1,
-                                end=df[[end.col]]) - end.offset + 1
-
-    gr <- GenomicRanges::GRanges(seqnames=df[[seqnames.col]],
-                                 ranges=MyRanges,
-                                 strand=df[[strand.col]])
-
-    GenomicRanges::mcols(gr) <- df[other.cols]
-    names(gr) <- rownames(df)
-    return(gr)
-}
+# ### Function df2GR ###@import magrittr
+# @importFrom stats na.omit
+# @importFrom IRanges IRanges
+# @importFrom GenomicRanges GRanges mcols
+# df2GR <- function(df, seqnames=c("seqnames", "chr", "chromosome"),
+#                   start="start", end="end", strand="strand",
+#                   start.offset=1, end.offset=start.offset) {
+#     #Convert a Annotation DF to a genomic Ranges object
+#     #Optional parameters for seqnames, start, end, strand anticipate possible you might have for these
+#     #fields in your annotation file.  Only need to modify these if your annotation uses differenc colnames
+#     #for these fields
+#     #
+#     #These lines return the colnames used in your datafile.
+#     seqnames.col <- base::match(seqnames, tolower(colnames(df))) %>% na.omit %>% .[1]
+#     start.col <- base::match(start, tolower(colnames(df))) %>% na.omit %>% .[1]
+#     end.col <-base:: match(end, tolower(colnames(df))) %>% na.omit %>% .[1]
+#     strand.col <- base::match(strand, tolower(colnames(df))) %>% na.omit %>% .[1]
+#     other.cols <- base::setdiff(seq_along(colnames(df)), c(seqnames.col, start.col, end.col, strand.col))
+#
+#     #make sure start and end are numeric; if not, remove commas and convert to numeric
+#     if (is.character(df[[start.col]])) {
+#         df[[start.col]] = gsub(",", "", df[[start.col]]) %>% as.numeric
+#     }
+#     if (is.character(df[[end.col]])) {
+#         df[[end.col]] = gsub(",", "", df[[end.col]]) %>% as.numeric
+#     }
+#
+#     MyRanges = IRanges::IRanges(start=df[[start.col]] - start.offset + 1,
+#                                 end=df[[end.col]]) - end.offset + 1
+#
+#     gr <- GenomicRanges::GRanges(seqnames=df[[seqnames.col]],
+#                                  ranges=MyRanges,
+#                                  strand=df[[strand.col]])
+#
+#     GenomicRanges::mcols(gr) <- df[other.cols]
+#     names(gr) <- rownames(df)
+#     return(gr)
+# }
 
 ### Function Txt2DF ###
 #' @importFrom utils read.table

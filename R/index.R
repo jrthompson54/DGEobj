@@ -270,6 +270,7 @@ indexType <- function(dgeObj, type, moreAttr){
 #' @import magrittr
 #' @importFrom assertthat assert_that
 #' @importFrom utils read.delim
+#' @importFrom dplyr setdiff
 #'
 #' @export
 buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
@@ -318,7 +319,7 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
     return(contrastData)
     }
 
-    assert_that(file.exists(outputPath),
+    assertthat::assert_that(file.exists(outputPath),
                 file.exists(inputPath ))
 
     #initilize or load projectIndex, contrastIndex, contrastData dataframes
@@ -345,13 +346,13 @@ buildContrastDB <- function(inputPath, outputPath, rebuild=FALSE){
 
     #dropped already processed files
     if (rebuild == FALSE)
-        rdsFiles <- base::setdiff(rdsFiles, processedFiles)
+        rdsFiles <- dplyr::setdiff(rdsFiles, processedFiles)
 
 
     #skip prior indexed files
     if (file.exists(file.path(outputPath, "projects.txt"))){
         projects <- read.delim(file.path(outputPath, "projects.txt"))
-        rdsFiles <- base::setdiff(rdsFiles, projects$filename)
+        rdsFiles <- dplyr::setdiff(rdsFiles, projects$filename)
     }
 
     for (dfile in rdsFiles){
