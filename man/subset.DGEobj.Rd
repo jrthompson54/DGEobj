@@ -4,9 +4,11 @@
 \alias{subset.DGEobj}
 \title{Function subset (DGEobj)}
 \usage{
-\method{subset}{DGEobj}(DgeObj, row, col, drop = FALSE, debug = FALSE)
+\method{subset}{DGEobj}(dgeObj, row, col, drop = FALSE, debug = FALSE)
 }
 \arguments{
+\item{dgeObj}{A class dgeObj created by function initDGEobj}
+
 \item{row}{row index for the subset}
 
 \item{col}{col index for the subset}
@@ -17,8 +19,6 @@ has no effect.}
 
 \item{debug}{Default=FALSE.  Set to TRUE to get more information is subsetting a
 DGEobj fails with a dimension error.}
-
-\item{dgeObj}{A class dgeObj created by function initDGEobj}
 }
 \value{
 A subsetted DGEobj class object
@@ -27,7 +27,7 @@ A subsetted DGEobj class object
 Add a data item to a class DGEobj
 }
 \examples{
-   DgeObj <- subset(DgeObj, 1:10, 100:1000)
+   dgeObj <- subset(dgeObj, 1:10, 100:1000)
 
 }
 \author{

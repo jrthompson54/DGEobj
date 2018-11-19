@@ -4,7 +4,7 @@
 \alias{baseTypes}
 \title{Function baseTypes}
 \usage{
-baseTypes(dgeObj, itemNames)
+baseTypes(dgeObj)
 }
 \arguments{
 \item{dgeObj}{a class DGEobj object}

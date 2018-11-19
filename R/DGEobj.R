@@ -355,10 +355,10 @@ initDGEobj <- function(counts, rowData, colData, #required
 #     #for these fields
 #     #
 #     #These lines return the colnames used in your datafile.
-#     seqnames.col <- base::match(seqnames, tolower(colnames(df))) %>% na.omit %>% .[1]
-#     start.col <- base::match(start, tolower(colnames(df))) %>% na.omit %>% .[1]
-#     end.col <-base:: match(end, tolower(colnames(df))) %>% na.omit %>% .[1]
-#     strand.col <- base::match(strand, tolower(colnames(df))) %>% na.omit %>% .[1]
+#     seqnames.col <- base::match(seqnames, tolower(colnames(df))) %>% an.omit() %>% .[1]
+#     start.col <- base::match(start, tolower(colnames(df))) %>% an.omit() %>% .[1]
+#     end.col <-base:: match(end, tolower(colnames(df))) %>% an.omit() %>% .[1]
+#     strand.col <- base::match(strand, tolower(colnames(df))) %>% an.omit() %>% .[1]
 #     other.cols <- base::setdiff(seq_along(colnames(df)), c(seqnames.col, start.col, end.col, strand.col))
 #
 #     #make sure start and end are numeric; if not, remove commas and convert to numeric

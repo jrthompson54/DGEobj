@@ -4,7 +4,7 @@
 \alias{inventory}
 \title{Function inventory}
 \usage{
-inventory(dgeObj, verbose = FALSE, ...)
+inventory(dgeObj, verbose = FALSE)
 }
 \arguments{
 \item{dgeObj}{A DGEobj object}

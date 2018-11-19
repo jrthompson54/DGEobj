@@ -88,7 +88,7 @@ annotateDGEobj <- function(dgeObj, regfile,
     #now split into key value pairs
     regdat <- strsplit(regdat$pair, "=") %>%
         as.data.frame(stringsAsFactors=FALSE) %>%
-        t %>%
+        t() %>%
         as.data.frame(stringsAsFactors=FALSE)
     colnames(regdat) <- c("key", "value")
 

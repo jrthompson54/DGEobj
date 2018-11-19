@@ -28,6 +28,8 @@ name and arguments used in the current function (optional)}
 
 \item{parent}{ItemName of the parent of this item (optional, but your DGEobj
 won't be well annotated if you don't use this wherever appropriate)}
+
+\item{init}{Default = FALSE. Used internally by the initDGEobj function.}
 }
 \value{
 A DGEobj class object with a new data item added.

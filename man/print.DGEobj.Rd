@@ -4,9 +4,7 @@
 \alias{print.DGEobj}
 \title{Function print.DGEobj}
 \usage{
-\method{print}{DGEobj}(dgeObj, digits = NULL, quote = TRUE,
-  na.print = NULL, print.gap = NULL, right = FALSE, max = NULL,
-  useSource = TRUE, verbose = FALSE, ...)
+\method{print}{DGEobj}(dgeObj, verbose = FALSE)
 }
 \arguments{
 \item{dgeObj}{A DGEobj object}
