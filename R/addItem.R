@@ -19,6 +19,7 @@
 #' @param itemAttr A named list of attributes to add directly to the item (optional)
 #' @param parent ItemName of the parent of this item (optional, but your DGEobj
 #'   won't be well annotated if you don't use this wherever appropriate)
+#' @param init Default = FALSE. Used internally by the initDGEobj function.
 #'
 #' @return A DGEobj class object with a new data item added.
 #'

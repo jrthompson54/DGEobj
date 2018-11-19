@@ -18,40 +18,40 @@
 #' @return A subsetted DGEobj class object
 #'
 #' @examples
-#'    DgeObj <- subset(DgeObj, 1:10, 100:1000)
+#'    dgeObj <- subset(dgeObj, 1:10, 100:1000)
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom stringr str_c
 #'
 #' @export
-subset.DGEobj <- function(DgeObj, row, col, drop=FALSE, debug=FALSE){
+subset.DGEobj <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
 
-    assertthat::assert_that(class(DgeObj)[[1]] == "DGEobj")
+    assertthat::assert_that(class(dgeObj)[[1]] == "DGEobj")
 
     #fill in missing row/col args
     if (missing(row))
-        row <-1:nrow(DgeObj)
+        row <-1:nrow(dgeObj)
     if (missing(col))
-        col <- 1:ncol(DgeObj)
+        col <- 1:ncol(dgeObj)
 
     #make sure row and col in range
-    if (class(row)[[1]] %in% c("numeric", "integer") & max(row) > nrow(DgeObj))
+    if (class(row)[[1]] %in% c("numeric", "integer") & max(row) > nrow(dgeObj))
         stop ("row coordinates out of range")
-    if (class(col)[[1]] %in% c("numeric", "integer") & max(col) > ncol(DgeObj))
+    if (class(col)[[1]] %in% c("numeric", "integer") & max(col) > ncol(dgeObj))
         stop("col coordinates out of range")
 
     #warn if named items don't exist
     if (class(row)[[1]] == "character"){
         count <- length(row)
-        foundcount <- sum(row %in% rownames(DgeObj))
+        foundcount <- sum(row %in% rownames(dgeObj))
         if (foundcount < count)
-            warning(stringr::str_c((count - foundcount), " items in row index not found in rownames(DgeObj)"))
+            warning(stringr::str_c((count - foundcount), " items in row index not found in rownames(dgeObj)"))
     }
     if (class(col)[[1]] == "character"){
         count <- length(col)
-        foundcount <- sum(col %in% colnames(DgeObj))
+        foundcount <- sum(col %in% colnames(dgeObj))
         if (foundcount < count)
-            warning(stringr::str_c((count - foundcount), " items in col index not found in colnames(DgeObj)"))
+            warning(stringr::str_c((count - foundcount), " items in col index not found in colnames(dgeObj)"))
     }
     #
     # Note1: subsetting a matrix with a vector of rownames doesn't work
@@ -61,7 +61,7 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE, debug=FALSE){
     # subset a matrix with a boolean index.
 
     #need basetype to define how to subset an object
-    basetypes <- attr(DgeObj, "basetype")
+    basetypes <- attr(dgeObj, "basetype")
 
     #classes for which the drop argument is valid.
 
@@ -69,55 +69,55 @@ subset.DGEobj <- function(DgeObj, row, col, drop=FALSE, debug=FALSE){
 
     #if row or col is a character vector, convert to boolean index.
     if (class(row)[[1]] == "character")
-        row <- rownames(DgeObj) %in% row
+        row <- rownames(dgeObj) %in% row
     if (class(col)[[1]] == "character")
-        col <- colnames(DgeObj) %in% col
+        col <- colnames(dgeObj) %in% col
 
-    for (i in 1:length(DgeObj)){
+    for (i in 1:length(dgeObj)){
 
         if (debug == TRUE) {
-            cat(stringr::str_c("subsetting", names(DgeObj)[i], basetypes[[i]], "\n", sep=" ")) #debug
+            cat(stringr::str_c("subsetting", names(dgeObj)[i], basetypes[[i]], "\n", sep=" ")) #debug
             cat(stringr::str_c("row arg length", length(row), class(row), "\n", sep=" "))
             cat(stringr::str_c("col arg length", length(col), class(col), "\n", sep=" "))
-            cat(stringr::str_c("object dim: ", nrow(DgeObj[[i]]), ":", ncol(DgeObj[[i]])))
+            cat(stringr::str_c("object dim: ", nrow(dgeObj[[i]]), ":", ncol(dgeObj[[i]])))
         }
 
-        objectClass <- class(DgeObj[[i]])[[1]]
+        objectClass <- class(dgeObj[[i]])[[1]]
 
         #select action dependent on basetype.  Do nothing for basetype = meta
         switch(basetypes[[i]],
 
                row = {
 
-                   if (is.null(dim(DgeObj[[i]]))){ #not a matrix type object
-                       DgeObj[[i]] <- DgeObj[[i]][row]
+                   if (is.null(dim(dgeObj[[i]]))){ #not a matrix type object
+                       dgeObj[[i]] <- dgeObj[[i]][row]
                    } else if (objectClass %in% dropClasses) {
-                       DgeObj[[i]] <- DgeObj[[i]][row, , drop=drop]
+                       dgeObj[[i]] <- dgeObj[[i]][row, , drop=drop]
                    } else {
-                       DgeObj[[i]] <- DgeObj[[i]][row,]
+                       dgeObj[[i]] <- dgeObj[[i]][row,]
                    }
                },
 
                col = {
-                   if (is.null(dim(DgeObj[[i]]))){
-                       DgeObj[[i]] <- DgeObj[[i]][col]
+                   if (is.null(dim(dgeObj[[i]]))){
+                       dgeObj[[i]] <- dgeObj[[i]][col]
                    } else if (objectClass %in% dropClasses){
-                       DgeObj[[i]] <- DgeObj[[i]][col, , drop=drop]
+                       dgeObj[[i]] <- dgeObj[[i]][col, , drop=drop]
                    } else {
-                       DgeObj[[i]] <- DgeObj[[i]][col,]
+                       dgeObj[[i]] <- dgeObj[[i]][col,]
                    }
                },
 
                assay = {
                    if (objectClass %in% dropClasses){
-                       DgeObj[[i]] <- DgeObj[[i]][row, col, drop=drop]
+                       dgeObj[[i]] <- dgeObj[[i]][row, col, drop=drop]
                    } else {
-                       DgeObj[[i]] <- DgeObj[[i]][row, col]
+                       dgeObj[[i]] <- dgeObj[[i]][row, col]
                    }
                })
 
     }
-    return(DgeObj)
+    return(dgeObj)
 }
 
 #' @export

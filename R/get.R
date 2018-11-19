@@ -185,7 +185,6 @@ baseType <- function(dgeObj, type){
                 )
     objDef <- attr(dgeObj, "objDef")
     return (objDef$type[[type]])
-
 }
 
 ### Function baseTypes ###
@@ -207,7 +206,7 @@ baseType <- function(dgeObj, type){
 #'    mybasetypes <- baseTypes(myDgeObj)
 #'
 #' @export
-baseTypes <- function(dgeObj, itemNames){
+baseTypes <- function(dgeObj){
     if (missing(dgeObj))
         return(unique(.DGEobjDef$type))
     else

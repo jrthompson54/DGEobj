@@ -7,7 +7,7 @@
 #' @keywords RNA-Seq, DGEobj
 #'
 #' @param dgeObj  A class dgeObj created by function initDGEobj
-#' @param itemName
+#' @param itemName Name of the item to remove from the DGEobj
 #'
 #' @return An updated DGEobj
 #'

@@ -20,7 +20,7 @@
 #'   Mydf <- inventory(myDGEobj, verbose=TRUE)
 #'
 #' @export
-inventory <- function(dgeObj, verbose=FALSE, ...)  {
+inventory <- function(dgeObj, verbose=FALSE)  {
 
     ItemNames <- names(dgeObj)
     ItemTypes <- attr(dgeObj, "type")
@@ -62,11 +62,13 @@ inventory <- function(dgeObj, verbose=FALSE, ...)  {
 #'   print(myDGEobj, verbose=TRUE)
 #'
 #' @export
-print.DGEobj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
-                          print.gap = NULL, right = FALSE, max = NULL,
-                          useSource = TRUE,
-                          verbose=FALSE,
-                          ...){
+print.DGEobj <- function (dgeObj,
+                          verbose=FALSE){
+# print.DGEobj <- function (dgeObj, digits = NULL, quote = TRUE, na.print = NULL,
+#                           print.gap = NULL, right = FALSE, max = NULL,
+#                           useSource = TRUE,
+#                           verbose=FALSE,
+#                           ...){
     df <- inventory(dgeObj, verbose=verbose)
     print(df)
     return(invisible(dgeObj))
