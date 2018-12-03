@@ -1,4 +1,4 @@
-### Function addItem ###
+### Function susset ###
 #' Function subset (DGEobj)
 #'
 #' Add a data item to a class DGEobj

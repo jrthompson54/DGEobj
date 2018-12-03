@@ -1,5 +1,5 @@
-### Function as.list ###
-#' Function as.list
+### Function rmItem ###
+#' Function rmItem
 #'
 #' Removes a named data item from a DGEobj
 #'

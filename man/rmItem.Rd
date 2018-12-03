@@ -2,7 +2,7 @@
 % Please edit documentation in R/rmItem.R
 \name{rmItem}
 \alias{rmItem}
-\title{Function as.list}
+\title{Function rmItem}
 \usage{
 rmItem(dgeObj, itemName)
 }
