@@ -2,7 +2,7 @@ Package: DGEobj
 Type: Package
 Title: DGEobj provides a S3 data class to manage and annotate DGE analysis
     results
-Version: 0.9.25
+Version: 0.9.26
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
@@ -10,9 +10,10 @@ Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
 Description: Provides an S3 data class to manage and annotate DGE analysis
     results.  Although authored with differential gene expression in mind,
     the datatypes are customizable and extensible to accommodate nearly any
-    data analysis workflow that starts from a data matrix of assays (rows) by Samples (columns).
+    data analysis workflow that starts from a data matrix of assays (rows) 
+    by Samples (columns).
 Depends:
-    R (>= 3.3.1)
+    R (>= 3.4.1)
 License: GPL3
 Encoding: UTF-8
 LazyData: true
@@ -45,6 +46,8 @@ Collate:
     'subset.R'
     'index.R'
     'mergeDGEobj.R'
+    'initSOMAobj.R'
+    'adatToDGEobj.R'
 RoxygenNote: 6.1.1
 Suggests: 
     rmarkdown

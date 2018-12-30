@@ -26,6 +26,7 @@
              geneData ="row",
              isoformData = "row",
              exonData = "row",
+             proteinData = "row", #for Somalogic
              granges = "row",
 
              fit = "row",
@@ -45,7 +46,6 @@
              DGEList = "assay",
              Elist = "assay",
              isoformFrac = "assay",
-
              corFit = "meta",
              topTreat ="meta",
              geneList = "meta",  #intended for short gene lists
@@ -62,26 +62,44 @@
              counts_orig = "meta",
              design_orig ="meta",
              effectiveLength_orig = "meta",
-             svobj = "meta"
-             ),
+             svobj = "meta",
+             intensities = "assay", #for somalogic data
+             intensities_orig = "meta",
+             proteinData = "assay",
+             proteinData_orig = "meta",
+             AffyRMA_orig = "meta"
+    ),
 
 # These Types can only have one instance in a DGEobj
     uniqueType = c("counts",
-                "design",
-                "geneData",
-                "isoformData",
-                "exonData",
-                "effectiveLength",
-                # "DGEList",
-                "granges"),
+                   "counts_orig",
+                   "design",
+                   "design_orig",
+                   "geneData",
+                   "geneData_orig",
+                   "isoformData",
+                   "isoformData_orig",
+                   "exonData",
+                   "exonData_orig",
+                   "effectiveLength",
+                   "effectiveLength_orig",
+                   # "DGEList",
+                   "granges",
+                   "granges_orig",
+                   "intensities",
+                   "intensities_orig",
+                   "AffyRMA",
+                   "AffyRMA_orig",
+                   "proteinData",
+                   "proteinData_orig"),
 
-    allowedLevels = c("gene", "isoform", "exon")
+    allowedLevels = c("gene", "isoform", "exon", "protein")
 ) #.DGEobjDef
 # Uncomment this block when you need to update the ./data/DGEobj.rda file
-# x = getwd()
-# setwd ("~/R/lib/pkgsrc/DGEobj/")
-# save(.DGEobjDef, file="./data/DGEobj.rda")
-# setwd(x)
+x = getwd()
+setwd ("~/R/lib/pkgsrc/DGEobj/")
+save(.DGEobjDef, file="./data/DGEobj.rda")
+setwd(x)
 
     #
     #Define allowed values for attributes of each data type to be attached to the data item.
