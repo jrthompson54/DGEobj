@@ -48,6 +48,7 @@ Collate:
     'mergeDGEobj.R'
     'initSOMAobj.R'
     'adatToDGEobj.R'
+    'resetDGEobj.R'
 RoxygenNote: 6.1.1
 Suggests: 
     rmarkdown

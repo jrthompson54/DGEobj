@@ -5,23 +5,27 @@
 \title{Function getAttributes}
 \usage{
 getAttributes(item, excludeList = list("dim", "dimnames", "names",
-  "row.names"))
+  "row.names", "class"))
 }
 \arguments{
-\item{item}{a DGEobj structre}
+\item{item}{a DGEobj structure (or any object with attributes)}
 
 \item{excludeList}{A list of attribute names to exclude from the output
 (default = list("dim", "dimnames", "names", "row.names"))}
 }
 \value{
-a list of attribute values for the items
+a named list of attribute values for the items
 }
 \description{
-get all attributes from an item
+get all attributes from an item except for ones listed on the excludeList.
+This is intended to capture user-defined attributes by excluding a few standard
+attributes like class and dim.
 }
 \examples{
-   #assign attributes to a DGEobj
-   MyAttr <- getAttributes(dgeObj$counts)
+   #get attributes from a DGEobj
+   MyAttr <- getAttributes(dgeObj)
+
+   #get the formula from the designMatrix
 
 }
 \author{

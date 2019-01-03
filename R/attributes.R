@@ -122,7 +122,7 @@ setAttributes <- function(item, attribs){
 #' @import magrittr
 #' @importFrom assertthat assert_that
 #'
-#' @export
+# Don't export.  User just needs to learn base attribute functions.
 getItemAttribute <- function(dgeObj, attrName){
     assert_that(
         !missing(dgeObj),
@@ -131,31 +131,35 @@ getItemAttribute <- function(dgeObj, attrName){
         class(attrName)[[1]] == "character"
     )
 
-    myattributes <- lapply (dgeObj, function(x) attr(x, attrName))
+    # myattributes <- lapply (dgeObj, function(x) attr(x, attrName))
     return(myattributes)
 }
 
 ### Function getAttributes ###
 #' Function getAttributes
 #'
-#' get all attributes from an item
+#' get all attributes from an item except for ones listed on the excludeList.
+#' This is intended to capture user-defined attributes by excluding a few standard
+#' attributes like class and dim.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
 #'
-#' @param item  a DGEobj structre
+#' @param item  a DGEobj structure (or any object with attributes)
 #' @param excludeList A list of attribute names to exclude from the output
 #'     (default = list("dim", "dimnames", "names", "row.names"))
 #'
-#' @return a list of attribute values for the items
+#' @return a named list of attribute values for the items
 #'
 #' @examples
-#'    #assign attributes to a DGEobj
-#'    MyAttr <- getAttributes(dgeObj$counts)
+#'    #get attributes from a DGEobj
+#'    MyAttr <- getAttributes(dgeObj)
+#'
+#'    #get the formula from the designMatrix
 #'
 #' @export
 getAttributes <- function(item, excludeList=list("dim", "dimnames",
-                                                 "names", "row.names")){
+                                                 "names", "row.names", "class")){
       at <- attributes(item)
       idx <- !names(at) %in% excludeList
       return(at[idx])
@@ -185,7 +189,7 @@ getAttributes <- function(item, excludeList=list("dim", "dimnames",
 #'
 #' @importFrom assertthat assert_that
 #'
-#' @export
+# Don't export.  User just needs to learn base attribute functions.
 getAttribute <- function(item, attrName){
     assert_that(!missing(item),
                 !missing(attrName))
@@ -223,7 +227,8 @@ getAttribute <- function(item, attrName){
 #'
 #' @importFrom assertthat assert_that
 #'
-#' @export
+# Don't export this anymore.  addItem depends on it but shouldn't be used by end users typically.
+# When time allows, re-examine whether addItem needs this.
 appendAttributes <- function(dgeObj, itemName, attribs){
     assert_that(!missing(dgeObj),
                 !missing(itemName),
