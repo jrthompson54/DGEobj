@@ -10,96 +10,96 @@
 ### Data Definitions
 #
 # The .DGEobjDef describes the structure of the DGE object.
-.DGEobjDef <- list(
-    #there are 4 basetypes that fundamentally describe how to subset different items
-    # basetype = c(row="row",
-    #                col="col",
-    #                assay="assay",
-    #                meta="meta"),
-    #the value of type is a basetype  All Types must be associated with one
-    #of the four basetypes.
-    type = c(row="row",
-             col="col",
-             assay ="assay",
-             meta ="meta",
-
-             geneData ="row",
-             isoformData = "row",
-             exonData = "row",
-             proteinData = "row", #for Somalogic
-             granges = "row",
-
-             fit = "row",
-             contrast_fit = "row",
-             topTable = "row",
-
-             design ="col",
-             designMatrix = "col",
-
-             counts ="assay",
-             effectiveLength = "assay",
-             Log2CPM = "assay",
-             TPM = "assay",
-             FPKM = "assay",
-             zFPKM = "assay",
-             AffyRMA = "assay",
-             DGEList = "assay",
-             Elist = "assay",
-             isoformFrac = "assay",
-             corFit = "meta",
-             topTreat ="meta",
-             geneList = "meta",  #intended for short gene lists
-             pathway = "meta",   #should consider format standards for genelists and pathways
-             URL = "meta",
-             contrast_fit_treat = "meta",
-             contrastMatrix = "meta",
-             #types with _orig suffix are intended to store the initialized data
-             #in its original state (i.e. before subsetting)
-             geneData_orig ="meta",
-             isoformData_orig = "meta",
-             exonData_orig = "meta",
-             granges_orig = "meta",
-             counts_orig = "meta",
-             design_orig ="meta",
-             effectiveLength_orig = "meta",
-             svobj = "meta",
-             intensities = "assay", #for somalogic data
-             intensities_orig = "meta",
-             proteinData = "assay",
-             proteinData_orig = "meta",
-             AffyRMA_orig = "meta"
-    ),
-
-# These Types can only have one instance in a DGEobj
-    uniqueType = c("counts",
-                   "counts_orig",
-                   "design",
-                   "design_orig",
-                   "geneData",
-                   "geneData_orig",
-                   "isoformData",
-                   "isoformData_orig",
-                   "exonData",
-                   "exonData_orig",
-                   "effectiveLength",
-                   "effectiveLength_orig",
-                   # "DGEList",
-                   "granges",
-                   "granges_orig",
-                   "intensities",
-                   "intensities_orig",
-                   "AffyRMA",
-                   "AffyRMA_orig",
-                   "proteinData",
-                   "proteinData_orig"),
-
-    allowedLevels = c("gene", "isoform", "exon", "protein")
-) #.DGEobjDef
-# Uncomment this block when you need to update the ./data/DGEobj.rda file
-x = getwd()
-setwd ("~/R/lib/pkgsrc/DGEobj/")
-save(.DGEobjDef, file="./data/DGEobj.rda")
-setwd(x)
+# .DGEobjDef <- list(
+#     #there are 4 basetypes that fundamentally describe how to subset different items
+#     # basetype = c(row="row",
+#     #                col="col",
+#     #                assay="assay",
+#     #                meta="meta"),
+#     #the value of type is a basetype  All Types must be associated with one
+#     #of the four basetypes.
+#     type = c(row="row",
+#              col="col",
+#              assay ="assay",
+#              meta ="meta",
+#
+#              geneData ="row",
+#              isoformData = "row",
+#              exonData = "row",
+#              proteinData = "row", #for Somalogic
+#              granges = "row",
+#
+#              fit = "row",
+#              contrast_fit = "row",
+#              topTable = "row",
+#
+#              design ="col",
+#              designMatrix = "col",
+#
+#              counts ="assay",
+#              effectiveLength = "assay",
+#              Log2CPM = "assay",
+#              TPM = "assay",
+#              FPKM = "assay",
+#              zFPKM = "assay",
+#              AffyRMA = "assay",
+#              DGEList = "assay",
+#              Elist = "assay",
+#              isoformFrac = "assay",
+#              corFit = "meta",
+#              topTreat ="meta",
+#              geneList = "meta",  #intended for short gene lists
+#              pathway = "meta",   #should consider format standards for genelists and pathways
+#              URL = "meta",
+#              contrast_fit_treat = "meta",
+#              contrastMatrix = "meta",
+#              #types with _orig suffix are intended to store the initialized data
+#              #in its original state (i.e. before subsetting)
+#              geneData_orig ="meta",
+#              isoformData_orig = "meta",
+#              exonData_orig = "meta",
+#              granges_orig = "meta",
+#              counts_orig = "meta",
+#              design_orig ="meta",
+#              effectiveLength_orig = "meta",
+#              svobj = "meta",
+#              intensities = "assay", #for somalogic data
+#              intensities_orig = "meta",
+#              proteinData = "assay",
+#              proteinData_orig = "meta",
+#              AffyRMA_orig = "meta"
+#     ),
+#
+# # These Types can only have one instance in a DGEobj
+#     uniqueType = c("counts",
+#                    "counts_orig",
+#                    "design",
+#                    "design_orig",
+#                    "geneData",
+#                    "geneData_orig",
+#                    "isoformData",
+#                    "isoformData_orig",
+#                    "exonData",
+#                    "exonData_orig",
+#                    "effectiveLength",
+#                    "effectiveLength_orig",
+#                    # "DGEList",
+#                    "granges",
+#                    "granges_orig",
+#                    "intensities",
+#                    "intensities_orig",
+#                    "AffyRMA",
+#                    "AffyRMA_orig",
+#                    "proteinData",
+#                    "proteinData_orig"),
+#
+#     allowedLevels = c("gene", "isoform", "exon", "protein")
+# ) #.DGEobjDef
+# # Uncomment this block when you need to update the ./data/DGEobj.rda file
+# x = getwd()
+# setwd ("~/R/lib/pkgsrc/DGEobj/")
+# save(.DGEobjDef, file="./data/DGEobj.rda")
+# setwd(x)
 
     #
     #Define allowed values for attributes of each data type to be attached to the data item.
