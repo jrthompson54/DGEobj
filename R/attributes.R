@@ -279,6 +279,7 @@ showMeta <- function(obj) {
         df <- stack(alist[idx])
         colnames(df) <- c("Value", "Attribute")
         df <- select(df, Attribute, Value)
+        df$Attribute <- as.character(df$Attribute)
         return(df)
     } else {
         return(NULL)
