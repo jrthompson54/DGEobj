@@ -11,3 +11,5 @@ inputPath <- "./input"
 outputPath <- "./output"
 adatFile <- "V4-18-079.hybNorm.medNormInt.plateScale.calibrate.medNormRef.qcCheck.medNormRefSMP.adat"
 
+#Stash folder
+#/stash/data/clin/external-collaboration/DS-316/sd

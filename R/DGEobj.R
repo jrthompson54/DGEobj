@@ -188,12 +188,12 @@
 #' @importFrom assertthat assert_that
 #' @importFrom methods as
 #' @export
-### # Constructor function for the class
 initDGEobj <- function(counts, rowData, colData, #required
                        level,   #one of gene, isoform or exon
                        customAttr, #optional list of named Attr/Value pairs
                        DGEobjDef=.DGEobjDef
                        ) {
+    ### # Constructor function for the class
     assert_that(!missing(counts),
                 !missing(colData),
                 !missing(rowData),
