@@ -1,7 +1,7 @@
-### Function susset ###
-#' Function subset (DGEobj)
+### Function subset.DGEobj ###
+#' Function subset.DGEobj (DGEobj)
 #'
-#' Add a data item to a class DGEobj
+#' This is the function bound to square brackets.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq, DGEobj
@@ -73,6 +73,8 @@ subset.DGEobj <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
     if (class(col)[[1]] == "character")
         col <- colnames(dgeObj) %in% col
 
+    if (debug) browser()
+
     for (i in 1:length(dgeObj)){
 
         if (debug == TRUE) {
@@ -84,7 +86,10 @@ subset.DGEobj <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
 
         objectClass <- class(dgeObj[[i]])[[1]]
 
-        #select action dependent on basetype.  Do nothing for basetype = meta
+        #get user attributes before subsetting
+        userAttribs <- getAttributes(dgeObj[[i]])
+
+        #select subset action dependent on basetype.  Do nothing for basetype = meta
         switch(basetypes[[i]],
 
                row = {
@@ -116,7 +121,11 @@ subset.DGEobj <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
                    }
                })
 
+        #put user attributes back in place except for granges objects
+        if (!"GRanges" %in% class(dgeObj[[i]]) & length(userAttribs) > 0)
+            dgeObj[[i]] <- setAttributes(dgeObj[[i]], userAttribs)
     }
+
     return(dgeObj)
 }
 

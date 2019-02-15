@@ -2,7 +2,7 @@
 % Please edit documentation in R/subset.R
 \name{subset.DGEobj}
 \alias{subset.DGEobj}
-\title{Function subset (DGEobj)}
+\title{Function subset.DGEobj (DGEobj)}
 \usage{
 \method{subset}{DGEobj}(dgeObj, row, col, drop = FALSE, debug = FALSE)
 }
@@ -24,7 +24,7 @@ DGEobj fails with a dimension error.}
 A subsetted DGEobj class object
 }
 \description{
-Add a data item to a class DGEobj
+This is the function bound to square brackets.
 }
 \examples{
    dgeObj <- subset(dgeObj, 1:10, 100:1000)

@@ -50,6 +50,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
     # basetype <- attr(dgeObj, "objDef")$type[[itemType]]
     basetype <- baseType(dgeObj, type=itemType)
 
+    #check for row/colnames
     switch(basetype,
            row = {if (!itemType == "granges" & is.null(rownames(item)))
                     stop("Row basetypes must have rownames")},
