@@ -64,7 +64,6 @@ subset.DGEobj <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
     basetypes <- attr(dgeObj, "basetype")
 
     #classes for which the drop argument is valid.
-
     dropClasses <- c("data.frame", "matrix")
 
     #if row or col is a character vector, convert to boolean index.

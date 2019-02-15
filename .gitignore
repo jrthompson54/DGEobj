@@ -31,3 +31,5 @@ vignettes/*.pdf
 .Rproj.user
 /.project
 inst/doc
+
+/**/*.xlsx

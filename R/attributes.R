@@ -159,7 +159,8 @@ getItemAttribute <- function(dgeObj, attrName){
 #'    #get attributes from a DGEobj
 #'    MyAttr <- getAttributes(dgeObj)
 #'
-#'    #get the formula from the designMatrix
+#'    #get the formula attribute from the designMatrix
+#'    MyAttr <- attr(dgeObj$designMatrixName, "formula")
 #'
 #' @export
 getAttributes <- function(item, excludeList=list("dim", "dimnames",
@@ -242,7 +243,6 @@ appendAttributes <- function(dgeObj, itemName, attribs){
     )
     attribNames <- as.list(names(attribs))
     for (i in 1:length(attribs)){
-# browser()
         #get the existing attributes
         at <- attr(dgeObj, attribNames[[i]])
         #append attribute for the new item

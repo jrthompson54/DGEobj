@@ -18,35 +18,60 @@ userAttrBeforeSubsetting <- getAttributes(dgeObj$Treatment_Disease)  ###
 dim(dgeObj)
 dsubset <- dgeObj[1:1000, 1:20, debug=FALSE]
 
-names(attributes(dgeObj$Treatment_Disease))
-names(attributes(dsubset$Treatment_Disease))
-#Now shows that the fixed attributes handling is working.
-
-
-
-# newAttrAfterSubsetting <- getAttributes(dsubset$Treatment_Disease)
-# mergedttributes <- do.call(c, list(newAttrAfterSubsetting, userAttrBeforeSubsetting))
-
-dm <- dsubset$Treatment_Disease
-dm <- setAttributes(dm, userAttrBeforeSubsetting)   ###
-
-names(attributes(dgeObj$Treatment_Disease))
-names(attributes(dm))
-
-#can I set attributes directly in a list subelement?
-dsubset$Treatment_Disease <- setAttributes(dsubset$Treatment_Disease, userAttrBeforeSubsetting)
-names(attributes(dsubset$Treatment_Disease) )
-#that works
-
-#replace attribs with merged attributes
-attributes(newdm) <- mergedttributes
-names(attributes(newdm))
-
-#try setAttibutes
+# names(attributes(dgeObj$Treatment_Disease))
+# names(attributes(dsubset$Treatment_Disease))
+# #Now shows that the fixed attributes handling is working.
+#
+#
+#
+# # newAttrAfterSubsetting <- getAttributes(dsubset$Treatment_Disease)
+# # mergedttributes <- do.call(c, list(newAttrAfterSubsetting, userAttrBeforeSubsetting))
+#
+# #grab the design matrix (see inventory(dgeObj))
+# dm <- dsubset$Treatment_Disease
+# dm <- setAttributes(dm, userAttrBeforeSubsetting)   ###
+#
+# names(attributes(dgeObj$Treatment_Disease))
+# names(attributes(dm))
+#
+# #can I set attributes directly in a list subelement?
+# dsubset$Treatment_Disease <- setAttributes(dsubset$Treatment_Disease, userAttrBeforeSubsetting)
+# names(attributes(dsubset$Treatment_Disease) )
+# #that works
+#
+# #now check all attributes before/after subsetting
 #
 
-#assigning attributes strips existing attributes.
-#
-#protocol
-#getAttributes before subsetting
-#setAttrributes after subsetting
+
+anames <- list()
+for (i in 1:length(dgeObj)){
+    asubi <- names(attributes(dgeObj[[i]]))
+    for (j in 1:length(asubi)){
+        # x <- c(names(dgeObj)[i], names(attributes(dgeObj[[i]]))[j])
+        anames[[str_c(names(dgeObj)[i],j, sep="_")]] <- names(attributes(dgeObj[[i]]))[j]
+    }
+}
+anames <- bind_cols(anames) %>% t() %>%
+    as.data.frame() %>%
+    rownames_to_column(var="Item") %>%
+    set_colnames(c("Item", "AttributeName")) %>%
+    arrange(Item, AttributeName)
+openxlsx::write.xlsx(anames, "anames.xlsx", rowNames=FALSE)
+
+bnames <- list()
+for (i in 1:length(dsubset)){
+    asubi <- names(attributes(dsubset[[i]]))
+    for (j in 1:length(asubi)){
+        # x <- c(names(dgeObj)[i], names(attributes(dgeObj[[i]]))[j])
+        bnames[[str_c(names(dsubset)[i],j, sep="_")]] <- names(attributes(dsubset[[i]]))[j]
+    }
+}
+bnames <- bind_cols(bnames) %>% t() %>%
+    as.data.frame() %>%
+    rownames_to_column(var="Item") %>%
+    set_colnames(c("Item", "AttributeName")) %>%
+    arrange(Item, AttributeName)
+openxlsx::write.xlsx(bnames, "bnames.xlsx", rowNames=FALSE)
+
+#all attribute names are present after subsetting now
+

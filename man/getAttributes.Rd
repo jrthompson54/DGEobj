@@ -25,7 +25,8 @@ attributes like class and dim.
    #get attributes from a DGEobj
    MyAttr <- getAttributes(dgeObj)
 
-   #get the formula from the designMatrix
+   #get the formula attribute from the designMatrix
+   MyAttr <- attr(dgeObj$designMatrixName, "formula")
 
 }
 \author{
