@@ -1,5 +1,5 @@
-### Function textToDgeObj ###
-#' Function  textToDgeObj
+### Function textToDGEobj ###
+#' Function  textToDGEobj
 #'
 #' Builds a DGEobj from Omicsoft output files.  To read data directly from the
 #' cloud, you'll need s3FS on mac/linux (https://github.com/s3fs-fuse/s3fs-fuse)
@@ -78,7 +78,7 @@
 #' @importFrom assertthat assert_that
 #'
 #' @export
-textToDgeObj <- function (path,
+textToDGEobj <- function (path,
                            counts = "RNA-Seq.Count.Table.txt",
                            seqAnnotation = "RNA-Seq.Count.Annotation.txt",
                            design = "RNA-Seq.Design.txt",

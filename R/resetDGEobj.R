@@ -47,17 +47,36 @@ resetDGEobj <- function(dgeObj, platformType)
   #Use PlatformType attribute to decide which init function to use.
   platformType <- tolower(attr(dgeObj, "PlatformType"))
 
+  #RNA-Seq
+  counts <- getItem(dgeObj, "counts_orig")
+  #Somalogic
+  intensities <- getItem(dgeObj, "intensities_orig")
+
+  design <- getItem(dgeObj, "design_orig")
+
+  if ("geneData_orig" %in% names(dgeObj)) {
+    rowData <- getItem(dgeObj, "geneData_orig")
+  } else if ("isoformData_orig" %in% names(dgeObj)) {
+    rowData <- getItem(dgeObj, "isoformData_orig")
+  } else if ("exonData_orig" %in% names(dgeObj)) {
+    rowData <- getItem(dgeObj, "exonData_orig")
+  } else if ("proteinData_orig" %in% names(dgeObj)){
+    rowData <- getItem(dgeObj, "proteinData_orig")
+  } else {
+    stop("gene/isoform/exon/protein data not found")
+  }
+
   if (platformType %in% platform.rnaseq) {
-    newObj <- initDGEobj(counts=metaList[[1]],
-                         rowData = metaList[[3]],
-                         colData = metaList[[2]],
+    newObj <- initDGEobj(counts=dgeObj$counts_orig,
+                         rowData = rowData,
+                         colData = design,
                          level= attr(dgeObj, "level"),
                          DGEobjDef = attr(dgeObj, "objDef")
     )
   } else if (platformType %in% platform.somalogic) {
-      newObj <- initSOMAobj(intensities=metaList[[1]],
-                         rowData = metaList[[3]],
-                         colData = metaList[[2]],
+      newObj <- initSOMAobj(intensities=intensities,
+                         rowData = rowData,
+                         colData = design,
                          level= attr(dgeObj, "level"),
                          DGEobjDef = attr(dgeObj, "objDef")
     )

@@ -4,7 +4,7 @@
 \alias{initSOMAobj}
 \title{Function initSOMAobj}
 \usage{
-initSOMAobj(intensities, rowData, colData, level, customAttr,
+initSOMAobj(intensities, rowData, colData, customAttr,
   DGEobjDef = .DGEobjDef)
 }
 \arguments{
@@ -39,7 +39,7 @@ Initializes DGEobj with base data (intensities, gene annotation and sample annot
    myDgeObj <- initSOMAobj(intensities = Myintensities,
                             rowData = MyGeneAnnotation,
                             colData = MyDesign,
-                            level = "gene",
+                            level = "protein",
                             customAttr = list (PID = "20171025-0001",
                                                XpressID = "12345",
                                                Genome = "Mouse.B38",

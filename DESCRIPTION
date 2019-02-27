@@ -2,7 +2,7 @@ Package: DGEobj
 Type: Package
 Title: DGEobj provides a S3 data class to manage and annotate DGE analysis
     results
-Version: 0.9.31
+Version: 0.9.32
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
@@ -49,7 +49,7 @@ Collate:
     'initSOMAobj.R'
     'adatToDGEobj.R'
     'resetDGEobj.R'
-    'textToDgeObj.R'
+    'textToDGEobj.R'
 RoxygenNote: 6.1.1
 Suggests: 
     rmarkdown

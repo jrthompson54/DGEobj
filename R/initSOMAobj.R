@@ -28,7 +28,7 @@
 #'    myDgeObj <- initSOMAobj(intensities = Myintensities,
 #'                             rowData = MyGeneAnnotation,
 #'                             colData = MyDesign,
-#'                             level = "gene",
+#'                             level = "protein",
 #'                             customAttr = list (PID = "20171025-0001",
 #'                                                XpressID = "12345",
 #'                                                Genome = "Mouse.B38",
@@ -41,7 +41,6 @@
 #' @export
 ### # Constructor function for the class
 initSOMAobj <- function(intensities, rowData, colData, #required
-                       level,   #one of gene, isoform or exon or protein
                        customAttr, #optional list of named Attr/Value pairs
                        DGEobjDef=.DGEobjDef
                        ) {
@@ -173,32 +172,6 @@ initSOMAobj <- function(intensities, rowData, colData, #required
 
     #annotate the level
     somaObj %<>% setAttributes(list(level=level))
-
-    # GRanges not appropriate for protein level data
-    #
-    # #Build GRanges if chr pos info is present
-    # ### depends on chr pos data;  wrap in try
-    # result <- try ({gr <- as(rowData, "GRanges")}, silent=TRUE)
-    # if (class(result) == "try-error"){
-    #     warning("Couldn't build a GRanges object!")
-    # } else { #add the GRanges items
-    #
-    #     somaObj <- addItem(somaObj,
-    #                       item=gr,
-    #                       itemName="granges_orig",
-    #                       itemType="granges_orig",
-    #                       funArgs=funArgs,
-    #                       parent=paste(grparent, "_orig", sep="")
-    #                       )
-    #
-    #     somaObj <- addItem(somaObj,
-    #                       item=gr,
-    #                       itemName="granges",
-    #                       itemType="granges",
-    #                       funArgs=funArgs,
-    #                       parent=grparent
-    #                       )
-    # }
 
     #add additional DGEobj level attributes
     if (!missing(customAttr))
