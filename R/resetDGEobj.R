@@ -83,6 +83,21 @@ resetDGEobj <- function(dgeObj, platformType)
     stop("The PlatformType attribute value was not recognized!")
   }
 
+  #transfer effectiveLength_orig if present
+  if ("effectiveLength_orig" %in% names(dgeObj)){
+    newObj <- addItem(newObj,
+                      item = dgeObj$effectiveLength_orig,
+                      itemName = "effectiveLength_orig",
+                      itemType = "effectiveLength_orig")
+
+    newObj <- addItem(newObj,
+                      item = dgeObj$effectiveLength_orig,
+                      itemName = "effectiveLength",
+                      itemType = "effectiveLength",
+                      parent = "effectiveLength_orig")
+
+  }
+
   # now transfer all but "names" and "class" attributes
   excludeList <- list("names",
                       "class",
