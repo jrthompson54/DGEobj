@@ -29,17 +29,14 @@ A DGEobj object with Somalogic data
 }
 \description{
 Initializes DGEobj with base data (intensities, gene annotation and sample annotation).
+This function is NOT typically used directly by end users.  See adatToDGEobj which
+reads a Somalogic adat file and calls this function to build a DGEobj.
 }
 \examples{
-   # Load and convert Somalogic data
-   library(readat)
-   soma_adat <- readAdat(adatfilename)
-   soma_se <- as.SummarizedExperiment(some_adat)
 
    myDgeObj <- initSOMAobj(intensities = Myintensities,
                             rowData = MyGeneAnnotation,
                             colData = MyDesign,
-                            level = "protein",
                             customAttr = list (PID = "20171025-0001",
                                                XpressID = "12345",
                                                Genome = "Mouse.B38",

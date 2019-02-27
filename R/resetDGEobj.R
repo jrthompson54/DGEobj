@@ -77,7 +77,6 @@ resetDGEobj <- function(dgeObj, platformType)
       newObj <- initSOMAobj(intensities=intensities,
                          rowData = rowData,
                          colData = design,
-                         level= attr(dgeObj, "level"),
                          DGEobjDef = attr(dgeObj, "objDef")
     )
   } else {

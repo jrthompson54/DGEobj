@@ -2,6 +2,8 @@
 #' Function initSOMAobj
 #'
 #' Initializes DGEobj with base data (intensities, gene annotation and sample annotation).
+#' This function is NOT typically used directly by end users.  See adatToDGEobj which
+#' reads a Somalogic adat file and calls this function to build a DGEobj.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq
@@ -17,18 +19,14 @@
 #' @param DGEobjDef An object definition. Defaults to the global DGE object definition
 #'     (.DGEobjDef) and you usually shouldn't change this unless you're customizing
 #'     the object for new data types.
+#'
 #' @return A DGEobj object with Somalogic data
 #'
 #' @examples
-#'    # Load and convert Somalogic data
-#'    library(readat)
-#'    soma_adat <- readAdat(adatfilename)
-#'    soma_se <- as.SummarizedExperiment(some_adat)
 #'
 #'    myDgeObj <- initSOMAobj(intensities = Myintensities,
 #'                             rowData = MyGeneAnnotation,
 #'                             colData = MyDesign,
-#'                             level = "protein",
 #'                             customAttr = list (PID = "20171025-0001",
 #'                                                XpressID = "12345",
 #'                                                Genome = "Mouse.B38",
@@ -86,8 +84,6 @@ initSOMAobj <- function(intensities, rowData, colData, #required
     #all our data are properly aligned; build the SOMAobj
     #
     funArgs <- match.call()
-
-    level <- "protein"  #only option for SOMA data
 
     result <- try(intensities <- as.matrix(intensities), silent=TRUE)
     if (class(result) == "try-error")
@@ -150,15 +146,15 @@ initSOMAobj <- function(intensities, rowData, colData, #required
            "protein" = itemName <- "proteinData"
     )
     itemType <- itemName
-    parent <- paste(itemName, "_orig", sep="")
-    grparent <- itemName
+    itemName_Parent <- paste(itemName, "_orig", sep="")
+    # grparent <- itemName
 
     #Now add the gene/isoform/exon data
     #  _orig version in meta
     somaObj <- addItem(somaObj,
                       item=rowData,
-                      itemName=parent,
-                      itemType=parent,
+                      itemName=itemName_Parent,
+                      itemType=itemName_Parent,
                       funArgs=funArgs,
                       parent="")
 
