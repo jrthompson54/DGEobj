@@ -1,6 +1,5 @@
 #test adatToDGEobj
-setwd("Z:/SomaDat")
-library(readat)
+setwd("Z:/SomaDat/DS-316/derived/TOPCAT_V4-18-079.2018-12-05.adats")
 library(magrittr)
 library(tidyverse)
 library(DGEobj)
@@ -13,3 +12,4 @@ adatFile <- "V4-18-079.hybNorm.medNormInt.plateScale.calibrate.medNormRef.qcChec
 
 #Stash folder
 #/stash/data/clin/external-collaboration/DS-316/sd
+SomaObj <- adatToDGEobj(adatFile)

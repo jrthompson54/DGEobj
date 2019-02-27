@@ -23,7 +23,7 @@
 #' @importFrom readat readAdat getSequenceData as.SummarizedExperiment getSampleData
 #' @importFrom tibble column_to_rownames
 #' @export
-adatToDGEobj <- function(adatFile, keepOnlyPasses, sampleNameCol="ExtIdentifier"){
+adatToDGEobj <- function(adatFile, keepOnlyPasses=TRUE, sampleNameCol="ExtIdentifier"){
 
     assertthat::assert_that(!missing(adatFile),
                             file.exists(adatFile))

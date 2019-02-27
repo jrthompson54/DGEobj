@@ -164,7 +164,7 @@ initSOMAobj <- function(intensities, rowData, colData, #required
                       itemName=itemName,
                       itemType=itemType,
                       funArgs=funArgs,
-                      parent=parent)
+                      parent=itemName_Parent)
 
     #annotate the level
     somaObj %<>% setAttributes(list(level=level))
