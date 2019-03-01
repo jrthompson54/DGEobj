@@ -2,7 +2,7 @@ Package: DGEobj
 Type: Package
 Title: DGEobj provides a S3 data class to manage and annotate DGE analysis
     results
-Version: 0.9.32
+Version: 0.9.33
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
@@ -29,7 +29,8 @@ Imports:
     stringr,
     S4Vectors,
     lubridate,
-    methods
+    methods,
+    readat
 Collate:
     'DGEobj.R'
     'addItem.R'
