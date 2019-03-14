@@ -30,7 +30,10 @@ Imports:
     S4Vectors,
     lubridate,
     methods,
-    readat
+    readat,
+    stats,
+    utils,
+    tibble
 Collate:
     'DGEobj.R'
     'addItem.R'
