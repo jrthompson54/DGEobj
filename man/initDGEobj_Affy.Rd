@@ -37,11 +37,9 @@ reads data from Xpress and calls this function to build a DGEobj.
    myDgeObj <- initDGEobj_Affy(intensities = Myintensities,
                             rowData = MyGeneAnnotation,
                             colData = MyDesign,
-                            level = "U133",
+                            level = "HG-U133_PLUS_2",
                             customAttr = list (PID = "20171025-0001",
-                                               XpressID = "12345",
-                                               Genome = "Mouse.B38",
-                                               GeneModel = "Ensembl.R84")
+                                               XpressID = "12345")
                            )
 
 }
