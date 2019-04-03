@@ -1,7 +1,9 @@
 ### Function inventory ###
 #' Function inventory
 #'
-#' Print a DGEobj object
+#' Show the contents of a DGEobj object.  Note if an item is one dimensional,
+#' the Row column reports the length.  This method is also invoked by aplying
+#' print to a DGEobj.
 #'
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq
@@ -30,12 +32,29 @@ inventory <- function(dgeObj, verbose=FALSE)  {
     FunArgs <- attr(dgeObj, "funArgs")
     Class <- lapply(dgeObj, class)
     Class <- lapply(Class, `[[`, 1)
+    Row <- rep(NA, length(dgeObj))
+    Col <- rep(NA, length(dgeObj))
+
+
+    #get length/dimensions
+    for (i in 1:length(dgeObj)){
+        if (is.null(dim(dgeObj[[i]]))){
+            Row[i] <- length(dgeObj[[i]])
+        } else { #capture the dims
+            Dim <- dim(dgeObj[[i]])
+            Row[i] <- Dim[1]
+            Col[i] <- Dim[2]
+        }
+    }
+
 
     df <- data.frame(cbind(ItemName=ItemNames,
     					   ItemType=ItemTypes,
                            BaseType=BaseTypes,
                            Parent=Parents,
-    					   Class,
+    					   Class=Class,
+    					   Row=Row,
+    					   Col=Col,
                            DateCreated=creationDates),
                            row.names=NULL)
     if (verbose==TRUE)

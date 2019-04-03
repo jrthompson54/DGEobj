@@ -15,7 +15,9 @@ inventory(dgeObj, verbose = FALSE)
 a dataframe summarizing the data contained in the DGEobj
 }
 \description{
-Print a DGEobj object
+Show the contents of a DGEobj object.  Note if an item is one dimensional,
+the Row column reports the length.  This method is also invoked by aplying
+print to a DGEobj.
 }
 \examples{
   #capture in a dataframe
