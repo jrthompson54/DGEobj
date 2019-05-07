@@ -93,6 +93,8 @@ convertDGEobj <- function(dgeObj, Class){
 #'
 #' @param RSE  A class RangedSummarizedExperiment
 #' @param Class Destination class (one of "DGEobj", "ES", "ExpressionSet")
+#' @param countsName If the name of the counts object is not "Counts", use
+#'   this argument to tell the function the actual name of the counts assay in the RSE.
 #'
 #' @return A obejct of the specified class
 #'
@@ -106,10 +108,10 @@ convertDGEobj <- function(dgeObj, Class){
 #' @importFrom methods as
 #'
 #' @export
-convertRSE <- function(RSE, Class){
+convertRSE <- function(RSE, Class, countsName="Counts"){
 
     .toDGEobj <- function(RSE){
-        counts <- SummarizedExperiment::assay(RSE, "Counts")
+        counts <- SummarizedExperiment::assay(RSE, countsName)
         design <- SummarizedExperiment::colData(RSE) %>% as.data.frame
         # geneAnnotation = mcols(RSE) %>% as.data.frame
         # rownames(geneAnnotation) <- geneAnnotation$ID

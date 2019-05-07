@@ -83,21 +83,12 @@ Install or update DGEobj:
     install.packages("DGEobj", repos="http://BRAN.pri.bms.com")
 ```
 
-For reproducible research reasons, you may want to specify a specific version when you install:
-
-```
-   require(devtools)
-   install_version("DGEobj", version = "0.9.35", repos="http://BRAN.pri.bms.com")
-```
-
-**Note:**  CRAN and Bioconductor package dependencies should be installed automatically.  Sometimes this doesn't work.  Watch the error messages and install any package that are reported missing. Then try again.  
-
 ## Installation from Biogit (backup method)
 
 You can also install directly from GIT.  Versions released to BRAN are tagged version numbers.  
 
 ```r
     require(devtools)
-    devtools::install_git("http://biogit.pri.bms.com/thompj27/DGEobj@0.9.35", repos=BiocInstaller::biocinstallRepos()) 
+    devtools::install_git("http://biogit.pri.bms.com/thompj27/DGEobj", repos=BiocInstaller::biocinstallRepos()) 
   
 ```   

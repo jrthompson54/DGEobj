@@ -62,7 +62,7 @@ annotateDGEobj <- function(dgeObj, regfile,
                                        "GeneModel",
                                        "TBio_Owner",
                                        "TA_Owner",
-                                       "LoadData",
+                                       "LoadDate",
                                        "ReadLength",
                                        "ReadType",
                                        "Pipeline",
@@ -70,7 +70,8 @@ annotateDGEobj <- function(dgeObj, regfile,
                                        "ScriptID",
                                        "BioGitURL",
                                        "source",
-                                       "XpressID"
+                                       "XpressID",
+                                       "repo"
                            )){
 
     # Read lines, stripping quotes
@@ -101,6 +102,7 @@ annotateDGEobj <- function(dgeObj, regfile,
 
     #capture/preserve the existing attributes
     MyAttribs <- attributes(dgeObj)
+    if (is.null(MyAttribs)) MyAttribs <- list()
 
     for (i in 1:nrow(regdat))
         if (is.null(keys)){ #add all keys
