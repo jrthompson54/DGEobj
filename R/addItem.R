@@ -68,7 +68,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
 
     #refuse to add if itemName exists already unless overwrite = T
     if (overwrite==FALSE & itemName %in% names(dgeObj))
-        stop('itemName already exists in DGEobj!')
+        stop(stringr::str_c('itemName (', itemName, ') already exists in DGEobj!'))
 
     #check for disallowed second instance of uniqueTypes (unless overwrite mode)
     uniqueTypes <- attr(dgeObj, "objDef")$uniqueType
