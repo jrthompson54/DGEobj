@@ -19,19 +19,24 @@ getItems <- function(dgeObj, itemNames){
 
     assert_that(!missing(dgeObj),
                 !missing(itemNames),
-                class(dgeObj)[[1]] == "DGEobj",
-                class(itemNames)[[1]] == "character"
+                "DGEobj" %in% class(dgeObj),
+                any(c("character", "list") %in% class(itemNames))
     )
 
-    idx <- names(dgeObj) %in% itemNames
-    if (sum(idx) == 0){
-        tsmsg("Warning: No matching item(s) found.")
-        result = NULL
-    } else {
-        result <- unclass(dgeObj)[idx]  #list of elements
-        if (length(result) < length (itemNames))
-            warning("Some requested items were missing!")
+    idx <- itemNames %in% names(dgeObj)
+    result <- list()
+    for (itemName in itemNames[idx]){
+        result[[itemName]] <- dgeObj[[itemName]]
     }
+    #return a list only if length >1
+    if (length(result) == 1) result <- result[[1]]
+
+    #report missing items
+    if (sum(idx) < length(idx)){
+        missingItems <- stringr::str_c(itemNames[!idx], sep=", ")
+        warning (stringr::str_c("These item(s) not found: [", missingItems, "]"))
+    }
+
     return(result)
 }
 
@@ -53,17 +58,14 @@ getItems <- function(dgeObj, itemNames){
 #'
 #' @export
 getItem <- function(dgeObj, itemName){
-    assert_that(!missing(dgeObj),
-                !missing(itemName),
-                class(dgeObj)[[1]] == "DGEobj",
-                class(itemName) == "character",
-                length(itemName) == 1
+    assertthat::assert_that(!missing(dgeObj),
+                            !missing(itemName),
+                            "DGEobj" %in% class(dgeObj),
+                            class(itemName) == "character",
+                            length(itemName) == 1,
+                            itemName %in% names(dgeObj)
     )
-    x <- getItems(dgeObj, itemName)
-    if (length(x) > 0)
-        return(x[[1]])
-    else
-        return(NULL)
+    return(dgeObj[[itemName]])
 }
 
 ### Function getType ###
