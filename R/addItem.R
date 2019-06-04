@@ -20,6 +20,7 @@
 #' @param parent ItemName of the parent of this item (optional, but your DGEobj
 #'   won't be well annotated if you don't use this wherever appropriate)
 #' @param init Default = FALSE. Used internally by the initDGEobj function.
+#' @param debug Default = FALSE; TRUE trigger browser mode.
 #'
 #' @return A DGEobj class object with a new data item added.
 #'
@@ -32,20 +33,25 @@
 #'                                  funArgs = myFunArgs)
 #'
 #' @importFrom assertthat assert_that
+#' @importFrom lubridate now
+#' @importFrom stringr str_c
 #'
 #' @export
 addItem <- function(dgeObj, item, itemName, itemType,
-                              overwrite=FALSE,
-                              funArgs=match.call(),
-                              itemAttr,
-                              parent="",
-                              init=FALSE  #used only by initDGEobj to disable dimension checks
-                              ){
+                    overwrite=FALSE,
+                    funArgs=match.call(),
+                    itemAttr,
+                    parent="",
+                    init=FALSE,  #used only by initDGEobj to disable dimension checks
+                    debug = FALSE
+){
 
     assert_that(!missing(dgeObj),
                 !missing(item),
                 !missing(itemName),
                 !missing(itemType))
+
+    if (debug == TRUE) browser()
 
     # basetype <- attr(dgeObj, "objDef")$type[[itemType]]
     basetype <- baseType(dgeObj, type=itemType)
@@ -89,7 +95,7 @@ addItem <- function(dgeObj, item, itemName, itemType,
     #confirm dimensions consistent before adding
     if (init==FALSE){
         if(.dimensionMatch(dgeObj, item, itemType) == FALSE)
-            stop("item doesn't match dimension of dgeObj")
+            stop(stringr::str_c("item doesn't match dimension of dgeObj [", itemName, "]"))
     }
 
     #confirm order of rownames and colnames
@@ -115,10 +121,17 @@ addItem <- function(dgeObj, item, itemName, itemType,
         parent = parent
     )
 
-    dgeObj <- appendAttributes(dgeObj,
-                               itemName=itemName,
-                               attribs=stdAttr
-    )
+    # dgeObj <- appendAttributes(dgeObj,
+    #                            itemName=itemName,
+    #                            attribs=stdAttr)
+    #
+
+    #Update the type, basetype dateCreated, funArgs and parent attributes with the new item
+    for (at in names(stdAttr)){
+        myattr <- attr(dgeObj, at)
+        myattr[[itemName]] <- stdAttr[[at]]
+        attr(dgeObj, at) <- myattr
+    }
 
     return(dgeObj)
 } #addItem

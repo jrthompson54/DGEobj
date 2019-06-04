@@ -5,7 +5,8 @@
 \title{Function addItem (DGEobj)}
 \usage{
 addItem(dgeObj, item, itemName, itemType, overwrite = FALSE,
-  funArgs = match.call(), itemAttr, parent = "", init = FALSE)
+  funArgs = match.call(), itemAttr, parent = "", init = FALSE,
+  debug = FALSE)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}
@@ -30,6 +31,8 @@ name and arguments used in the current function (optional)}
 won't be well annotated if you don't use this wherever appropriate)}
 
 \item{init}{Default = FALSE. Used internally by the initDGEobj function.}
+
+\item{debug}{Default = FALSE; TRUE trigger browser mode.}
 }
 \value{
 A DGEobj class object with a new data item added.

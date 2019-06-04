@@ -204,54 +204,7 @@ getAttribute <- function(item, attrName){
 }
 
 
-### Function appendAttributes ###
-#' Function appendAttributes
-#'
-#' DGEobj have several attributes whose values are named lists (type, basetype,
-#' parent, funArgs, dateCreated.  The names and length match the names and
-#' number of items.  This function is used by DGEobj::addItem to update these
-#' attributes when a new item is added.
-#'
-#' This was written to work on DGEobjs but is generalized to work with any object
-#' that can accept attributes.
-#'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param dgeObj  a DGEobj structure
-#' @param itemName Name of the item being annotated
-#' @param attribs A named list of base attributes to annotate itemName
-#'
-#' @return A dDGEobj with updated attributes
-#'
-#' @examples
-#'    #get an attribute from a DGEobj
-#'    MyDgeObj <- appendAttributes(dgeObj, "counts",
-#'                    list("type", "basetype"),
-#'                    list("counts", "counts"))
-#'
-#' @importFrom assertthat assert_that
-#'
-# Don't export this anymore.  addItem depends on it but shouldn't be used by end users typically.
-# When time allows, re-examine whether addItem needs this.
-appendAttributes <- function(dgeObj, itemName, attribs){
-    assert_that(!missing(dgeObj),
-                !missing(itemName),
-                !missing(attribs),
-                class(itemName)[[1]] == "character",
-                class(attribs)[[1]] == "list"
-    )
-    attribNames <- as.list(names(attribs))
-    for (i in 1:length(attribs)){
-        #get the existing attributes
-        at <- attr(dgeObj, attribNames[[i]])
-        #append attribute for the new item
-        at[itemName] <- attribs[[i]]
-        #store the modified attribute
-        attr(dgeObj, attribNames[[i]]) <- at
-    }
-    return(dgeObj)
-}
+
 
 ### Function showMeta ###
 #' Function showMeta
