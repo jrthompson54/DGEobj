@@ -13,9 +13,9 @@
 #'
 #' @param DGEobj A DGEobj that we wish to extract original un-filtered data from.
 #' @param platformType One of "RNA-Seq", "Affymetrix" or "Somalogic".  Only
-#'   required if this attribute is missing from the DGEobj.
+#'   required if the PlatformType attribute is missing from the DGEobj.
 #'
-#' @return Same class as input object with low intensity rows removed
+#' @return A DGEobj containing the original (unfiltered) data.
 #'
 #' @examples
 #'
@@ -31,7 +31,7 @@ resetDGEobj <- function(dgeObj, platformType)
   platform.rnaseq <- c("rna-seq", "rnaseq")
   platform.somalogic <- c("somalogic", "soma", "adat")
 
-  assertthat::assert_that(class(dgeObj)[[1]] == "DGEobj",
+  assertthat::assert_that("DGEobj" %in% class(dgeObj),
                           !is.null(attr(dgeObj, "level")))
 
   if(is.null(attr(dgeObj, "PlatformType")))
@@ -45,12 +45,18 @@ resetDGEobj <- function(dgeObj, platformType)
   metaList <- getBaseType(dgeObj, "meta")[1:3]
 
   #Use PlatformType attribute to decide which init function to use.
-  platformType <- tolower(attr(dgeObj, "PlatformType"))
+  if (!is.null(attr(dgeObj, "PlatformType")))
+    platformType <- tolower(attr(dgeObj, "PlatformType"))
 
   #RNA-Seq
-  counts <- getItem(dgeObj, "counts_orig")
+  if (tolower(platformType) %in% platform.rnaseq)
+    counts <- getItem(dgeObj, "counts_orig")
   #Somalogic
-  intensities <- getItem(dgeObj, "intensities_orig")
+  if (tolower(platformType) %in% platform.somalogic)
+    intensities <- getItem(dgeObj, "intensities_orig")
+  #affy
+  # if (tolower(platformType) == "affymetrix")
+  #   rma <- getItem(dgeObj, "rma_orig")
 
   design <- getItem(dgeObj, "design_orig")
 
@@ -66,14 +72,14 @@ resetDGEobj <- function(dgeObj, platformType)
     stop("gene/isoform/exon/protein data not found")
   }
 
-  if (platformType %in% platform.rnaseq) {
+  if (tolower(platformType) %in% platform.rnaseq) {
     newObj <- initDGEobj(counts=dgeObj$counts_orig,
                          rowData = rowData,
                          colData = design,
                          level= attr(dgeObj, "level"),
                          DGEobjDef = attr(dgeObj, "objDef")
     )
-  } else if (platformType %in% platform.somalogic) {
+  } else if (tolower(platformType) %in% platform.somalogic) {
       newObj <- initSOMAobj(intensities=intensities,
                          rowData = rowData,
                          colData = design,

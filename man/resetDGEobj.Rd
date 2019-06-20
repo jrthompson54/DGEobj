@@ -8,12 +8,12 @@ resetDGEobj(dgeObj, platformType)
 }
 \arguments{
 \item{platformType}{One of "RNA-Seq", "Affymetrix" or "Somalogic".  Only
-required if this attribute is missing from the DGEobj.}
+required if the PlatformType attribute is missing from the DGEobj.}
 
 \item{DGEobj}{A DGEobj that we wish to extract original un-filtered data from.}
 }
 \value{
-Same class as input object with low intensity rows removed
+A DGEobj containing the original (unfiltered) data.
 }
 \description{
 During a workflow, a DGEobj typically gets filtered down to remove samples
