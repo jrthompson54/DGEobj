@@ -13,7 +13,7 @@
 #' @examples
 #'    MyDims <- dimnames(dgeObj)
 #'    names(MyDims)
-#'    [1] "rownames" "colnames"
+#'    "rownames" "colnames"
 #'
 #' @export
 dimnames.DGEobj <- function(dgeObj){

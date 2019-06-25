@@ -41,7 +41,7 @@ adatToDGEobj <- function(adatFile, keepOnlyPasses=TRUE, sampleNameCol="ExtIdenti
     intensities <- SummarizedExperiment::assay(SE, "intensities")  #gene by samples with row/colnames
 
     design <- readat::getSampleData(adat) %>%
-        JRTutil::factor2char()
+        factor2char()
     rownames(design) <- design[[sampleNameCol]]
     class(design) <- "data.frame"
 
@@ -49,4 +49,12 @@ adatToDGEobj <- function(adatFile, keepOnlyPasses=TRUE, sampleNameCol="ExtIdenti
                            rowData = proteinData,
                            colData = design)
 
+}
+
+factor2char <- function(df){
+    #Converts dataframe factor columns to char; leaves other columns alone
+    #http://stackoverflow.com/questions/2851015/convert-data-frame-columns-from-factors-to-characters
+    i <- sapply(df, is.factor)
+    df[i] <- lapply(df[i], as.character)
+    return(df)
 }

@@ -7,10 +7,10 @@
 resetDGEobj(dgeObj, platformType)
 }
 \arguments{
+\item{dgeObj}{A DGEobj that we wish to extract original un-filtered data from.}
+
 \item{platformType}{One of "RNA-Seq", "Affymetrix" or "Somalogic".  Only
 required if the PlatformType attribute is missing from the DGEobj.}
-
-\item{DGEobj}{A DGEobj that we wish to extract original un-filtered data from.}
 }
 \value{
 A DGEobj containing the original (unfiltered) data.

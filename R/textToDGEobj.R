@@ -76,6 +76,7 @@
 #'
 #' @importFrom stringr str_c
 #' @importFrom assertthat assert_that
+#' @importFrom utils packageVersion
 #'
 #' @export
 textToDGEobj <- function (path,
@@ -114,21 +115,21 @@ textToDGEobj <- function (path,
     #get the data
     if (verbose) tsmsg("Reading count data...")
     if (file.exists(file.path(path, counts))) {
-      countData <- DGE.Tools2:::Txt2DF(file.path(path, counts))
+      countData <- Txt2DF(file.path(path, counts))
     } else {
       stop(str_c("Couldn't find file: ", counts))
     }
 
     if (verbose) tsmsg("Reading seq annotation data...")
     if (file.exists(file.path(path, seqAnnotation))) {
-      seqData <- DGE.Tools2:::Txt2DF(file.path(path, seqAnnotation))
+      seqData <- Txt2DF(file.path(path, seqAnnotation))
     } else {
       stop(str_c("Couldn't find file: ", seqAnnotation))
     }
 
     if (verbose) tsmsg("Reading seq annotation data...")
     if (file.exists(file.path(path, design))) {
-      designData <- DGE.Tools2:::Txt2DF(file.path(path, design))
+      designData <- Txt2DF(file.path(path, design))
     } else {
       stop("Couldn't find file: ", design)
     }
@@ -142,11 +143,33 @@ textToDGEobj <- function (path,
     customAttr$DGEobj <- packageVersion("DGEobj")
 
     #build the DgeObj
-    DgeObj <- DGEobj::initDGEobj(counts=countData, rowData=seqData,
+    DgeObj <- initDGEobj(counts=countData, rowData=seqData,
                         colData=designData, level,
                         customAttr=customAttr)
 
     return(DgeObj)
 }
 
+
+### Function Txt2DF ###
+Txt2DF <- function(filename) {
+  #configured to read Omicsoft .txt files correctly capturing GeneIDs as rownames
+  if (file.exists(filename)) {
+    df = read.table (filename, sep="\t", stringsAsFactors = FALSE,
+                     header=TRUE, row.names = 1, comment.char="",
+                     quote="", na.strings=c("NA", "."),
+                     check.names=TRUE)
+    return (df)
+  } else {
+    warning (paste ("Warning: File = ", filename, "not found."))
+    return (-1)
+  }
+}
+
+### Function tsmsg ###
+# a timestamped message
+tsmsg <- function(...) {
+  # Works like message() but prepends a timestamp
+  message(date(), ": ", ...)
+}
 

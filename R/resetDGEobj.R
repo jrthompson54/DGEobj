@@ -11,7 +11,7 @@
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq; counts; low intensity
 #'
-#' @param DGEobj A DGEobj that we wish to extract original un-filtered data from.
+#' @param dgeObj A DGEobj that we wish to extract original un-filtered data from.
 #' @param platformType One of "RNA-Seq", "Affymetrix" or "Somalogic".  Only
 #'   required if the PlatformType attribute is missing from the DGEobj.
 #'
