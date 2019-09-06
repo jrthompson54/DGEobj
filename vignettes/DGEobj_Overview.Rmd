@@ -262,11 +262,15 @@ The dimension reported for a DGEobj is the dimensions of the assays contained in
 dim(MyDgeObj)
 ```
 
+## Rownames and Colnames
+
+The rownames and colnames of the DGEobj are inherited from the first "assay" matrix in a DGEobj, typically the counts matrix for RNA-Seq data.  
+
+Note, there is no facility provided to assign rownames or colnames to a DGEobj.  This is because I can't guarantee that an object stored in the DGEobj has row/colname assignment support.
+
 ## Subsetting a DEobj
 
 Coordinates contained in square brackets can be used to subset a DGEobj, the same way that a dataframe or matrix can be subsetted.  The subsetting function uses the base type to define how each data items is handled during subsetting.  MetaData items are carried along unchanged.
-
-You subset a DGEobj with square brackets the same way you would subset a matrix.
 
 ```
 #subset to the first 100 genes

@@ -20,7 +20,7 @@
 #'     (.DGEobjDef) and you usually shouldn't change this unless you're customizing
 #'     the object for new data types.
 #'
-#' @return A DGEobj object with Somalogic data
+#' @return A DGEobj object with RMA data
 #'
 #' @examples
 #'
