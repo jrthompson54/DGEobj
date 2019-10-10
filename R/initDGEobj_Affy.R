@@ -15,7 +15,11 @@
 #' @param colData A dataframe describing the experiment design.  Rownames much match
 #'  colnames(intensities).
 #' @param customAttr An optional (but highly recommended) named list of attributes
-#'     to assign to the DGEobj.
+#'     to assign to the DGEobj
+#' @param allowShortSampleIDs  Using sequential integers rownames (even if typed as character)
+#'   is discouraged and by default will abort the DGEobj creation.  If you have a legitimate
+#'   need to have short samplenames composed of numeric characters, you can set this argument to TRUE.
+#'   (default = FALSE)
 #' @param DGEobjDef An object definition. Defaults to the global DGE object definition
 #'     (.DGEobjDef) and you usually shouldn't change this unless you're customizing
 #'     the object for new data types.
@@ -40,6 +44,7 @@ initDGEobj_Affy <- function(AffyRMA, rowData, colData, #required
                             level,   #one of gene, isoform or exon
                             BrainArrayVer,  #the BrainArray version number for the alternate CDFs used
                             customAttr, #optional list of named Attr/Value pairs
+                            allowShortSampleIDs = FALSE,
                             DGEobjDef=.DGEobjDef
                             ) {
     assert_that(!missing(AffyRMA),
@@ -77,6 +82,33 @@ initDGEobj_Affy <- function(AffyRMA, rowData, colData, #required
         all(rownames(AffyRMA) == rownames(rowData)),
         all(colnames(AffyRMA) == rownames(colData))
         )
+
+    #JRT oct2019: now trap for sequential numeric sample names (assay colnames and  design rownames)
+    # disguised as type charater
+    #
+    # coerce the sample names to to numeric.  If succesfull, abort the process.
+    # further qualify by character length; i.e. if <= 999 samples, force max(nchar) >3.  This will
+    # allow long numeric sample IDs.
+
+    #Do rownames convert all to numeric
+    if (!allowShortSampleIDs == TRUE){ #override/skip the test
+      suppressWarnings(
+        test <- as.numeric(rownames(colData))
+      )
+      #If numeric conversion was successful on all rows, test further for length of labels
+      if (all(is.na(test)) == FALSE) {
+
+        sampleCount <- nrow(colData)
+        minchar <- nchar(as.character(sampleCount))  #some samples must have nchar greater than this, or abort
+        maxchar <- max(sapply(rownames(colData), nchar)) #max length of sampleID
+        assert_that (maxchar > minchar,
+                     msg = str_c("It looks like you have numeric sample IDs (design rownames).",
+                                 "Please supply a more specific sample identifier. ",
+                                 "Use allowShortSampleIDs = TRUE to explicitily override this restriction",
+                                 sep="\n")
+        )
+      }
+    }
 
     #all our data are properly aligned; build the DGEobj
     #

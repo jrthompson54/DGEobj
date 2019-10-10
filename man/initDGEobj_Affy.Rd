@@ -5,7 +5,7 @@
 \title{Function initDGEobj_Affy}
 \usage{
 initDGEobj_Affy(AffyRMA, rowData, colData, level, BrainArrayVer,
-  customAttr, DGEobjDef = .DGEobjDef)
+  customAttr, allowShortSampleIDs = FALSE, DGEobjDef = .DGEobjDef)
 }
 \arguments{
 \item{AffyRMA}{An RMA intensity matrix in genes (rows) by samples (col) format
@@ -18,14 +18,19 @@ rownames in intensities matrix.}
 colnames(intensities).}
 
 \item{customAttr}{An optional (but highly recommended) named list of attributes
-to assign to the DGEobj.}
+to assign to the DGEobj}
+
+\item{allowShortSampleIDs}{Using sequential integers rownames (even if typed as character)
+is discouraged and by default will abort the DGEobj creation.  If you have a legitimate
+need to have short samplenames composed of numeric characters, you can set this argument to TRUE.
+(default = FALSE)}
 
 \item{DGEobjDef}{An object definition. Defaults to the global DGE object definition
 (.DGEobjDef) and you usually shouldn't change this unless you're customizing
 the object for new data types.}
 }
 \value{
-A DGEobj object with Somalogic data
+A DGEobj object with RMA data
 }
 \description{
 Initializes DGEobj with base data (intensities, gene annotation and sample annotation).
