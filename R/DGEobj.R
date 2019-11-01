@@ -9,9 +9,9 @@
 ###
 ### Data Definitions
 #
-# The .DGEobjDef describes the structure of the DGE object.
+#The .DGEobjDef describes the structure of the DGE object.
 # .DGEobjDef <- list(
-#     #there are 4 basetypes that fundamentally describe how to subset different items
+#     #there are 4 basetypes that fundamentally define how to subset different items
 #     # basetype = c(row="row",
 #     #                col="col",
 #     #                assay="assay",
@@ -26,7 +26,7 @@
 #              geneData ="row",
 #              isoformData = "row",
 #              exonData = "row",
-#              proteinData = "row", #for Somalogic
+#              #proteinData = "row", #for Somalogic #deprecated; use proteinAnnotation
 #              granges = "row",
 #
 #              fit = "row",
@@ -53,6 +53,7 @@
 #              URL = "meta",
 #              contrast_fit_treat = "meta",
 #              contrastMatrix = "meta",
+#
 #              #types with _orig suffix are intended to store the initialized data
 #              #in its original state (i.e. before subsetting)
 #              geneData_orig ="meta",
@@ -62,12 +63,25 @@
 #              counts_orig = "meta",
 #              design_orig ="meta",
 #              effectiveLength_orig = "meta",
+#
 #              svobj = "meta",
-#              intensities = "assay", #for somalogic data
+#
+#              intensities = "assay", #for somalogic data (30Oct2019 deprecated for intensity)
 #              intensities_orig = "meta",
-#              proteinData = "assay",
-#              proteinData_orig = "meta",
-#              AffyRMA_orig = "meta"
+#              intensity = "assay", #intended to replace "intensities";
+#              intensity_orig = "meta",
+#
+#              #proteinData = "assay",
+#              #proteinData_orig = "meta",
+#              AffyRMA_orig = "meta",
+#
+#              #Proteomics data types
+#              proteinAnnotation = "row",
+#              peptideAnnotation = "row",
+#              proteingroupAnnotation = "row",
+#              proteinAnnotation_orig = "meta",
+#              peptideAnnotation_orig = "meta",
+#              proteingroupAnnotation_orig = "meta"
 #     ),
 #
 # # These Types can only have one instance in a DGEobj
@@ -90,10 +104,18 @@
 #                    "intensities_orig",
 #                    "AffyRMA",
 #                    "AffyRMA_orig",
-#                    "proteinData",
-#                    "proteinData_orig"),
+#                    "proteinAnnotation",
+#                    "proteinAnnotation_orig",
+#                     "intensity",
+#                     "intentisy_orig",
+#                     "peptideAnnotation",
+#                     "peptideAnnotation_orig",
+#                     "proteingroupAnnotation",
+#                     "proteingroupAnnotation_orig",
+#                     "ptmAnnotation",
+#                     "ptmAnnotation_orig"),
 #
-#     allowedLevels = c("gene", "isoform", "exon", "protein")
+#     allowedLevels = c("gene", "isoform", "exon", "proteingroup", "peptide", "ptm", "protein")
 # ) #.DGEobjDef
 # # Uncomment this block when you need to update the ./data/DGEobj.rda file
 # x = getwd()
@@ -155,14 +177,8 @@
 
 
 
-##  To Do
-##
-##      as.RSE
-##      as.ES
-##
-##
-
-#Notcurrently used:  I'm using as(rowData, "GRanges") to cast rowData as a
+### Notcurrently used:  I'm using as(rowData, "GRanges") to cast rowData as a
+#
 #GRanges object.  This  works with Omicsoft data.  Haven't tested Xpress data yet.
 #
 # ### Function df2GR ###@import magrittr

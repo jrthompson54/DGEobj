@@ -8,7 +8,7 @@ document()
 load_all()
 # build_vignettes()
 build()
-pkg = "~/R/lib/pkgsrc/DGEobj_0.9.46.tar.gz"
+pkg = "~/R/lib/pkgsrc/DGEobj_0.9.48.tar.gz"
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)
 
@@ -26,6 +26,3 @@ install_git("http://biogit.pri.bms.com/thompj27/DGE.Tools", branch="dev", repos=
 > x <- cbind(names(flist), flist) %>% as.data.frame()
 
 
-#Change Log
-#   0.9.46
-#       Fix help for initDGEobj_Affy

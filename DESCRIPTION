@@ -2,7 +2,7 @@ Package: DGEobj
 Type: Package
 Title: DGEobj provides a S3 data class to manage and annotate DGE analysis
     results
-Version: 0.9.46
+Version: 0.9.48
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
@@ -13,7 +13,7 @@ Description: Provides an S3 data class to manage and annotate DGE analysis
     data analysis workflow that starts from a data matrix of assays (rows) 
     by Samples (columns).
 Depends:
-    R (>= 3.4.1)
+    R (>= 3.5.0)
 License: GPL3
 Encoding: UTF-8
 LazyData: true
@@ -57,6 +57,7 @@ Collate:
     'textToDGEobj.R'
     'initDGEobj.R'
     'initDGEobj_Affy.R'
+    'initDGEobj_ptx.R'
 RoxygenNote: 6.1.1
 Suggests: 
     rmarkdown

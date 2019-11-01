@@ -4,18 +4,18 @@
 \alias{initSOMAobj}
 \title{Function initSOMAobj}
 \usage{
-initSOMAobj(intensities, rowData, colData, customAttr,
+initSOMAobj(intensity, rowData, colData, customAttr,
   DGEobjDef = .DGEobjDef)
 }
 \arguments{
-\item{intensities}{A intensity matrix in genes (rows) by samples (col) format
+\item{intensity}{A intensity matrix in genes (rows) by samples (col) format
 with row and column names.}
 
 \item{rowData}{Protein level annotation. rownames must match
-rownames in intensities matrix.}
+rownames in intensity matrix.}
 
 \item{colData}{A dataframe describing the experiment design.  Rownames much match
-colnames(intensities).}
+colnames(intensity).}
 
 \item{customAttr}{An optional (but highly recommended) named list of attributes
 to assign to the DGEobj.}
@@ -34,7 +34,7 @@ reads a Somalogic adat file and calls this function to build a DGEobj.
 }
 \examples{
 
-   myDgeObj <- initSOMAobj(intensities = Myintensities,
+   myDgeObj <- initSOMAobj(intensity = Myintensity,
                             rowData = MyGeneAnnotation,
                             colData = MyDesign,
                             customAttr = list (PID = "20171025-0001",

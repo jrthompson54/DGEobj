@@ -8,12 +8,12 @@
 #' @author John Thompson, \email{john.thompson@@bms.com}
 #' @keywords RNA-Seq
 #'
-#' @param intensities A intensity matrix in genes (rows) by samples (col) format
+#' @param intensity A intensity matrix in genes (rows) by samples (col) format
 #'   with row and column names.
 #' @param rowData  Protein level annotation. rownames must match
-#'    rownames in intensities matrix.
+#'    rownames in intensity matrix.
 #' @param colData A dataframe describing the experiment design.  Rownames much match
-#'  colnames(intensities).
+#'  colnames(intensity).
 #' @param customAttr An optional (but highly recommended) named list of attributes
 #'     to assign to the DGEobj.
 #' @param DGEobjDef An object definition. Defaults to the global DGE object definition
@@ -24,7 +24,7 @@
 #'
 #' @examples
 #'
-#'    myDgeObj <- initSOMAobj(intensities = Myintensities,
+#'    myDgeObj <- initSOMAobj(intensity = Myintensity,
 #'                             rowData = MyGeneAnnotation,
 #'                             colData = MyDesign,
 #'                             customAttr = list (PID = "20171025-0001",
@@ -38,56 +38,56 @@
 #' @importFrom methods as
 #' @export
 ### # Constructor function for the class
-initSOMAobj <- function(intensities, rowData, colData, #required
+initSOMAobj <- function(intensity, rowData, colData, #required
                        customAttr, #optional list of named Attr/Value pairs
                        DGEobjDef=.DGEobjDef
                        ) {
     level <- "protein"  #only option for SOMA data
 
-    #need to add intensities to DGEobjDef
-    assert_that(!missing(intensities),
+    #need to add intensity to DGEobjDef
+    assert_that(!missing(intensity),
                 !missing(colData),
                 !missing(rowData),
                 # !missing(level),
-                is.matrix(intensities) | is.data.frame(intensities),
+                is.matrix(intensity) | is.data.frame(intensity),
                 # level %in% DGEobjDef$allowedLevels,
-                !is.null(rownames(intensities)),
-                !is.null(colnames(intensities)),
+                !is.null(rownames(intensity)),
+                !is.null(colnames(intensity)),
                 !is.null(rownames(rowData)),
                 !is.null(rownames(colData))
                 )
 
     #some reality checking before we build the DGEobj
-    #rownames annotation = rownames on intensities
+    #rownames annotation = rownames on intensity
     #   if not and same length, sort to try and align the data
-    # similarly rownames in colData must match colnames in intensities
-    assert_that(nrow(intensities) == nrow(rowData),
-                ncol(intensities) == nrow(colData))
+    # similarly rownames in colData must match colnames in intensity
+    assert_that(nrow(intensity) == nrow(rowData),
+                ncol(intensity) == nrow(colData))
 
     #if we're here, lengths match up, now check names
-    if (!all(rownames(intensities) == rownames(rowData))){
+    if (!all(rownames(intensity) == rownames(rowData))){
         #sort both by rowname
-        intensities <- intensities[order(rownames(intensities)),]
+        intensity <- intensity[order(rownames(intensity)),]
         rowData <- rowData[order(rownames(rowData)),]
     }
-    if (!all(colnames(intensities) == rownames(colData))){
+    if (!all(colnames(intensity) == rownames(colData))){
         #sort both as appropriate
-        intensities <- intensities[,order(colnames(intensities))]
+        intensity <- intensity[,order(colnames(intensity))]
         colData <- colData[order(rownames(colData)),]
     }
     #now everything should be sorted properly check one last time
     assert_that(
-        all(rownames(intensities) == rownames(rowData)),
-        all(colnames(intensities) == rownames(colData))
+        all(rownames(intensity) == rownames(rowData)),
+        all(colnames(intensity) == rownames(colData))
         )
 
     #all our data are properly aligned; build the SOMAobj
     #
     funArgs <- match.call()
 
-    result <- try(intensities <- as.matrix(intensities), silent=TRUE)
+    result <- try(intensity <- as.matrix(intensity), silent=TRUE)
     if (class(result) == "try-error")
-        stop("Couldn't coerce intensities to a numeric matrix!")
+        stop("Couldn't coerce intensity to a numeric matrix!")
 
     #initialize an empty SOMAobj
     somaObj <- list()
@@ -103,22 +103,22 @@ initSOMAobj <- function(intensities, rowData, colData, #required
 
     #load required items
     #
-    #intensities
+    #intensity
     somaObj <- addItem(somaObj,
-                      item=intensities,
-                      itemName="intensities_orig",
-                      itemType="intensities_orig",
+                      item=intensity,
+                      itemName="intensity_orig",
+                      itemType="intensity_orig",
                       funArgs = funArgs,
                       parent = "",
                       init=TRUE
     )
 
     somaObj <- addItem(somaObj,
-                      item=intensities,
-                      itemName="intensities",
-                      itemType="intensities",
+                      item=intensity,
+                      itemName="intensity",
+                      itemType="intensity",
                       funArgs= funArgs,
-                      parent = "intensities_orig",
+                      parent = "intensity_orig",
                       init=TRUE
     )
 
@@ -143,7 +143,7 @@ initSOMAobj <- function(intensities, rowData, colData, #required
            "gene" = itemName <- "geneData",
            "isoform" = itemName <- "isoformData",
            "exon" = itemName <- "exonData",
-           "protein" = itemName <- "proteinData"
+           "protein" = itemName <- "proteinAnnotation"
     )
     itemType <- itemName
     itemName_Parent <- paste(itemName, "_orig", sep="")
