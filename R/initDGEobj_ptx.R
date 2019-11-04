@@ -11,7 +11,7 @@
 #'    rownames in count matrix (required).
 #' @param colData A dataframe describing the experiment design.  Rownames much match
 #'  colnames(intensity). (required)
-#' @param level One of "peptide", "peptidegroup" (required)
+#' @param level One of "peptide", "proteingroup", "ptm" (required) (Only proteingroup working so far)
 #' @param customAttr An optional (but highly recommended) named list of attributes
 #'     to assign to the DGEobj.
 #' @param allowShortSampleIDs  Using sequential integers rownames (even if typed as character)
