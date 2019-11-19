@@ -4,8 +4,7 @@
 \alias{adatToDGEobj}
 \title{Function adatToDGEobj}
 \usage{
-adatToDGEobj(adatFile, keepOnlyPasses = TRUE,
-  sampleNameCol = "ExtIdentifier")
+adatToDGEobj(adatFile, keepOnlyPasses = TRUE, sampleNameCol = "ExtIdentifier")
 }
 \arguments{
 \item{adatFile}{Name of a .adat datafile.}

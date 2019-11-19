@@ -4,8 +4,10 @@
 \alias{getAttributes}
 \title{Function getAttributes}
 \usage{
-getAttributes(item, excludeList = list("dim", "dimnames", "names",
-  "row.names", "class"))
+getAttributes(
+  item,
+  excludeList = list("dim", "dimnames", "names", "row.names", "class")
+)
 }
 \arguments{
 \item{item}{a DGEobj structure (or any object with attributes)}

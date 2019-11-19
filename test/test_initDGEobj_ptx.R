@@ -32,4 +32,6 @@ dgeObj <- initDGEobj_ptx(intensity=ptxAssay,
                          debug=FALSE
                              )
 
+
+
 inventory(dgeObj)

@@ -4,8 +4,15 @@
 \alias{initDGEobj}
 \title{Function initDGEobj}
 \usage{
-initDGEobj(counts, rowData, colData, level, customAttr,
-  allowShortSampleIDs = FALSE, DGEobjDef = .DGEobjDef)
+initDGEobj(
+  counts,
+  rowData,
+  colData,
+  level,
+  customAttr,
+  allowShortSampleIDs = FALSE,
+  DGEobjDef = .DGEobjDef
+)
 }
 \arguments{
 \item{counts}{A count matrix or dataframe with row and colnames.}

@@ -4,8 +4,10 @@
 \alias{showAttributes}
 \title{Function showAttributes}
 \usage{
-showAttributes(dgeObj, skip = c("dim", "dimnames", "rownames",
-  "colnames", "listData", "objDef"))
+showAttributes(
+  dgeObj,
+  skip = c("dim", "dimnames", "rownames", "colnames", "listData", "objDef")
+)
 }
 \arguments{
 \item{dgeObj}{A DGEobj created by function initDGEobj}

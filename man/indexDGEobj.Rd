@@ -4,11 +4,13 @@
 \alias{indexDGEobj}
 \title{Function indexDGEobj}
 \usage{
-indexDGEobj(dgeObj, keys = list("ID", "BMS_PID", "Title", "Description",
-  "Keywords", "Business Unit", "Functional Area", "Disease", "Vendor",
-  "PlatformType", "Technology", "LibraryPrep", "Organism", "Tissue",
-  "AlignmentReference", "GeneModel", "TBio_Owner", "TA_Owner", "LoadData",
-  "ReadLength", "ReadType", "Pipeline"))
+indexDGEobj(
+  dgeObj,
+  keys = list("ID", "BMS_PID", "Title", "Description", "Keywords", "Business Unit",
+    "Functional Area", "Disease", "Vendor", "PlatformType", "Technology", "LibraryPrep",
+    "Organism", "Tissue", "AlignmentReference", "GeneModel", "TBio_Owner", "TA_Owner",
+    "LoadData", "ReadLength", "ReadType", "Pipeline")
+)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}

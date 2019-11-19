@@ -4,13 +4,16 @@
 \alias{annotateDGEobj}
 \title{Function annotateDGEobj}
 \usage{
-annotateDGEobj(dgeObj, regfile, keys = list("ID", "BMS_PID", "Title",
-  "Description", "Keywords", "Business Unit", "BusinessUnit",
-  "Functional Area", "FunctionalArea", "Disease", "Vendor", "PlatformType",
-  "Technology", "LibraryPrep", "Organism", "Tissue", "AlignmentReference",
-  "GeneModel", "TBio_Owner", "TA_Owner", "LoadDate", "ReadLength",
-  "ReadType", "Pipeline", "AlignmentAlgorithm", "ScriptID", "BioGitURL",
-  "source", "XpressID", "repo"))
+annotateDGEobj(
+  dgeObj,
+  regfile,
+  keys = list("ID", "BMS_PID", "Title", "Description", "Keywords", "Business Unit",
+    "BusinessUnit", "Functional Area", "FunctionalArea", "Disease", "Vendor",
+    "PlatformType", "Technology", "LibraryPrep", "Organism", "Tissue",
+    "AlignmentReference", "GeneModel", "TBio_Owner", "TA_Owner", "LoadDate", "ReadLength",
+    "ReadType", "Pipeline", "AlignmentAlgorithm", "ScriptID", "BioGitURL", "source",
+    "XpressID", "repo")
+)
 }
 \arguments{
 \item{dgeObj}{A class dgeObj created by function initDGEobj}

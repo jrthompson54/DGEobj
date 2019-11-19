@@ -4,8 +4,7 @@
 \alias{initSOMAobj}
 \title{Function initSOMAobj}
 \usage{
-initSOMAobj(intensity, rowData, colData, customAttr,
-  DGEobjDef = .DGEobjDef)
+initSOMAobj(intensity, rowData, colData, customAttr, DGEobjDef = .DGEobjDef)
 }
 \arguments{
 \item{intensity}{A intensity matrix in genes (rows) by samples (col) format

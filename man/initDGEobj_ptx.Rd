@@ -4,8 +4,16 @@
 \alias{initDGEobj_ptx}
 \title{Function initDGEobj_ptx}
 \usage{
-initDGEobj_ptx(intensity, rowData, colData, level, customAttr,
-  allowShortSampleIDs = FALSE, DGEobjDef = .DGEobjDef, debug = FALSE)
+initDGEobj_ptx(
+  intensity,
+  rowData,
+  colData,
+  level,
+  customAttr,
+  allowShortSampleIDs = FALSE,
+  DGEobjDef = .DGEobjDef,
+  debug = FALSE
+)
 }
 \arguments{
 \item{intensity}{An intensity matrix or dataframe with row and colnames (required).}
@@ -16,7 +24,7 @@ rownames in count matrix (required).}
 \item{colData}{A dataframe describing the experiment design.  Rownames much match
 colnames(intensity). (required)}
 
-\item{level}{One of "peptide", "peptidegroup" (required)}
+\item{level}{One of "peptide", "proteingroup", "ptm" (required) (Only proteingroup working so far)}
 
 \item{customAttr}{An optional (but highly recommended) named list of attributes
 to assign to the DGEobj.}

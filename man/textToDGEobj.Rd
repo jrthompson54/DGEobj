@@ -4,10 +4,16 @@
 \alias{textToDGEobj}
 \title{Function  textToDGEobj}
 \usage{
-textToDGEobj(path, counts = "RNA-Seq.Count.Table.txt",
+textToDGEobj(
+  path,
+  counts = "RNA-Seq.Count.Table.txt",
   seqAnnotation = "RNA-Seq.Count.Annotation.txt",
-  design = "RNA-Seq.Design.txt", level, customAttr, gz = FALSE,
-  verbose = FALSE)
+  design = "RNA-Seq.Design.txt",
+  level,
+  customAttr,
+  gz = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{path}{Path for the three data files (required).  For cloud, use s3fs to

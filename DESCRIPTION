@@ -2,7 +2,7 @@ Package: DGEobj
 Type: Package
 Title: DGEobj provides a S3 data class to manage and annotate DGE analysis
     results
-Version: 0.9.48
+Version: 0.9.49
 Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
                   role = c("aut", "cre"))
 Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
@@ -58,7 +58,7 @@ Collate:
     'initDGEobj.R'
     'initDGEobj_Affy.R'
     'initDGEobj_ptx.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Suggests: 
     rmarkdown
 VignetteBuilder: knitr

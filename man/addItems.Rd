@@ -4,8 +4,7 @@
 \alias{addItems}
 \title{Function addItems (DGEobj)}
 \usage{
-addItems(dgeObj, itemList, itemTypes, parents, overwrite = FALSE,
-  itemAttr)
+addItems(dgeObj, itemList, itemTypes, parents, overwrite = FALSE, itemAttr)
 }
 \arguments{
 \item{dgeObj}{A DGEobj that items will be added to (required)}

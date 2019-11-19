@@ -4,8 +4,16 @@
 \alias{initDGEobj_Affy}
 \title{Function initDGEobj_Affy}
 \usage{
-initDGEobj_Affy(AffyRMA, rowData, colData, level, BrainArrayVer,
-  customAttr, allowShortSampleIDs = FALSE, DGEobjDef = .DGEobjDef)
+initDGEobj_Affy(
+  AffyRMA,
+  rowData,
+  colData,
+  level,
+  BrainArrayVer,
+  customAttr,
+  allowShortSampleIDs = FALSE,
+  DGEobjDef = .DGEobjDef
+)
 }
 \arguments{
 \item{AffyRMA}{An RMA intensity matrix in genes (rows) by samples (col) format

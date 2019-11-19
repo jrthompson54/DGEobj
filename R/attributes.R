@@ -225,20 +225,24 @@ getAttribute <- function(item, attrName){
 #'    df <- showMeta(MydgeObj)
 #'
 #' @importFrom utils stack
+#' @importFrom dplyr select
 #'
 #' @export
 showMeta <- function(obj) {
+  browser()
     #print length==1 attributes in a table
     alist <- attributes(obj)
     #filter for attributes that are simple key/value pairsinventory
     idx <- lapply(alist, length) == 1
     if(sum(idx) > 0){
-        df <- stack(alist[idx])
-        colnames(df) <- c("Value", "Attribute")
-        df <- select(df, Attribute, Value)
-        df$Attribute <- as.character(df$Attribute)
-        return(df)
+      suppressWarnings(
+        df <- stack(alist[idx])  #issues warning
+      )
+      colnames(df) <- c("Value", "Attribute")
+      df <- dplyr::select(df, Attribute, Value)
+      df$Attribute <- as.character(df$Attribute)
+      return(df)
     } else {
-        return(NULL)
+      return(NULL)
     }
 }
