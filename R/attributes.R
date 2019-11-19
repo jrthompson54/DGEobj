@@ -229,8 +229,7 @@ getAttribute <- function(item, attrName){
 #'
 #' @export
 showMeta <- function(obj) {
-  browser()
-    #print length==1 attributes in a table
+     #print length==1 attributes in a table
     alist <- attributes(obj)
     #filter for attributes that are simple key/value pairsinventory
     idx <- lapply(alist, length) == 1

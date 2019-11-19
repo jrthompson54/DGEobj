@@ -8,7 +8,7 @@ document()
 load_all()
 # build_vignettes()
 build()
-pkg = "~/R/lib/pkgsrc/DGEobj_0.9.49.tar.gz"
+pkg = "~/R/lib/pkgsrc/DGEobj_0.9.50.tar.gz"
 install.packages(pkg, repos=NULL, type="source")
 setwd(x)
 
