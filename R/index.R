@@ -86,12 +86,21 @@ annotateDGEobj <- function(dgeObj, regfile,
     #just lines with equals signs
     regdat <- dplyr::filter(regdat, stringr::str_detect(pair, "="), !stringr::str_detect(pair, "Parameters."))
 
+    #JRT: modify to allow equals signs in the value part of a key value pair
+    #loop through the attributes spitting on the rist = sign
+    regdat$key <- ""
+    regdat$value <- ""
+    for (i in length(regdat)) {
+        splitpos <- str_locate(regdat[i], "=")[1]  #pos of 1st = sign
+        regdat$key <- substr(regdat[i], 1, (splitpos-1))
+        regdat$value <- subst(regdat[i], (splitpos+1), nchar(regdat[i]))
+    }
     #now split into key value pairs
-    regdat <- strsplit(regdat$pair, "=") %>%
-        as.data.frame(stringsAsFactors=FALSE) %>%
-        t() %>%
-        as.data.frame(stringsAsFactors=FALSE)
-    colnames(regdat) <- c("key", "value")
+    # regdat <- strsplit(regdat$pair, "=") %>%
+    #     as.data.frame(stringsAsFactors=FALSE) %>%
+    #     t() %>%
+    #     as.data.frame(stringsAsFactors=FALSE)
+    # colnames(regdat) <- c("key", "value")
 
     #after splitting, key without values get the key names inserted as the value.  Convert those to empty strings.
     idx <- regdat$key == regdat$value
