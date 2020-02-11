@@ -90,10 +90,10 @@ annotateDGEobj <- function(dgeObj, regfile,
     #loop through the attributes spitting on the rist = sign
     regdat$key <- ""
     regdat$value <- ""
-    for (i in length(regdat)) {
-        splitpos <- str_locate(regdat[i], "=")[1]  #pos of 1st = sign
-        regdat$key <- substr(regdat[i], 1, (splitpos-1))
-        regdat$value <- subst(regdat[i], (splitpos+1), nchar(regdat[i]))
+    for (i in 1:nrow(regdat)) {
+        splitpos <- str_locate(regdat[i,1], "=")[1]  #pos of 1st = sign
+        regdat$key[i] <- substr(regdat[i,1], 1, (splitpos-1))
+        regdat$value[i] <- substr(regdat[i,1], (splitpos+1), nchar(regdat[i,1]))
     }
     #now split into key value pairs
     # regdat <- strsplit(regdat$pair, "=") %>%
