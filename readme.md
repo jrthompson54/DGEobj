@@ -67,28 +67,8 @@ During initialization, a copy of the counts, gene annotation and sample annotati
 It is best to run the install from a fresh R session before loading any
 packages because loaded packages cannot be updated.
 
-Charles Tilford has created a BMS repository, BRAN.  Packages from BRAN
-can now be installed simply with install.packages (after a little setup).
-
-One time setup for BRAN :
-
-```
-   # Sourcing this file modifies your .Rprofile file to add BRAN to your list of repositories
-   source('http://bran.pri.bms.com/resources/configureRepo.R')
-```
-
-Install or update DGEobj:  
-
-```
-    install.packages("DGEobj", repos="http://BRAN.pri.bms.com")
-```
-
-## Installation from Biogit (backup method)
-
-You can also install directly from GIT.  Versions released to BRAN are tagged version numbers.  
-
 ```r
     require(devtools)
-    devtools::install_git("http://biogit.pri.bms.com/thompj27/DGEobj", repos=BiocInstaller::biocinstallRepos()) 
+    devtools::install_git("https://github.com/jrthompson54/DGEobj", repos=BiocInstaller::biocinstallRepos()) 
   
 ```   
