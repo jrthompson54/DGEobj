@@ -69,6 +69,6 @@ packages because loaded packages cannot be updated.
 
 ```r
     require(devtools)
-    devtools::install_git("https://github.com/jrthompson54/DGEobj", repos=BiocInstaller::biocinstallRepos()) 
+    devtools::install_git("https://github.com/jrthompson54/DGEobj") 
   
 ```   
