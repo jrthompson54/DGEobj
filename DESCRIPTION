@@ -1,64 +1,38 @@
 Package: DGEobj
-Type: Package
-Title: DGEobj provides a S3 data class to manage and annotate DGE analysis
-    results
-Version: 0.9.52
-Authors@R: person("John", "Thompson", email = "john.thompson@bms.com",
-                  role = c("aut", "cre"))
-Maintainer@R: person("John", "Thompson", email = "john.thompson@bms.com",
-    role = c("aut", "cre"))
-Description: Provides an S3 data class to manage and annotate DGE analysis
-    results.  Although authored with differential gene expression in mind,
-    the datatypes are customizable and extensible to accommodate nearly any
-    data analysis workflow that starts from a data matrix of assays (rows) 
-    by Samples (columns).
-Depends:
-    R (>= 3.5.0)
-License: GPL3
+Type:    Package
+Title:   Differential Gene Expression (DGE) Analysis Results Data Object
+Version: 1.0.1
+Description: 
+    Provides a flexible container to manage and annotate Differential Gene 
+    Expression (DGE) analysis results (Smythe et. al (2015) <doi:10.1093/nar/gkv007>).  
+    The DGEobj has data slots for row (gene), col (samples), assays (matrix n-rows 
+    by m-samples dimensions) and metadata (not keyed to row, col, or assays).  
+    A set of accessory functions to deposit, query and retrieve subsets of a data 
+    workflow has been provided.  Attributes are used to capture metadata such as 
+    species and gene model, including reproducibility information such that a 3rd 
+    party can access a DGEobj history to see how each data object was created or 
+    modified.  Since the DGEobj is customizable and extensible it is not limited 
+    to RNA-seq analysis types of workflows -- it can accommodate nearly any data 
+    analysis workflow that starts from a matrix of assays (rows) by samples (columns).
+Authors@R: 
+    c(person("John", "Thompson", role = "aut", email = "jrt@thompsonclan.org"),
+      person("Connie", "Brett",  role = c("aut", "cre"), email = "connie@aggregate-genius.com"),
+      person("Isaac", "Neuhaus", role = "aut", email = "isaac.neuhaus@bms.com"),
+      person("Ryan", "Thompson", role = "aut", email = "rct@thompsonclan.org"))
+Depends:  R (>= 3.5.0)
+License:  GPL-3
+Language: en-US
 Encoding: UTF-8
-LazyData: true
 Imports:
-    dplyr (>= 0.4.3),
-    magrittr (>= 1.5),
-    GenomicRanges,
-    IRanges,
-    SummarizedExperiment,
     assertthat,
-    testthat,
-    knitr,
+    magrittr,
     stringr,
-    S4Vectors,
-    lubridate,
-    methods,
-    readat,
-    pathological, 
-    stats,
     utils,
-    tibble
-Collate:
-    'DGEobj.R'
-    'addItem.R'
-    'rmItem.R'
-    'dimensionMatch.R'
-    'get.R'
-    'dim.R'
-    'newType.R'
-    'showTypes.R'
-    'print.R'
-    'dimnames.R'
-    'as.R'
-    'attributes.R'
-    'subset.R'
-    'index.R'
-    'mergeDGEobj.R'
-    'initSOMAobj.R'
-    'adatToDGEobj.R'
-    'resetDGEobj.R'
-    'textToDGEobj.R'
-    'initDGEobj.R'
-    'initDGEobj_Affy.R'
-    'initDGEobj_ptx.R'
-RoxygenNote: 7.0.2
+    GenomicRanges
+RoxygenNote: 7.1.1
 Suggests: 
-    rmarkdown
+    knitr,
+    rmarkdown,
+    testthat,
+    edgeR
 VignetteBuilder: knitr

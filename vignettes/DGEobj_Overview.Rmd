@@ -1,9 +1,8 @@
 ---
-title: "DGEobj: An S3 Object to Capture DGE Workflows"
-author: "John Thompson (john.thompson@bms.com)"
+title: "DGEobj: Capture Differential Gene Expression Workflows"
 date: "`r Sys.Date()`"
 output: 
-  pdf_document:
+  html_document:
     fig_caption: yes
     number_sections: yes
     toc: yes
@@ -14,424 +13,261 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r global options, include = FALSE}
+knitr::opts_chunk$set(echo    = TRUE, 
+                      include = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      eval    = FALSE)
+```
+
+
 # Introduction   
 
-The DGEobj package implements an S3 class data object, the DGEobj, that
-represents an extension of the capabilties of the
-RangedSummarizedExperiment(RSE) originally developed by Martin Morgan et al.
-Both the DGEobj and the RSE object capture the raw data for a differential gene
-expression analysis, namely a counts matrix along with associated gene and
-sample annotation.  Additionally, the DGEobj extends this concept to support
-capture of downstream data objects the capture the workflow of and analysis
-project.   The availability of a structured data object like the DGEobj, that
-catpure an entire workflow has multiple advantages.  Sharing DGE results with
-other colleagues is simplified because the entire analysis is encapsulated
-within the DGEobj and the recipient of data in this format can examine details
-of the analysis based on the annotation built into the DGE object.  Further the
-DGEobj structure enables programatic inspection of analysis results and thus
-enables automation of higher level integrative analyses across multiple
-projects.
+The DGEobj package implements an S3 class data object that represents an extension of the capabilities of the RangedSummarizedExperiment (RSE) originally developed by Martin Morgan et al. Both the DGEobj and the RSE object can capture the raw data for a differential gene expression analysis, namely a counts matrix along with associated gene and sample annotation.  Additionally, the DGEobj extends this concept to support capture of downstream data objects during the capture the workflow of an analysis project.   The availability of a structured data object like the DGEobj, that captures an entire workflow has multiple advantages.  Sharing Differential Gene Expression (DGE) results with other colleagues is simplified because the entire analysis is encapsulated within the DGEobj and the recipient of data in this format can examine details of the analysis based on the annotation built into the DGE object.  Furthermore, the DGEobj structure enables programmatic inspection of analysis results and thus enables automation of higher level integrative analyses across multiple projects.
 
-The RSE object that inspired the DGEobj can capture as many assays as desired.
-An "assay" is defined as any matrix with n genes (rows) and m samples (columns).
-A limitation of the RSE object however, is that the RSE can capture only 1 instance of row data (typically gene
-annotation) and 1 instance of column data (sample annotation with one row for
-every column of data in the assay slot).  This limits the RSE in terms of it's
-ability to hold downstream data objects because many of those objects meet the
-definition of row data also (e.g. DGEList, Fit object, topTable
-output).  Other types of data (e.g. design matrices, sample QC) meet the definition of column data.  
-Thus, the DGEobj was modeled after the RSE object, but extended to accommodate
-multiple row and column data types.  The DGEobj is thus uniquely suited to
-capturing the entire workflow of a DGE analysis.
+The RSE object that inspired the DGEobj can capture as many assays as desired. An "assay" is defined as any matrix with n genes (rows) and m samples (columns). A limitation of the RSE object however is that the RSE can capture only 1 instance of row data (typically gene annotation) and 1 instance of column data (sample annotation with one row for every column of data in the assay slot).  This limits the RSE in terms of its ability to hold downstream data objects because many of those objects meet the definition of row data also (e.g. Fit object, topTable output).  Other types of data (e.g. design matrices, sample QC) meet the definition of column data.  Thus, the DGEobj was modeled after the RSE object, but extended to accommodate multiple row and column data types.  The DGEobj is thus uniquely suited to capturing the entire workflow of a DGE analysis.
 
-# DGEobj Structure
+# Structure
 
 ## Base Types
 
 The DGEobj supports four distinct data types, that we refer to as "base types":  
 
-* assay data: dataframes or matrices of data with n rows (genes or transcripts) 
-and m columns (samples)   
-* rowData: a dataframe with n rows typically containing information about each 
-gene with as many columns as needed (gene ID, gene symbols, chromosome information, etc).  Other types of rowData include the edgeR DGEList object, design matricies and Fit objects   
-* colData: a dataframe with m rows, that is one row for each sample column in the assay slot   
-* metaData: anything that doesn't fit in one of the other slots  
+* assay data: dataframes or matrices of data with n rows (genes or transcripts) and m columns (samples)   
+* row: a dataframe with n rows typically containing information about each gene with as many columns as needed (gene ID, gene symbols, chromosome information, etc).  Other types of rowData include design matrices and fit objects for example.
+* col: a dataframe with m rows, that is, one row for each sample column in the assay slot   
+* metadata: anything that doesn't fit in one of the other slots  
 
-Fundamentally, the base type defines how an item should be subsetted.
+Fundamentally, the base type defines how an item can be subsetted.
 
 ## DGEobj Nomenclature: Items, Types and Base Types
 
-We accommodate multiple instances of a base type by defining data types and
-items.   Each data type is assigned a base type (e.g. geneData, granges and
-fit are all "types" of "basetype"" = rowData).  
+Multiple instances of a base type are accommodated by defining data types and items.  Each data type is assigned a base type (e.g. geneData, GRanges, and Fit are all "types" of "baseType" = "row").  
 
-You can have multiple instances of each type (with some exceptions).  We therefore 
-describe each instance of a "type" as an "item" and each item must have a user-defined
-item name and the item name must be unique within a DGEobj.   
+Multiple instances of each type (with some exceptions) are supported.  We therefore describe each instance of a "type" as an "item" and each item must have a user-defined item name and the item name must be unique within a DGEobj.   
 
 ## Unique Items
 
-The intent of the DGEobj is that it captures the workflow and analysis results of
-a single dataset.  As such, certain items that constitute the raw data are defined
-as unique and only one instance of these datatypes are allowed.
+The intent of the DGEobj is that it captures the workflow and analysis results of a single dataset.  As such, certain items that constitute the raw data are defined as unique and only one instance of these data types are allowed.
 
-Three items, counts, design (expt factors and sample information) and geneData (or isoformData, or exonData)
-are defined as unique.  If appropriate chromosome location data (Chr, Start, End, Strand)
-are supplied in the geneData, then a granges item is also created upon initializing
-a DGEobj.  
-
-If RNA-Seq data is coming from Xpress, then it will also have an effective length
-matrix.  This goes into an assay slot and is also unique.
+Three items: counts, design (except factors and sample information), and gene (or isoform, or exon) data are defined as unique.  If appropriate chromosome location data (Name, Start, End, Strand) are supplied in the geneData, then a GRanges item is also created upon initializing a DGEobj.  
 
 ## Levels 
 
-Three levels are predefined for DGEobj objects: gene, isoform or exon.  A DGEobj
-may contain only one of these levels.  Thus you would create a separate DGEobj
-for isoform data if you were performing a transcript analysis.  For the sake of
-simplicity, throughout this document I will refer to geneData which will exist
-in a gene level DGEobj. You can mentally substitute isoform or exon for gene if you
-are working with that type of data.
+Three levels are predefined for DGEobj objects: gene, isoform, or exon.  A DGEobj may contain only one of these levels.  For the sake of simplicity, throughout this document geneData is referred to which will exist in a gene-level DGEobj. Substitute isoform or exon for gene when working with that type of data.
 
 ## Parentage
 
-An analysis can become multi-threaded.  For example, multiple models can be
-built from one dataset.  Two features of the DGEobj serve to manage
-multi-threaded analyses.    Only one instance of these data types are allowed.
-Unique types are the "counts", "design" (sample data) and "geneData".   The
-DGEobj can contain multiple instances of other data types.  To document the
-workflow and unambiguosly define the relationships between data items in a
-multi-threaded analysis, the concept of parent is invoked.  Each data item
-carries a parent attribute that holds the name of the parent data item.  In this
-way, for example, a topTable item can be linked to the contrast fit that
-produced it.
+An analysis can become branched. For example, multiple models can be built from one dataset.  Two features of the DGEobj serve to manage branched analyses.  Unique types are the "counts", "design" (sample data), and "geneData".  The DGEobj can contain multiple instances of other data types.  To document the workflow and unambiguously define the relationships between data items in a branched analysis, the concept of a parent is invoked.  Each data item carries a parent attribute that holds the name of the parent data item.  In this way, for example, a topTable item can be linked to the contrast fit that produced it.
 
 ## Original Data
 
-In the course of an analysis you may subset the DGEobj to remove undetected
-genes or remove outlier samples.  However, for some purposes you may need to return 
-to the orignal un-subsetted data.  For this reason, a copy of the original data
-is also stored in a metadata slot.  Metadata slots are carried along without subsetting
-so the original data may always be retrieved from the metadata slots.  The item
-names of the original data in the metadata slot have a "_orig" suffix.
+The DGEobj can be subset, for instance to remove undetected genes or outlier samples.  However, for some purposes it may be necessary to return to the original data.  For this reason, a copy of the original data is also stored in a metadata slot.  Metadata slots are carried along without subsetting so the original data may always be retrieved from the metadata slots.  The item names of the original data in the metadata slot have a *"_orig"* suffix.
 
-# Working with DGE objects
+# Working with DGEobjs
 
-You can create a DGEobj from a set of dataframes containing the counts, geneData
-and design information (Sample annotation).  If you have an Expression Set (ES)
-or RSE object, you can also recast it as a DGEobj.  Note that when recasting an ES or RSE object
-only the counts, geneData and design data are transferred.
+## Creation/Initialization
 
-## Create a DGEobj
+Three dataframes are required to initialize a new DGEobj: counts, gene, and design data.  The initDGEobj function can then be used to create a DGEobj. The data "level" must also be specified (one of "gene", "isoform", or "exon").
 
-### Initializing a DGEobj from dataframes
+The counts data must use the geneIDs as rownames.  The gene data (rowData) should be a dataframe using geneIDs as rownames.  The design data (colData) should be a dataframe with rownames matching the column names of the counts data.
 
-Three dataframes are required to initialize a new DGEobj. Import your counts,
-geneData and design data as dataframes. Then use the initDGEobj function to
-create a DGEobj. You must also specify the "level" of your data (one of "gene",
-"isoform" or "exon").
-
-The counts can be a matrix or dataframe with geneIDs as rownames.  
-The rowData should be a dataframe also wit geneIDs as rownames.  
-The colData should be a dataframe with colnames(counts) as the rownames.  
-
-Adding custom attributes (customAttr argument) are, strictly speaking, optional but
-**highly recommended**.  The reusability of your DGEobj data is only as good
-as the annotation. Attributes are supplied as named list of name/value pairs with the names
-entirely up to the end user.  It is incumbent upon the user to define and use
-a consistent set of names for the annotation they supply.  
+Adding custom attributes (customAttr argument) is, strictly speaking, optional but **highly recommended**.  The re-usability of the DGEobj data is only as good as the annotations. Attributes are supplied as named list of name/value pairs and it is recommended that users define and use a consistent set of names for their annotations.  
 
 ```
-# initialize a DGEobj
-myDgeObj <- initDGEobj(counts = MyCounts,
-                        rowData = MyGeneAnnotation,
-                        colData = MyDesign,
-                        level = "gene",
-                        customAttr = list (PID = "20171025-0001",
-                            XpressID = "12345",
-                            Genome = "Mouse.B38",
-                            GeneModel = "Ensembl.R89")
-                      )
+myDgeObj <- initDGEobj(counts  = MyCounts,
+                       rowData = MyGeneAnnotation,
+                       colData = MyDesign,
+                       level = "gene",
+                       customAttr = list(Genome    = "Mouse.B38",
+                                         GeneModel = "Ensembl.R89"))
 ```
 
-It can be tedious to add annotation attrributes via the initDGEobj function, so, to 
-encourage extensive annotation, a more convenient method is supplied.  We use Omicsoft
-ArrayStudio to process RNA-Seq data and we collect annotation on the sample set
-during the process of loading data into Omicsoft.  The annotateDGEobj function
-will read the Omicsoft registration file and capture the same set of sample set annotation
-that was collected for the Omicsoft project.  
-
+It can be tedious to add annotation attributes via the initDGEobj function, so, to encourage extensive annotation, a more convenient `annotateDGEobj()` method is supplied that can also take a file of key/value pairs and also has an optional keys argument to import a subset of keys. 
 
 ```
-myDgeObj <- annotateDGEobj(myDgeObj, regfile, 
-        keys = list("ID", "BMS_PID", "Title",
-                    "Description", "Keywords", "Business Unit", 
-                    "Functional Area", "Disease",
-                    "Vendor", "PlatformType", "Technology", 
-                    "LibraryPrep", "Organism", "Tissue",
-                    "AlignmentReference", "GeneModel", "TBio_Owner",
-                    "TA_Owner", "LoadData, "ReadLength", "ReadType",
-                    "Pipeline", "AlignmentAlgorithm", "ScriptID")
-              )
-```
-This function attaches the key/value pairs found in regfile and returns the DGEobj with the annotation attached.  
-
-The keys argument is optional unless you want to change the default list
-of keys but included here to show the defaults.  You can also turn the keys argument
-off by assigning a NULL value (keys=NULL) in which case it will add any key value
-pair it finds.  
-
-Operationally, this function reads a set of key/value pairs from a text file and attaches them to the DGEobj.  Although designed to capture annotation from an Omicsoft
-registration file, the format is simple enough that you can easily create such an annotation file. Each key/value pair should be on a line
-by itself with the key and value separated by an equals sign.  Lines without
-key value pairs will be ignored (it looks for an = sign).  
-
-### Converting to/from RSE or ES data formats
-
-You may receive data in ES or RSE format or need to reformat data into one of those formats for use with other functions.  We therefore provide a function to facilitate the convertion to/from RSE format.  The SummarizedExperiment package already provides a method to convert from ES to RSE.
-
-```
-#convert ES to RSE
-library(SummarizedExperiment)
-MyRSE <- as(MyES, "RangedSummarizedExperiment")
-
-#convert RSE to DGEobj
-MyDgeObj <- convertRSE(MyRSE, "DGEobj")
-
-#convert RSE to either RSE or ES
-MyRSE <- convertDGEobj(MyDgeObj, "RSE")
-MyES <- convertDGEobj(MyDgeObj, "ES")
+myDgeObj <- annotateDGEobj(myDgeObj, 
+                           regfile, 
+                           keys = list("ID", "Title", "Description",
+                                       "Organism", "Tissue","GeneModel"))
 ```
 
-## Adding Items to a DGEobj
+## Adding Items
 
-As you progress through an analysis, you'll want to capture certain data objects in the DGEobj.  
-
-To add one item to a DGEobj:
+Throughout analysis other data objects can be captured in the object:
 
 ```
-myDgeObj <- addItem(myDgeObj, item = MyDGEList,
-                             itemName = "MyDGEList",
-                             itemType = "DGEList",
-                             parent = "counts",
-                             funArgs = match.call())
+myDGEobj <- addItem(myDGEobj, 
+                    item     = MyDGEList,   # data object to add
+                    itemName = "MyDGEList", # user-defined name
+                    itemType = "DGEList",
+                    parent   = "counts", 
+                    funArgs  = match.call())
 ```
-The item is the actual data object to add.   
 
-The itemName is the user-defined name for that object.  
+The item is the actual data object to add with the itemName is the user-defined name for that object.  The itemType is one of the predefined types.  To see a list of predefined types use the function `showTypes()`. 
 
-The itemType is the predefined type.  To see a list of predefine types use the function **showTypes(MyDgeObj)**. 
+The parent argument is particularly important for a branched analysis.  For instance if more than one fit or normalization technique is used, the parent argument maintains the thread and unambiguously defines the workflow.  The value assigned to parent should be the item name of the parent data object.
 
-The parent argument is particularly important for a multi-threaded analysis.  If you try more than one fit or apply more than one normalization technique, the parent argument maintains the thread and unambiguously defines the workflow.  The value assigned to parent should be the item name of the parent data object.
+Passing `match.call()` to `funArgs` captures the function arguments from the currently running function and serves to document both the function call and the arguments used to create the data object that is being captured.  It is also possible to pass a user-defined text string to the `funArgs` argument.
 
-Passing match.call() to funArgs captures the function arguments from the currently running function and serves to document both the function call and the arguments used to create the data object that is being captured.  You can also pass a user-defined text string to the funArgs argument.
+There is also an overwrite argument to the `addItem()` function.  By default `addItem()` will refuse to add an `itemname` that already exists. Add the `overwrite = TRUE` argument to update an object that already exists in the DGEobj.
 
-There is also an overwrite argument to the addItem function.  By 
-default addItem will refuse to add an itemname that already exists. Add the overwrite=TRUE argument if you really mean to update an
-object that already exists in the DGEobj.
+## Batch Addition 
 
-## Batch addition of multiple items  
-
-You can also add multiple data objects to a DGEobj in one function call using the addItems function. A typical use case for addItems is you've performed a several different contrasts from a single fit and have multiple topTable dataframes to be added to the DGEobj. 
+Multiple data objects can be added to a DGEobj in one function call using the `addItems()` function. A typical use case for `addItems()` is when several different contrasts are performed from a single fit and therefore there are multiple topTable dataframes to be added to the DGEobj. 
 
 ```
 MyDgeObj <- addItems(MyDgeObj, 
-                        itemList = MyItems,
-                        itemTypes = MyTypes,
-                        parents = MyParents,
-                        itemAttr = MyAttributes)
-```
-itemList is a list of the data objects to add.
-
-itemTypes is a list of the types for each item in itemList.  
-
-parents is a list of the parent item names for each item in itemList. 
-
-itemAttr is an optional named list of attributes that will be added to every item on the itemList.  Note that the DGEobj has attributes and each item within the DGEobj can have its own attributes.  Here the attributes are being added to the individual items.
-
-## DGEobj Length and Dimensions
-
-The length of a DGEobj refers to the number of data items in the DGEobj.   
-
-```
-length(MyDgeObj)
+                     itemList  = MyItems,  # data objects to add
+                     itemTypes = MyTypes,  # user-defined names
+                     parents   = MyParents,
+                     itemAttr  = MyAttributes)
 ```
 
-The dimension reported for a DGEobj is the dimensions of the assays contained in the DGEobj.  That is, the row dimension is the number of genes contained in the object and the column dimension is the number of samples contained in the object.
+`itemAttr` is an optional named list of attributes that will be added to every item on the `itemList`.  Note that the DGEobj has attributes and each item within the DGEobj can have its own attributes.  Here the attributes are being added to the individual items.
 
-```
-dim(MyDgeObj)
-```
+## Length and Dimensions
+
+The length `length()` of a DGEobj refers to the number of data items in the DGEobj.   
+
+The dimension `dim()` reported for a DGEobj is the dimensions of the assays contained in the DGEobj.  That is, the row dimension is the number of genes contained in the object and the column dimension is the number of samples contained in the object.
 
 ## Rownames and Colnames
 
 The rownames and colnames of the DGEobj are inherited from the first "assay" matrix in a DGEobj, typically the counts matrix for RNA-Seq data.  
 
-Note, there is no facility provided to assign rownames or colnames to a DGEobj.  This is because I can't guarantee that an object stored in the DGEobj has row/colname assignment support.
+Note, there is no facility provided to assign rownames or colnames to a DGEobj.  This is because it cannot be guaranteed that an object stored in the DGEobj has row/col assignment support.
 
-## Subsetting a DEobj
+## Subsetting
 
-Coordinates contained in square brackets can be used to subset a DGEobj, the same way that a dataframe or matrix can be subsetted.  The subsetting function uses the base type to define how each data items is handled during subsetting.  MetaData items are carried along unchanged.
+Coordinates contained in square brackets can be used to subset a DGEobj, the same way that a dataframe or matrix can be subsetted.  The subsetting function uses the base type to define how each data items is handled during subsetting.  Metadata items are carried along unchanged.
 
 ```
 #subset to the first 100 genes
-MyDGEobj <- MyDGEobj[1:100,]
+MyDGEobj <- MyDGEobj[c(1:100), ]
 
 #subset to the first 10 samples
-MyDGEobj <- MyDGEobj[,1:10]
+MyDGEobj <- MyDGEobj[ ,c(1:10)]
 
-#susbest genes and samples
+#subset genes and samples
 MyDGEobj <- MyDGEobj[1:100, 1:10]
 ```
-You may also use boolean vectors to subset dimensions of a DGEobj. 
 
-## Inventory of a DGEobj
+## Inventory
 
-The inventory function prints a table of the data items present in a DGEobj.  
-The output includes the item name, type, basettype, parent, class and date created.  
-if the verbose=TRUE argument is added, a funArgs column is also included.  
+The `inventory()` function prints a table of the data items in a DGEobj.  The output includes the item name, type, baseType, parent, class, and date created.  If the `verbose = TRUE` argument is added, a `funArgs` column is also included.  
 
 ```
-inventory(DGEobj, verbose=TRUE)
-```
-If you just need the item names of data stored in the DGEobj uses the names function.
-
-```
-names(MyDgeObj)
+inventory(DGEobj, verbose = TRUE)
 ```
 
-## Adding a new data type
+Note: To retrieve just the item names of data stored in the DGEobj, use the `names()` function.
 
-A set of data types has already been defined based on data types I encounter
-in my typical edgeR/Voom workflow.  Certainly, I haven't thought of everything that someone might want to capture.  Therefore, new types can be defined on the fly.
+
+## Adding a Data Type
+
+A set of data types has already been defined based on data types commonly encountered in a DGE workflow.  However this likely will not cover everything that someone might want to capture.  Therefore, new types can be defined on a DGEobj.  Each type must have a baseType and can be defined as unique or not.
 
 ```
-#see predefined data types
+# See predefined data types
 showTypes(MyDgeObj)
 
-#add a new colData datatype called "sampleQC"
+# Add a new datatype called "sampleQC"
 MyDgeObj <- newType(MyDgeObj,
-                    itemType="sampleQC",
-                    baseType="col",
-                    uniqueItem=FALSE)
+                    itemType = "sampleQC",
+                    baseType = "col",
+                    uniqueItem = FALSE)
 
 ```
-## Accessing data in a DGEobj
 
-You'll likely need to access various components of the DGEobj as you progress through you workflow.  Therea are several ways to extract one or more components from the DGEobj for use in your analysis.
+## Accessing Data
 
-### Retrieve a single item
+There are several ways to extract one or more components from a DGEobj:
 
-The getItem function allows you to retrieve any item in a DGEobj by referencing it's name. Use the inventory function (described above) to check the contents of the DGEobj.
+The `getItem()` function can be used to retrieve any item in a DGEobj by referencing the item name
 
 ```
 MyCounts <- getItem(MyDgeObj, "counts")
 ```
 
-### Retrive multiple items
+The `getItems()` can be used to retrieve multiple items DGEobj by referencing the item names
 
-There are several ways to retrieve multiple items as a list or data objects.
-
-You can supply a list of item names to retreive specific items.  The items requested are returned in a list.  
 ```
 MyItems <- getItems(MyDgeObj, list("counts", "geneData"))
 ```
-If all the items you wish to retrieve are of the same type, you can use the
-getType function to retreive them as a list.  For example, you might want to
-retrieve a set of contrast results present as topTable output.  
+
+If all the items to be retrieved are of the same type they can be retrieved using the type name:
+
 ```
+# get all contrast results that are stored as a topTable type
 MyContrasts <- getType(MyDgeObj, "topTable")
 ```
-Similarly, you can retrieve all items of the same basetype as a list.
+
+Similarly, all items of the same baseType can be retrieved using the baseType name:
+
 ```
 MyRowData <- getBaseType(MyDgeObj, "row")
 ```
-Finally, should you need to retrieve all the items in a DGEobj as a simple list,
-you can recast the DGEobj as a simple list.
+
+It is also possible to retrieve all the items in a DGEobj as a simple list by recasting the DGEobj as a simple list.
+
 ```
 MyList <- as.list(MyDgeObj)
 ```
 
 ## Ancillary Functions  
 
-### Function showTypes  
+### showTypes()
 
-Shows all the pre-defined types in a DGEobj.  This shows all types whether or
-not the DGEobj contains data associated with a given type.
+Shows all the predefined types in a DGEobj.  This shows all types, whether or not the DGEobj contains data associated with a given type.
+
 ```
 showTypes(MyDgeObj)
 ```
 
-### Function baseType
+### baseType()
 
 Returns the baseType for a given Type
+
 ```
 baseType(MyDgeObj, "DGEList")
 ```
-### Function getAttribute and getAttributes
 
-These are for retrieving attributes from an individual item.  So far,  the only 
-place where I've used attributes attached to an item (as opposed to the DGEobj itself) 
-is the design matrix.  In my workflow I attach the formula as an attribute of 
-the design matrix.
+### getAttribute/s()
+
+Retrieves attribute(s) from an individual item
 
 ```
+getAttribute(MyDgeObj, "attributeName")
+
+# for example retrieve the formula that is stored on the design matrix
 getAttribute(MyDgeObj$designMatrix, "formula")
 ```
 
-If an item had multiple attributes, you could retrieve the list of attributes
-with getAttributes.  getAttributes by default excluded common attributes including
-dim and dimnames which already have base functions for accessing.
+### rmItem()
 
-### Function getItemAttributes
+Delete a particular item from a DGEobj
 
-This function will retrieve a requested attribute from all items in a dgeobj, 
-returned as a list. So far I haven't been assigning any common attributes to all items.
-```
-getItemAttribute(MyDgeObj, "attributeName")
-```
-
-### Function rmItem
-
-For the most part, you'll be collecting and adding new object to a DGEobj
-in the course of an analysis.  The rmItem function is added for the case 
-where you might need to delete a particular item.  
-
-To delete an item from a DGEobj:
 ```
 MyDgeObj <- rmItem(MyDgeObj, "itemName")
 ```
 
-### Function setAttributes
+### setAttribute/s()
 
-You can add attributes to an item with the addItem function.  This function 
-provides an alternate mechanism to add attributes to an item which would
-typically be done before adding the item to a DGEobj.
-```
-MyItem <- setAttributes(MyItem, list(date=date(), analyst="JRT"))
-```
-### Function showMeta
+Add attribute(s) to an item in a DGEobj
 
-This function is intended to return any project oriented attributes assigned
-to the DGEobj using function annotateDGEobj.   It returns the attributes
-as a two column dataframe of Attribute/Value pairs.
+```
+MyItem <- setAttribute(MyItem, myData, myName)
+
+MyItem <- setAttributes(MyItem, list(myName1=myData1, myName2=myData2))
+```
+
+### showMeta()
+
+This function is intended to return project-oriented attributes assigned to the DGEobj using function `annotateDGEobj()`.  It returns the attributes as a two column dataframe of Attribute/Value pairs.
 
 ```
 MyAnnotation <- showMeta(MyDgeObj)
 ```
-
-### Functions under development
-
-The main DGEobj functions described above are relatively stable at this point.  Other functions in the package are either utility functions used by other functions and not really intended for end user use or functions under active development.  
-
-One group of functions in this latter category (active development) is a set of functions designed to query a collection of DGEobj objects and then extract all contrast data and assemble the contrasts into a contrast database.  These are under active development, may change substantially with future versions and will likely be migrated to a separate package.  These include:    
-
-* indexDGEobj               
-* indexType   
-* buildContrastDB   
-
-# Questions, bug reports, feature requests
-
-Contact John Thompson: john.thompson@bms.com
-
-
-

@@ -2,32 +2,29 @@
 % Please edit documentation in R/attributes.R
 \name{getAttribute}
 \alias{getAttribute}
-\title{Function getAttribute}
+\title{Get a specified attribute}
 \usage{
-getAttribute(item, attrName)
+getAttribute(dgeObj, attrName)
 }
 \arguments{
-\item{item}{a DGEobj or item}
+\item{dgeObj}{A DGEobj}
 
-\item{attrName}{Name of the attribute to retrieve.}
+\item{attrName}{Name of the attribute to retrieve}
 }
 \value{
-the specified attribute value (data type depends on the datatype
-stored in the attribute) or NULL if attribute doesn't exist
+The specified attribute value or NULL if the attribute doesn't exist
 }
 \description{
-get a specified attribute from an item
+Get a specified attribute
 }
 \examples{
-   #get an attribute from a DGEobj
-   MyAttr <- getAttribute(dgeObj, "type")
+    # example DGEobj
+    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
-   #get an attribute from a DGEobj item
-   MyAttr <- getAttribute(dgeObj$designMatrix, "formula")
+    # Get an attribute from a DGEobj
+    getAttribute(exObj, "type")
+
+    # Get an attribute from a DGEobj item
+    getAttribute(exObj$designMatrix, "formula")
 
 }
-\author{
-John Thompson, \email{john.thompson@bms.com}
-}
-\keyword{DGEobj}
-\keyword{RNA-Seq,}

@@ -1,58 +1,59 @@
-### Function getItems ###
-#' Function getItems
+#' Retrieve data items by name
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
+#' @param dgeObj    A DGEobj
+#' @param itemNames A character string, character vector, or list names to retrieve
 #'
-#' @param dgeObj  A class dgeObj created by function initDGEobj
-#' @param itemNames A list of itemNames to retrieve
-#'
-#' @return A data item or list data items
+#' @return A list
 #'
 #' @examples
-#'    MyCounts <- getItem(dgeObj, "counts")
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'
+#'     MyCounts <- getItems(exObj, "counts")
 #'
 #' @importFrom assertthat assert_that
+#' @importFrom stringr str_c
 #'
 #' @export
 getItems <- function(dgeObj, itemNames){
 
-    assert_that(!missing(dgeObj),
-                !missing(itemNames),
-                "DGEobj" %in% class(dgeObj),
-                any(c("character", "list") %in% class(itemNames))
-    )
+    assertthat::assert_that(!missing(dgeObj),
+                            !missing(itemNames),
+                            msg = "Specify both a DGEobj and at least one itemName to retrieve.")
+    assertthat::assert_that("DGEobj" %in% class(dgeObj),
+                            msg = "The DGEobj must be of class 'DGEobj'.")
+    assertthat::assert_that(any(c("character", "list") %in% class(itemNames)),
+                            msg = "Pass the itemNames as a single character string, a character vector, or a list of string names to retrieve.")
 
     idx <- itemNames %in% names(dgeObj)
     result <- list()
-    for (itemName in itemNames[idx]){
+    for (itemName in itemNames[idx]) {
         result[[itemName]] <- dgeObj[[itemName]]
     }
-    #return a list only if length >1
+
     if (length(result) == 1) result <- result[[1]]
 
-    #report missing items
-    if (sum(idx) < length(idx)){
-        missingItems <- stringr::str_c(itemNames[!idx], sep=", ")
-        warning (stringr::str_c("These item(s) not found: [", missingItems, "]"))
+    if (sum(idx) < length(idx)) {
+        missingItems <- stringr::str_c(itemNames[!idx], sep = ", ")
+        warning(stringr::str_c("These item(s) not found: [", missingItems, "]"))
     }
 
     return(result)
 }
 
-### Function getItem ###
-#' Function getItem
+
+#' Retrieve a data item by name
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param dgeObj  A class dgeObj created by function initDGEobj
+#' @param dgeObj   A DGEobj
 #' @param itemName Name of item to retrieve
 #'
-#' @return A data item
+#' @return The requested data item
 #'
 #' @examples
-#'    MyCounts <- getItem(dgeObj, "counts")
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'
+#'     MyCounts <- getItem(exObj, "counts")
 #'
 #' @importFrom assertthat assert_that
 #'
@@ -60,56 +61,46 @@ getItems <- function(dgeObj, itemNames){
 getItem <- function(dgeObj, itemName){
     assertthat::assert_that(!missing(dgeObj),
                             !missing(itemName),
-                            "DGEobj" %in% class(dgeObj),
-                            class(itemName) == "character",
+                            msg = "Specify both a DGEobj and an itemName to retrieve.")
+    assertthat::assert_that("DGEobj" %in% class(dgeObj),
+                            msg = "The DGEobj must be of class 'DGEobj'.")
+    assertthat::assert_that(class(itemName) == "character",
                             length(itemName) == 1,
-                            itemName %in% names(dgeObj)
-    )
+                            msg = "The itemName should be a character string and contain the name of only one item to retrieve. To retrieve multiple items, use the getItems() function.")
+    assertthat::assert_that(itemName %in% names(dgeObj),
+                            msg = "The requested itemName should be in the DGEobj. Use names(dgeObj) to see the available items.")
     return(dgeObj[[itemName]])
 }
 
-### Function getType ###
-#' Function getType
+
+#' Retrieve data items by type
 #'
-#' Retrieve one of more data items by type.
-#'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param dgeObj  A class dgeObj created by function initDGEobj
-#' @param type A single type of list of types to retreives.  Enter
-#'    showTypes(MyDgeObj) to see a list of allowed types.  See F. addType
-#'    to define new types.
-#' @param parent (Optional) filter return list for common parent (e.g. useful
+#' @param dgeObj  A DGEobj
+#' @param type    A type or list of types to retrieve
+#' @param parent  (optional) Filter return list for common parent (e.g. useful
 #' to select one set of contrast results when multiple fits have been performed)
+#'
 #' @return A list of data items
 #'
 #' @examples
-#'    MyContrastList <- getType(dgeObj, type="topTable")
-#'    MyRawData <- getType(dgeObj, type=list("counts", "design", "geneData"))
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'
+#'     MyContrastList <- getType(exObj, type = "topTable")
+#'     MyRawData      <- getType(exObj, type = list("counts", "design", "geneData"))
 #'
 #' @export
-#Return all items of a specified type as a list
 getType <- function(dgeObj, type, parent){
-    #type can be a single named type or a vector or list of types
+
     idx <- attr(dgeObj, "type") %in% type
-    if (!missing(parent)){
-    	pidx <- attr(dgeObj, "parent") == parent
-    	idx <- idx & pidx
+    if (!missing(parent)) {
+        pidx <- attr(dgeObj, "parent") == parent
+        idx <- idx & pidx
     }
     result <- unclass(dgeObj)[idx]
 
-##    filter for defined parent
-#    if (!missing("parent")){
-##        Get the names of items
-#        itemNames <- names(lapply(result, attr, "parent"))
-#        result <- result[itemNames]
-#    }
-
-    if (sum(idx) < length(type))
-        warning("Some types were not found")
-    if (sum(idx) == 0){
-        tsmsg("Warning: no items of specified type are found.")
+    if (sum(idx) == 0) {
+        warning("No items of specified type were found")
         return(NULL)
     } else {
         if (sum(idx) < length(type))
@@ -119,36 +110,30 @@ getType <- function(dgeObj, type, parent){
 }
 
 
+#' Retrieve data items by baseType
 
-### Function getBaseType ###
-#' Function getBaseType
-#'
-#' Accessor function for DGEobj class objects.  Retrieves all data items of a
-#' given basetype or list of basetypes.
-#'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param dgeObj  A class dgeObj created by function initDGEobj
+#' @param dgeObj   A DGEobj
 #' @param baseType One or more of: ["row", "col", "assay", "meta"]
 #'
-#' @return A simple list of data items
+#' @return A list of data items
 #'
 #' @examples
-#'    Assays <- getBaseType(dgeObj, baseType="assay")
-#'    AssaysAndGeneAnnotation <- getBaseType(degObj, c("assay", "row"))
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'
+#'     Assays <- getBaseType(exObj, baseType = "assay")
+#'     AssaysAndMeta <- getBaseType(exObj, c("assay", "meta"))
 #'
 #' @export
-#Return all items of a specified type as a list
 getBaseType <- function(dgeObj, baseType){
 
     if (missing(baseType))
         stop("baseType argument is required")
 
-    if (!baseType %in% baseTypes(dgeObj))
+    if (!all(baseType %in% baseTypes(dgeObj)))
         stop(paste("baseType must be one of: ",
-                paste(baseTypes(dgeObj), collapse=", "),
-                sep=""))
+                   paste(baseTypes(dgeObj), collapse = ", "),
+                   sep = ""))
 
     idx <- attr(dgeObj, "basetype") %in% baseType
 
@@ -158,62 +143,3 @@ getBaseType <- function(dgeObj, baseType){
     result <- unclass(dgeObj)[idx]
     return(result)
 }
-
-### Function BaseType ###
-#' Function BaseType
-#'
-#' Return the basetype for a given type
-#'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param dgeObj A class DGEobj created by function initDGEobj
-#' @param type  A type for which you want the basetype
-#'
-#' @return A basetype value (chracter string)
-#'
-#' @examples
-#'    MyBaseType <- baseType(dgeObj, type="DGEList")
-#'
-#' @importFrom assertthat assert_that
-#'
-#' @export
-baseType <- function(dgeObj, type){
-
-    assert_that(!missing(dgeObj),
-                !missing(type),
-                class(dgeObj)[[1]] == "DGEobj",
-                class(type)[[1]] == "character"
-                )
-    objDef <- attr(dgeObj, "objDef")
-    return (objDef$type[[type]])
-}
-
-### Function baseTypes ###
-#' Function baseTypes
-#'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' Return a list of the available basetypes
-#'
-#' @param dgeObj  a class DGEobj object
-#'
-#' @return A list of  basetypes
-#'
-#' @examples
-#'    #global definition of baseTypes
-#'    mybasetypes <- baseTypes()
-#'    #basetypes from a specific DGEobj
-#'    mybasetypes <- baseTypes(myDgeObj)
-#'
-#' @export
-baseTypes <- function(dgeObj){
-    if (missing(dgeObj))
-        return(unique(.DGEobjDef$type))
-    else
-        return(unique(attr(dgeObj, "objDef")$type))
-}
-
-
-

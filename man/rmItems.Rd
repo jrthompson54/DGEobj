@@ -2,28 +2,26 @@
 % Please edit documentation in R/rmItem.R
 \name{rmItems}
 \alias{rmItems}
-\title{Function rmItems}
+\title{Removes list of named data items}
 \usage{
 rmItems(dgeObj, items)
 }
 \arguments{
-\item{dgeObj}{A class dgeObj created by function initDGEobj}
+\item{dgeObj}{A DGEobj}
 
-\item{items}{Either a character vector of item names or a numeric index of items to
-remove from the dgeObj.  Use inventory(dgeobj) to view the indexes of items.}
+\item{items}{Either a character vector of names or numeric indexes of items to remove.  Use inventory(DGEobj) to view the indexes of items.}
 }
 \value{
-An updated DGEobj
+A DGEobj
 }
 \description{
-Removes a vector or list of named data items from a DGEobj
+Removes list of named data items
 }
 \examples{
-   MyDgeObj <- rmItems(MyDgeObj, c("designMatrix", "designMatrix_Elist"))
+    # example DGEobj
+    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+
+    exObj <- rmItems(exObj, c("design", "design_orig"))
+    exObj <- rmItems(exObj, c(1:2))
 
 }
-\author{
-John Thompson, \email{john.thompson@bms.com}
-}
-\keyword{DGEobj}
-\keyword{RNA-Seq,}

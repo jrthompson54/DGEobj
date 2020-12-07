@@ -2,3 +2,8 @@
 ^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$
+^codecov\.yml$
+^misc$
+^cran-comments\.md$
+^CRAN-RELEASE$

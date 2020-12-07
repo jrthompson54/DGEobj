@@ -2,37 +2,32 @@
 % Please edit documentation in R/attributes.R
 \name{getAttributes}
 \alias{getAttributes}
-\title{Function getAttributes}
+\title{Get all attributes}
 \usage{
 getAttributes(
-  item,
+  dgeObj,
   excludeList = list("dim", "dimnames", "names", "row.names", "class")
 )
 }
 \arguments{
-\item{item}{a DGEobj structure (or any object with attributes)}
+\item{dgeObj}{A DGEobj}
 
-\item{excludeList}{A list of attribute names to exclude from the output
-(default = list("dim", "dimnames", "names", "row.names"))}
+\item{excludeList}{A list of attribute names to exclude from the output (default = list("dim", "dimnames", "names", "row.names"))}
 }
 \value{
-a named list of attribute values for the items
+A named list
 }
 \description{
-get all attributes from an item except for ones listed on the excludeList.
-This is intended to capture user-defined attributes by excluding a few standard
-attributes like class and dim.
+Get all user-defined attributes from a DGEobj except for any listed in the
+excludeList argument.
 }
 \examples{
-   #get attributes from a DGEobj
-   MyAttr <- getAttributes(dgeObj)
+    # example DGEobj
+    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
-   #get the formula attribute from the designMatrix
-   MyAttr <- attr(dgeObj$designMatrixName, "formula")
+    getAttributes(exObj)
+
+    # Get the formula attribute from the design (if set)
+    attr(exObj$design, "formula")
 
 }
-\author{
-John Thompson, \email{john.thompson@bms.com}
-}
-\keyword{DGEobj}
-\keyword{RNA-Seq,}
