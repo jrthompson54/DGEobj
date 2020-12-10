@@ -2,28 +2,25 @@
 % Please edit documentation in R/attributes.R
 \name{showMeta}
 \alias{showMeta}
-\title{Function showMeta}
+\title{Retrieve the Key/Value metadata attributes}
 \usage{
-showMeta(obj)
+showMeta(dgeObj, printed = TRUE)
 }
 \arguments{
-\item{obj}{A object with attributes to examine created by function initDGEobj}
+\item{dgeObj}{A DGEobj with attributes}
+
+\item{printed}{Whether to print the list (default = TRUE)}
 }
 \value{
-A data frame with the key value pairs from the object's attributes.
+A data.frame with "Attribute" and "Value" columns
 }
 \description{
-Prints the attributes associated with a object with a limit on the length of
-the values stored in the attributes.  Use this to examine the key=value meta
-data associated with a DGEobj.  Written for use with DGEobjs but
-should function generically on any object with key/value pair attributes.
+Retrieve the Key/Value metadata attributes
 }
 \examples{
-   df <- showMeta(MydgeObj)
+    # example DGEobj
+    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+
+    showMeta(exObj)
 
 }
-\author{
-John Thompson, \email{john.thompson@bms.com}
-}
-\keyword{DGEobj}
-\keyword{RNA-Seq,}

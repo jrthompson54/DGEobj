@@ -1,247 +1,226 @@
-### Function showAttributes ###
-#' Function showAttributes
+#' Print attributes
 #'
-#' Prints the attributes associated with a DEGobj.  This prints
-#' all attributes regardless of the class of the attribute value.
-#' Use showMeta if you are only interested in attributes that are
-#' key/value pairs.
+#' This function prints all attributes regardless of the class of the attribute value.
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
+#' *Note* Use showMeta() to only retrieve attributes that are key/value pairs.
 #'
-#' @param dgeObj  A DGEobj created by function initDGEobj
-#' @param skip  A character vector of attributes to skip. Use this to avoid
-#'   printing certain lengthy attributes like rownames.  Defaults to c("dim",
-#'   dimnames", "rownames", "colnames", "listData", "objDef")
-#'
-#' @return Prints a list of attributes and values.
+#' @param dgeObj    A DGEobj
+#' @param skipList  A character vector of attributes to skip. Use this to avoid printing certain lengthy attributes like rownames.  Defaults to c("dim", "dimnames", "rownames", "colnames", "listData", "objDef")
 #'
 #' @examples
-#'    showAttributes(MydgeObj)
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
-#' @importFrom dplyr setdiff
+#'    showAttributes(exObj)
+#'
 #' @export
-### attributes.DGEobj
-showAttributes <- function(dgeObj, skip=c("dim", "dimnames", "rownames",
-                                          "colnames", "listData", "objDef")) {
+showAttributes <- function(dgeObj, skipList = c("dim", "dimnames", "rownames", "colnames", "listData", "objDef")) {
 
-    #first show the main DGEobj attributes (omitting assayDimnames):
-    # at <- attributes(unclass(dgeObj))C
     at <- attributes(dgeObj)
-    if (length(at) >0){
+    if (length(at) > 0) {
         print(names(at))
     }
 
-    #Now print attributes from each data item except dimnnames
     for (i in 1:length(dgeObj)) {
         dataName <- names(dgeObj)[i]
-        print(paste("dataName", ":", sep=""))
+        print(paste("dataName", ":", sep = ""))
 
         atnames <- names(attributes(dgeObj[[i]]))
-        #drop dimnames. we're interested in other custom attributes here
-        atnames <- dplyr::setdiff(atnames, skip)
-        print(paste("atnames:", paste(atnames, collapse=", "),sep=" "))
+        atnames <- atnames[!(atnames %in% skipList)]
+        print(paste("atnames:", paste(atnames, collapse = ", "), sep = " "))
 
-        for (j in atnames) #print the name then the attribute value
-            print(paste("[", j, "] = ", attr(dgeObj[[i]], j)))
+        for (j in atnames) {
+            cat(paste("[", j, "] = "))
+            print(attr(dgeObj[[i]], j))
+        }
     }
+    invisible(NULL)
 }
 
-### Function setAttributes ###
-#' Function setAttributes
+
+#' Set attributes
 #'
-#' Set one or more attributes on an object.  You can use this to add attribute
-#' annotation(s) to a DGEobj or to a specific item within a DGEobj.  Notably,
-#' using the base attributes function to add attributes strips existing
-#' attributes.  The setAttributes function adds the attributes passed to it in
-#' the attribs argument without deleting attributes already present.   However,
-#' A names attribute on the attribs argument list that already exists in the
-#' object will be updated.  The function is generic in that it should work on
-#' other datatypes/classes, not just the DGEobj.
+#' Set one or more attributes on a DGEobj or on a specific item within a DGEobj.
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
+#' This function adds attributes without deleting the attributes that are already
+#' present. Any named attribute that already exists in the object will be updated.
+#' To remove an attribute from an object pass NULL as the attribute value.
 #'
-#' @param item  Anything you want to attach attributes to
+#' @param dgeObj  A DGEobj
 #' @param attribs A named list of attribute/value pairs
 #'
-#' @return the item with new attributes
+#' @return A DGEobj
 #'
 #' @examples
-#'    #assign attributes to a DGEobj
-#'    MyAttributes <- list(Platform = "RNA-Seq",
-#'            Instrument = "HiSeq",
-#'            Vendor = "BMS",
-#'            readType = "PE",
-#'            readLength = 75,
-#'            strandSpecific = TRUE)
-#'    MyDGEobj <- setAttributes(MyDGEObj, MyAttributes)
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
-#'    #set attributes on an item inside a DGEobj
-#'    MyAttributes <- list(normalized = FALSE,
-#'                         LowIntFilter = "FPK >5 in >= 1 group"),
-#'    MyDGEObj[["counts"]] <- setAttributes(MyDGEObj[["counts"]], MyAttributes)
+#'     # Assign attributes to a DGEobj
+#'     MyAttributes <- list(Platform       = "RNA-Seq",
+#'                          Instrument     = "HiSeq",
+#'                          Vendor         = "Unknown",
+#'                          readType       = "PE",
+#'                          readLength     = 75,
+#'                          strandSpecific = TRUE)
+#'     exObj <- setAttributes(exObj, MyAttributes)
+#'
+#'     # Set attributes on an item inside a DGEobj
+#'     MyAttributes <- list(normalized   = FALSE,
+#'                          LowIntFilter = "FPK >5 in >= 1 group")
+#'     exObj[["counts"]] <- setAttributes(exObj[["counts"]], MyAttributes)
 #'
 #' @import magrittr
 #' @importFrom assertthat assert_that
 #'
-#'
 #' @export
-setAttributes <- function(item, attribs){
+setAttributes <- function(dgeObj, attribs){
 
-    assert_that(!missing(item),
-                !missing(attribs),
-                class(attribs)[[1]] == "list",
-                !is.null(names(attribs))
-    )
+    assertthat::assert_that(!missing(dgeObj),
+                            !missing(attribs),
+                            msg = "Specify both a DGEobj and the attributes (attribs).")
+    assertthat::assert_that(class(attribs)[[1]] == "list",
+                            msg = "attribs must be of class 'list'.")
+    assertthat::assert_that(!is.null(names(attribs)),
+                            msg = "The attribs list should be a named list, specifying the attribute/value pairs. It must have names specified.")
+
     attribNames <- as.list(names(attribs))
     for (i in 1:length(attribs))
-        attr(item, attribNames[[i]]) <- attribs[[i]]
-    return(item)
+        dgeObj <- setAttribute(dgeObj, attribs[[i]], attribNames[[i]])
+    return(dgeObj)
 }
 
-### Function getItemAttribute ###
-#' Function getItemAttribute
+
+#' Set an attribute
 #'
-#' Get a named attribute (key) from all items on a list.
+#' Set an attribute on a DGEobj or on a specific item within a DGEobj.
 #'
-#' At present, there are no attributes common to all items in a
-#' DGEobj.  This will work on generic lists also where each list
-#' has a common set of attribute keys.
+#' The function adds or updates the attribute passed to it.  To remove an attribute,
+#' pass NULL as the attribute value.
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
+#' @param dgeObj     A DGEobj
+#' @param attrib     An attribute value to add
+#' @param attribName A name for the attribute
 #'
-#' @param dgeObj  a DGEobj structre
-#' @param attrName The name of the item attribute to retrieve
-#'
-#' @return a list of attribute values for the items
+#' @return A DGEobj
 #'
 #' @examples
-#'    #assign attributes to a DGEobj
-#'    MyTypes <- getItemAttribute(dgeObj, "type")
-#'    MyBaseTypes <- getItemAttribute(dgeObj, "basetype")
-#'    MyCreationDates <- getItemAttribute(dgeObj, "dateCreated")
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
-#' @import magrittr
+#'     # Assign attribute to a DGEobj
+#'     exObj <- setAttribute(exObj, "RNA-SEQ", "Platform")
+#'
+#'     # Set attributes on an item inside a DGEobj
+#'     exObj[["counts"]] <- setAttribute(exObj[["counts"]], FALSE, "normalized")
+#'
 #' @importFrom assertthat assert_that
-#'
-# Don't export.  User just needs to learn base attribute functions.
-getItemAttribute <- function(dgeObj, attrName){
-    assert_that(
-        !missing(dgeObj),
-        !missing(attrName),
-        class(dgeObj)[[1]] %in% c("DGEobj", "list"),
-        class(attrName)[[1]] == "character"
-    )
-
-    # myattributes <- lapply (dgeObj, function(x) attr(x, attrName))
-    return(myattributes)
-}
-
-### Function getAttributes ###
-#' Function getAttributes
-#'
-#' get all attributes from an item except for ones listed on the excludeList.
-#' This is intended to capture user-defined attributes by excluding a few standard
-#' attributes like class and dim.
-#'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param item  a DGEobj structure (or any object with attributes)
-#' @param excludeList A list of attribute names to exclude from the output
-#'     (default = list("dim", "dimnames", "names", "row.names"))
-#'
-#' @return a named list of attribute values for the items
-#'
-#' @examples
-#'    #get attributes from a DGEobj
-#'    MyAttr <- getAttributes(dgeObj)
-#'
-#'    #get the formula attribute from the designMatrix
-#'    MyAttr <- attr(dgeObj$designMatrixName, "formula")
 #'
 #' @export
-getAttributes <- function(item, excludeList=list("dim", "dimnames",
-                                                 "names", "row.names", "class")){
-      at <- attributes(item)
-      idx <- !names(at) %in% excludeList
-      return(at[idx])
+setAttribute <- function(dgeObj, attrib, attribName) {
+
+    assertthat::assert_that(!missing(dgeObj),
+                            !missing(attrib),
+                            !missing(attribName),
+                            msg = "Specify a DGEobj, the attribute, and the attribute name")
+    assertthat::assert_that(class(attribName) == "character",
+                            msg = "attribName must be of class 'character'.")
+
+    attr(dgeObj, attribName) <- attrib
+    return(dgeObj)
+}
+
+#' Get all attributes
+#'
+#' Get all user-defined attributes from a DGEobj except for any listed in the
+#' excludeList argument.
+#'
+#' @param dgeObj      A DGEobj
+#' @param excludeList A list of attribute names to exclude from the output (default = list("dim", "dimnames", "names", "row.names"))
+#'
+#' @return A named list
+#'
+#' @examples
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'
+#'     getAttributes(exObj)
+#'
+#'     # Get the formula attribute from the design (if set)
+#'     attr(exObj$design, "formula")
+#'
+#' @export
+getAttributes <- function(dgeObj,
+                          excludeList = list("dim", "dimnames",
+                                             "names", "row.names", "class")){
+    at <- attributes(dgeObj)
+    idx <- !names(at) %in% excludeList
+    return(at[idx])
 }
 
 
-### Function getAttribute ###
-#' Function getAttribute
+#' Get a specified attribute
 #'
-#' get a specified attribute from an item
+#' @param dgeObj   A DGEobj
+#' @param attrName Name of the attribute to retrieve
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param item  a DGEobj or item
-#' @param attrName Name of the attribute to retrieve.
-#'
-#' @return the specified attribute value (data type depends on the datatype
-#' stored in the attribute) or NULL if attribute doesn't exist
+#' @return The specified attribute value or NULL if the attribute doesn't exist
 #'
 #' @examples
-#'    #get an attribute from a DGEobj
-#'    MyAttr <- getAttribute(dgeObj, "type")
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
-#'    #get an attribute from a DGEobj item
-#'    MyAttr <- getAttribute(dgeObj$designMatrix, "formula")
+#'     # Get an attribute from a DGEobj
+#'     getAttribute(exObj, "type")
+#'
+#'     # Get an attribute from a DGEobj item
+#'     getAttribute(exObj$designMatrix, "formula")
 #'
 #' @importFrom assertthat assert_that
 #'
-# Don't export.  User just needs to learn base attribute functions.
-getAttribute <- function(item, attrName){
-    assert_that(!missing(item),
-                !missing(attrName))
+#' @export
+getAttribute <- function(dgeObj, attrName){
+    assertthat::assert_that(!missing(dgeObj),
+                            !missing(attrName),
+                            msg = "A DGEobj and an attribute name (attrName) are required.")
 
-    x <- attr(item, attrName)
+    x <- attr(dgeObj, attrName)
     return(x)
 }
 
 
-
-
-### Function showMeta ###
-#' Function showMeta
+#' Retrieve the Key/Value metadata attributes
 #'
-#' Prints the attributes associated with a object with a limit on the length of
-#' the values stored in the attributes.  Use this to examine the key=value meta
-#' data associated with a DGEobj.  Written for use with DGEobjs but
-#' should function generically on any object with key/value pair attributes.
+#' @param dgeObj   A DGEobj with attributes
+#' @param printed  Whether to print the list (default = TRUE)
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param obj  A object with attributes to examine created by function initDGEobj
-#'
-#' @return A data frame with the key value pairs from the object's attributes.
+#' @return A data.frame with "Attribute" and "Value" columns
 #'
 #' @examples
-#'    df <- showMeta(MydgeObj)
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'
+#'     showMeta(exObj)
 #'
 #' @importFrom utils stack
-#' @importFrom dplyr select
 #'
 #' @export
-showMeta <- function(obj) {
-     #print length==1 attributes in a table
-    alist <- attributes(obj)
-    #filter for attributes that are simple key/value pairsinventory
+showMeta <- function(dgeObj, printed = TRUE) {
+    alist <- attributes(dgeObj)
+
     idx <- lapply(alist, length) == 1
-    if(sum(idx) > 0){
-      suppressWarnings(
-        df <- stack(alist[idx])  #issues warning
-      )
-      colnames(df) <- c("Value", "Attribute")
-      df <- dplyr::select(df, Attribute, Value)
-      df$Attribute <- as.character(df$Attribute)
-      return(df)
+
+    if (sum(idx) > 0) {
+        suppressWarnings(
+            df <- utils::stack(alist[idx])
+        )
+        colnames(df) <- c("Value", "Attribute")
+        df <- df[, c("Attribute", "Value")]
+        df$Attribute <- as.character(df$Attribute)
+        if (printed) {
+            print(df)
+        }
+        return(df)
     } else {
-      return(NULL)
+        return(NULL)
     }
 }

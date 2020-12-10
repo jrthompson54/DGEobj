@@ -1,138 +1,154 @@
-### Function subset.DGEobj ###
-#' Function subset.DGEobj (DGEobj)
+
+#' Subset internal row or column data
 #'
-#' This is the function bound to square brackets.
+#' @param x     A DGEobj
+#' @param ...   Additional parameters
+#' @param row   Row index for the subset
+#' @param col   Col index for the subset
+#' @param drop  Included for compatibility only
+#' @param debug (default = FALSE) Set to TRUE to get additional information on the console if subsetting a DGEobj fails with a dimension error.
 #'
-#' @author John Thompson, \email{john.thompson@@bms.com}
-#' @keywords RNA-Seq, DGEobj
-#'
-#' @param dgeObj  A class dgeObj created by function initDGEobj
-#' @param row  row index for the subset
-#' @param col col index for the subset
-#' @param drop Included for compatibility but has no real meaning in the context
-#'    of subsetting a DGEobj.  So drop=FALSE is the default and changing this
-#'    has no effect.
-#' @param debug Default=FALSE.  Set to TRUE to get more information is subsetting a
-#'    DGEobj fails with a dimension error.
-#'
-#' @return A subsetted DGEobj class object
+#' @return A DGEobj
 #'
 #' @examples
-#'    dgeObj <- subset(dgeObj, 1:10, 100:1000)
+#'     # example DGEobj
+#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'
+#'     exObj <- subset(exObj, 1:10, 5:50)
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom stringr str_c
 #'
 #' @export
-subset.DGEobj <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
+subset.DGEobj <- function(x, ..., row, col, drop = FALSE, debug = FALSE){
 
-    assertthat::assert_that(class(dgeObj)[[1]] == "DGEobj")
+    assertthat::assert_that(class(x)[[1]] == "DGEobj",
+                            msg = "x must be of class 'DGEobj'.")
 
-    #fill in missing row/col args
+    # Fill in missing row/col args
     if (missing(row))
-        row <-1:nrow(dgeObj)
+        row <- 1:nrow(x)
     if (missing(col))
-        col <- 1:ncol(dgeObj)
+        col <- 1:ncol(x)
 
-    #make sure row and col in range
-    if (class(row)[[1]] %in% c("numeric", "integer") & max(row) > nrow(dgeObj))
-        stop ("row coordinates out of range")
-    if (class(col)[[1]] %in% c("numeric", "integer") & max(col) > ncol(dgeObj))
+    # Make sure row and col in range
+    if (class(row)[[1]] %in% c("numeric", "integer") & max(row) > nrow(x))
+        stop("row coordinates out of range")
+    if (class(col)[[1]] %in% c("numeric", "integer") & max(col) > ncol(x))
         stop("col coordinates out of range")
 
-    #warn if named items don't exist
-    if (class(row)[[1]] == "character"){
+    # Warn if named items don't exist
+    if (class(row)[[1]] == "character") {
         count <- length(row)
-        foundcount <- sum(row %in% rownames(dgeObj))
+        foundcount <- sum(row %in% rownames(x))
         if (foundcount < count)
-            warning(stringr::str_c((count - foundcount), " items in row index not found in rownames(dgeObj)"))
+            warning(stringr::str_c((count - foundcount), " items in row index not found in rownames(x)"))
     }
-    if (class(col)[[1]] == "character"){
+    if (class(col)[[1]] == "character") {
         count <- length(col)
-        foundcount <- sum(col %in% colnames(dgeObj))
+        foundcount <- sum(col %in% colnames(x))
         if (foundcount < count)
-            warning(stringr::str_c((count - foundcount), " items in col index not found in colnames(dgeObj)"))
+            warning(stringr::str_c((count - foundcount), " items in col index not found in colnames(x)"))
     }
-    #
-    # Note1: subsetting a matrix with a vector of rownames doesn't work
-    #
-    # Note2: granges objects lack rownames.  To support named vectors as filtering indices,
-    # Convert the names into a boolean index.  This also solves note1 problem as you can
-    # subset a matrix with a boolean index.
 
-    #need basetype to define how to subset an object
-    basetypes <- attr(dgeObj, "basetype")
-
-    #classes for which the drop argument is valid.
+    basetypes <- attr(x, "basetype")
     dropClasses <- c("data.frame", "matrix")
 
-    #if row or col is a character vector, convert to boolean index.
     if (class(row)[[1]] == "character")
-        row <- rownames(dgeObj) %in% row
+        row <- rownames(x) %in% row
     if (class(col)[[1]] == "character")
-        col <- colnames(dgeObj) %in% col
+        col <- colnames(x) %in% col
 
-    if (debug) browser()
-
-    for (i in 1:length(dgeObj)){
-
+    for (i in 1:length(x)) {
         if (debug == TRUE) {
-            cat(stringr::str_c("subsetting", names(dgeObj)[i], basetypes[[i]], "\n", sep=" ")) #debug
-            cat(stringr::str_c("row arg length", length(row), class(row), "\n", sep=" "))
-            cat(stringr::str_c("col arg length", length(col), class(col), "\n", sep=" "))
-            cat(stringr::str_c("object dim: ", nrow(dgeObj[[i]]), ":", ncol(dgeObj[[i]])))
+            cat(stringr::str_c("subsetting", names(x)[i], basetypes[[i]], "\n", sep = " "))
+            cat(stringr::str_c("row arg length", length(row), class(row), "\n", sep = " "))
+            cat(stringr::str_c("col arg length", length(col), class(col), "\n", sep = " "))
+            cat(stringr::str_c("object dim: ", nrow(x[[i]]), ":", ncol(x[[i]])))
         }
 
-        objectClass <- class(dgeObj[[i]])[[1]]
+        objectClass <- class(x[[i]])[[1]]
+        userAttribs <- getAttributes(x[[i]])
 
-        #get user attributes before subsetting
-        userAttribs <- getAttributes(dgeObj[[i]])
-
-        #select subset action dependent on basetype.  Do nothing for basetype = meta
         switch(basetypes[[i]],
-
                row = {
-
-                   if (is.null(dim(dgeObj[[i]]))){ #not a matrix type object
-                       dgeObj[[i]] <- dgeObj[[i]][row]
+                   if (is.null(dim(x[[i]]))) {
+                       x[[i]] <- x[[i]][row]
                    } else if (objectClass %in% dropClasses) {
-                       dgeObj[[i]] <- dgeObj[[i]][row, , drop=drop]
+                       x[[i]] <- x[[i]][row, , drop = drop]
                    } else {
-                       dgeObj[[i]] <- dgeObj[[i]][row,]
+                       x[[i]] <- x[[i]][row,]
                    }
                },
 
                col = {
-                   if (is.null(dim(dgeObj[[i]]))){
-                       dgeObj[[i]] <- dgeObj[[i]][col]
-                   } else if (objectClass %in% dropClasses){
-                       dgeObj[[i]] <- dgeObj[[i]][col, , drop=drop]
+                   if (is.null(dim(x[[i]]))) {
+                       x[[i]] <- x[[i]][col]
+                   } else if (objectClass %in% dropClasses) {
+                       x[[i]] <- x[[i]][col, , drop = drop]
                    } else {
-                       dgeObj[[i]] <- dgeObj[[i]][col,]
+                       x[[i]] <- x[[i]][col,]
                    }
                },
 
                assay = {
-                   if (objectClass %in% dropClasses){
-                       dgeObj[[i]] <- dgeObj[[i]][row, col, drop=drop]
+                   if (objectClass %in% dropClasses) {
+                       x[[i]] <- x[[i]][row, col, drop = drop]
                    } else {
-                       dgeObj[[i]] <- dgeObj[[i]][row, col]
+                       x[[i]] <- x[[i]][row, col]
                    }
                })
 
-        #put user attributes back in place except for granges objects
-        if (!"GRanges" %in% class(dgeObj[[i]]) & length(userAttribs) > 0)
-            dgeObj[[i]] <- setAttributes(dgeObj[[i]], userAttribs)
+        if (!"GRanges" %in% class(x[[i]]) & length(userAttribs) > 0)
+            x[[i]] <- setAttributes(x[[i]], userAttribs)
     }
 
-    return(dgeObj)
+    return(x)
 }
 
+
+#' Subset with square brackets
+#'
+#' @param x    A DGEobj
+#' @param ...  Additional parameters
+#'
+#' @return A DGEobj
+#'
 #' @export
-`[.DGEobj` <- function(dgeObj, row, col, drop=FALSE, debug=FALSE){
-    #drop supported for compatibility but has no effect in this context
-    dgeObj <- subset(dgeObj, row, col, drop, debug)
+`[.DGEobj` <- function(x, ...){
+    row <- NULL
+    col <- NULL
+
+    dot.args <- as.list(substitute(list(...)))
+
+    if (("row" %in% names(dot.args)) || ("col" %in% names(dot.args))) {
+        # using named arguments, ignore unnamed arguments
+        if ("row" %in% names(dot.args)) {
+            row <- eval(dot.args$row, parent.frame())
+        }
+        if ("col" %in% names(dot.args)) {
+            col <- eval(dot.args$col, parent.frame())
+        }
+    } else {
+        if (length(dot.args) >= 2 && (dot.args[[2]] != "") && is.null(names(dot.args[[2]]))) {
+            row <- eval(dot.args[[2]], parent.frame())
+        }
+        if (length(dot.args) >= 3 && (dot.args[[3]] != "") && is.null(names(dot.args[[3]]))) {
+            col <- eval(dot.args[[3]], parent.frame())
+        }
+    }
+
+    if (!is.null(row)) {
+        if (!is.null(col)) {
+            subset(x, row = row, col = col)
+        } else {
+            subset(x, row = row)
+        }
+    } else {
+        if (!is.null(col)) {
+            subset(x, col = col)
+        } else {
+            subset(x)
+        }
+    }
 }
-
-
-
