@@ -7,24 +7,37 @@
 annotateDGEobj(dgeObj, annotations, keys = NULL)
 }
 \arguments{
-\item{dgeObj}{A class DGEobj created by function initDGEobj()}
+\item{dgeObj}{A object of class DGEobj created by function initDGEobj()}
 
-\item{annotations}{Either A character string path to a file with annotations given as key/value pairs separated by an equal sign, or a named list of key/value pairs}
+\item{annotations}{Either a character string path to a file with annotations
+given as key/value pairs separated by an equal sign, or a named list of
+key/value pairs}
 
-\item{keys}{A subset of keys to look for in the annotations and transfer to the DGEobj (default = NULL)}
+\item{keys}{By default (value = NULL), all keys are read in and applied as
+DGEobj attributes.  Use the keys argument to specify a specific list of
+keys to read from the file.}
 }
 \value{
 A DGEobj
 }
 \description{
-Reads an annotation file of key/value pairs or a named list and attaches them attributes to a DGEobj.
-If a file is used, it should be a text file containing key/value pairs separated by an equals
-sign. The keys parameter specifies which key we want to capture as
-attributes on the DGEobj. The value will then be the value of that attribute.
+Reads an annotation file containing key/value pairs or a named list and attaches them
+attributes to a DGEobj. If a file is used, it should be a text file
+containing key/value pairs separated by an equals sign. The keys argument
+specifies which keys we want to capture as attributes on the DGEobj.
 }
 \examples{
+   MyDgeObj <- system.file("exampleObj.RDS", package = "DGEobj")
+
 \dontrun{
-   MyDgeObj <- annotateDGEobj(DGEobj, annotations)
+   #using a text file file of key=value pairs
+   annotationFile <- "/location/to/myAnnotations.txt"
+   MyDgeObj <- annotateDGEobj(MyDgeObj, annotationFile)
 }
+   #using a named list of key/values
+   annotations <- list(Title     = "Rat Liver Slices from Bile Duct Ligation animals",
+                       Organism  = "Rat",
+                       GeneModel = "Ensembl.R89")
+   MyDgeObj <- annotateDGEobj(MyDgeObj, annotations)
 
 }

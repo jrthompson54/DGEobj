@@ -6,7 +6,7 @@ test_that('get.R: getItem()', {
 
     expect_true(is.data.frame(getItem_DGEobj_test))
     expect_equal(nrow(getItem_DGEobj_test), 48)
-    expect_equal(ncol(getItem_DGEobj_test), 8)
+    expect_equal(ncol(getItem_DGEobj_test), 10)
 
     expect_error(getItem(t_obj, 'fred'),
                  regexp = "The requested itemName should be in the DGEobj. Use names(dgeObj) to see the available items.",
@@ -48,8 +48,8 @@ test_that('get.R: getBaseType()', {
     getBaseType_DGEobj_test <- getBaseType(t_obj, "col")
 
     expect_type(getBaseType_DGEobj_test, 'list')
-    expect_equal(length(getBaseType_DGEobj_test), 1)
-    expect_setequal(names(getBaseType_DGEobj_test), c("design"))
+    expect_equal(length(getBaseType_DGEobj_test), 2)
+    expect_setequal(names(getBaseType_DGEobj_test), c("design", "ReplicateGroupDesign"))
 
     expect_error(getBaseType(t_obj, "counts"),
                  regexp = "baseType must be one of: row, col, assay, meta")

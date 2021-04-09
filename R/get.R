@@ -1,6 +1,6 @@
-#' Retrieve data items by name
+#' Retrieve multiple data items by name
 #'
-#' @param dgeObj    A DGEobj
+#' @param dgeObj    A class DGEobj created by function initDGEobj()
 #' @param itemNames A character string, character vector, or list names to retrieve
 #'
 #' @return A list
@@ -9,7 +9,8 @@
 #'     # example DGEobj
 #'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
-#'     MyCounts <- getItems(exObj, "counts")
+#'     myList <- getItems(exObj, list("counts", "geneData"))
+#'     names(myList)
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom stringr str_c
@@ -44,7 +45,7 @@ getItems <- function(dgeObj, itemNames){
 
 #' Retrieve a data item by name
 #'
-#' @param dgeObj   A DGEobj
+#' @param dgeObj   A class DGEobj created by function initDGEobj()
 #' @param itemName Name of item to retrieve
 #'
 #' @return The requested data item
@@ -75,7 +76,7 @@ getItem <- function(dgeObj, itemName){
 
 #' Retrieve data items by type
 #'
-#' @param dgeObj  A DGEobj
+#' @param dgeObj  A class DGEobj created by function initDGEobj()
 #' @param type    A type or list of types to retrieve
 #' @param parent  (optional) Filter return list for common parent (e.g. useful
 #' to select one set of contrast results when multiple fits have been performed)
@@ -86,7 +87,6 @@ getItem <- function(dgeObj, itemName){
 #'     # example DGEobj
 #'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
-#'     MyContrastList <- getType(exObj, type = "topTable")
 #'     MyRawData      <- getType(exObj, type = list("counts", "design", "geneData"))
 #'
 #' @export
@@ -112,7 +112,7 @@ getType <- function(dgeObj, type, parent){
 
 #' Retrieve data items by baseType
 
-#' @param dgeObj   A DGEobj
+#' @param dgeObj   A class DGEobj created by function initDGEobj()
 #' @param baseType One or more of: ["row", "col", "assay", "meta"]
 #'
 #' @return A list of data items

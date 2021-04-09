@@ -2,7 +2,7 @@
 #'
 #' Returns the dimensions of the assay data (baseType)
 #'
-#' @param x  A DGEobj
+#' @param x  A class DGEobj created by function initDGEobj()
 #'
 #' @return An integer vector [r,c] with a length of 2.
 #'
@@ -37,9 +37,9 @@ dimnames.DGEobj <- function(x){
 
 #' Print the Inventory
 #'
-#' @param x       A DGEobj
+#' @param x       A class DGEobj created by function initDGEobj()
 #' @param ...     Additional parameters
-#' @param verbose Add funArgs to the output (default = FALSE)
+#' @param verbose Include funArgs column in the output (default = FALSE)
 #'
 #' @return NULL
 #'
@@ -59,8 +59,8 @@ print.DGEobj <- function(x, ..., verbose = FALSE) {
 
 #' Retrieve the object inventory
 #'
-#' @param dgeObj A DGEobj
-#' @param verbose Add funArgs to the output (default = FALSE)
+#' @param dgeObj A class DGEobj created by function initDGEobj()
+#' @param verbose Include funArgs column in the output (default = FALSE)
 #'
 #' @return A data.frame summarizing the data contained in the DGEobj
 #'
@@ -103,9 +103,9 @@ inventory <- function(dgeObj, verbose = FALSE)  {
                            Col = Col,
                            DateCreated = creationDates),
                      row.names = NULL)
-    if (verbose == TRUE)
-        df$FunArgs <- unlist(FunArgs)
-
+    if (verbose == TRUE) {
+        df$FunArgs <- unlist(lapply(FunArgs, paste0, collapse = "; "))
+    }
     return(df)
 }
 
@@ -114,13 +114,13 @@ inventory <- function(dgeObj, verbose = FALSE)  {
 #' @param x    A DGEobj
 #' @param ...  Additional parameters
 #'
-#' @return A simple list representation
+#' @return A named list
 #'
 #' @examples
 #'     # example DGEobj
 #'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
-#'     as.list(exObj)
+#'     mylist <- as.list(exObj)
 #'
 #' @export
 as.list.DGEobj <- function(x, ...){

@@ -2,12 +2,12 @@
 % Please edit documentation in R/get.R
 \name{getItems}
 \alias{getItems}
-\title{Retrieve data items by name}
+\title{Retrieve multiple data items by name}
 \usage{
 getItems(dgeObj, itemNames)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
 \item{itemNames}{A character string, character vector, or list names to retrieve}
 }
@@ -15,12 +15,13 @@ getItems(dgeObj, itemNames)
 A list
 }
 \description{
-Retrieve data items by name
+Retrieve multiple data items by name
 }
 \examples{
     # example DGEobj
     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
-    MyCounts <- getItems(exObj, "counts")
+    myList <- getItems(exObj, list("counts", "geneData"))
+    names(myList)
 
 }

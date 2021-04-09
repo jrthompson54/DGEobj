@@ -7,7 +7,7 @@
 getItem(dgeObj, itemName)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
 \item{itemName}{Name of item to retrieve}
 }

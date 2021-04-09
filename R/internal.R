@@ -1,13 +1,13 @@
 .DGEobjDef <- list(
-    # There are 4 immutable base type: row, col, assay, meta
+    # There are 4 immutable basetypes: row, col, assay, meta
     # Each type must be one of these four basetypes
     # Extensibility: Additional types can be added to .DGEobj$type as long as they are
     # assigned to one of the 4 basetypes.
 
-    basetype = c(row = "row",
-                 col = "col",
+    basetype = c(row   = "row",
+                 col   = "col",
                  assay = "assay",
-                 meta = "meta"),
+                 meta  = "meta"),
 
     # The value of type is a basetype.
     # All types must be associated with one of the four basetypes.
@@ -19,6 +19,7 @@
              geneData    = "row",
              isoformData = "row",
              exonData    = "row",
+             affyData    = "row",
              granges     = "row",
 
              fit          = "row",
@@ -27,13 +28,10 @@
 
              design       = "col",
              designMatrix = "col",
+             alignQC      = "col",
 
              counts             = "assay",
              effectiveLength    = "assay",
-             Log2CPM            = "assay",
-             TPM                = "assay",
-             FPKM               = "assay",
-             zFPKM              = "assay",
              AffyRMA            = "assay",
              DGEList            = "assay",
              Elist              = "assay",
@@ -55,23 +53,8 @@
              counts_orig          = "meta",
              design_orig          = "meta",
              effectiveLength_orig = "meta",
-
-             svobj = "meta",
-
-             intensities      = "assay",
-             intensities_orig = "meta",
-             intensity        = "assay",
-             intensity_orig   = "meta",
-
-             AffyRMA_orig = "meta",
-
-             # Proteomics data types
-             proteinAnnotation           = "row",
-             peptideAnnotation           = "row",
-             proteingroupAnnotation      = "row",
-             proteinAnnotation_orig      = "meta",
-             peptideAnnotation_orig      = "meta",
-             proteingroupAnnotation_orig = "meta"
+             AffyRMA_orig         = "meta",
+             svobj                = "meta"
     ),
 
     # These can only have one instance in a DGEobj
@@ -92,17 +75,15 @@
                    "intensities",
                    "intensities_orig",
                    "AffyRMA",
-                   "AffyRMA_orig",
-                   "proteinAnnotation",
-                   "proteinAnnotation_orig",
-                   "intensity",
-                   "intentisy_orig",
-                   "peptideAnnotation",
-                   "peptideAnnotation_orig",
-                   "proteingroupAnnotation",
-                   "proteingroupAnnotation_orig",
-                   "ptmAnnotation",
-                   "ptmAnnotation_orig"),
+                   "AffyRMA_orig"
+    ),
 
-    allowedLevels = c("gene", "isoform", "exon", "proteingroup", "peptide", "ptm", "protein")
+    allowedLevels = c("gene", "isoform", "exon", "affy"),
+
+    primaryAssayNames = c(gene    = "counts",
+                          isoform = "counts",
+                          exon    = "counts",
+                          affy    = "AffyRMA")
 )
+
+class(.DGEobjDef) <- "DGEobjDef"

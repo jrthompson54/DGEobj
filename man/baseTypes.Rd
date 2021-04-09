@@ -7,7 +7,7 @@
 baseTypes(dgeObj)
 }
 \arguments{
-\item{dgeObj}{(optional) A DGEobj}
+\item{dgeObj}{(optional) A class DGEobj created by function initDGEobj()}
 }
 \value{
 A character vector of baseTypes

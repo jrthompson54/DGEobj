@@ -7,7 +7,7 @@
 newType(dgeObj, itemType, baseType, uniqueItem = FALSE)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
 \item{itemType}{The name of the new type to create}
 

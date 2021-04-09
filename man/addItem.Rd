@@ -21,7 +21,7 @@ addItem(
 
 \item{item}{The data item to be deposited in the DGEobj}
 
-\item{itemName}{The assigned name for this data item}
+\item{itemName}{The user-assigned name for this data item}
 
 \item{itemType}{The type attribute.  See showTypes() to see the predefined types -- types are extensible with the newType() function.}
 

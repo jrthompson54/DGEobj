@@ -6,23 +6,23 @@ test_that('annotate.R: annotateDGEobj()', {
     writeLines(c("key1='value 1'", "key2=value 2"), con = ann.file)
 
     ann_DGEobj <- annotateDGEobj(t_obj, ann.file)
-    expect_equal(getAttribute(ann_DGEobj, 'key1'), "'value 1'")
-    expect_equal(getAttribute(ann_DGEobj, 'key2'), 'value 2')
-    expect_null(getAttribute(ann_DGEobj, 'key3'))
+    expect_equal(attr(ann_DGEobj, 'key1'), "'value 1'")
+    expect_equal(attr(ann_DGEobj, 'key2'), 'value 2')
+    expect_null(attr(ann_DGEobj, 'key3'))
 
     ann_DGEobj <- annotateDGEobj(t_obj, ann.file, keys = list("key2"))
-    expect_null(getAttribute(ann_DGEobj, 'key1'))
-    expect_equal(getAttribute(ann_DGEobj, 'key2'), 'value 2')
+    expect_null(attr(ann_DGEobj, 'key1'))
+    expect_equal(attr(ann_DGEobj, 'key2'), 'value 2')
 
     ann.list <- list("key1" = "'value 1'", "key2" = "value 2")
     ann_DGEobj <- annotateDGEobj(t_obj, ann.list)
-    expect_equal(getAttribute(ann_DGEobj, 'key1'), "'value 1'")
-    expect_equal(getAttribute(ann_DGEobj, 'key2'), 'value 2')
-    expect_null(getAttribute(ann_DGEobj, 'key3'))
+    expect_equal(attr(ann_DGEobj, 'key1'), "'value 1'")
+    expect_equal(attr(ann_DGEobj, 'key2'), 'value 2')
+    expect_null(attr(ann_DGEobj, 'key3'))
 
     ann_DGEobj <- annotateDGEobj(t_obj, ann.list, keys = list("key2"))
-    expect_null(getAttribute(ann_DGEobj, 'key1'))
-    expect_equal(getAttribute(ann_DGEobj, 'key2'), 'value 2')
+    expect_null(attr(ann_DGEobj, 'key1'))
+    expect_equal(attr(ann_DGEobj, 'key2'), 'value 2')
 })
 
 test_that('annotate.R: incorrect usage', {

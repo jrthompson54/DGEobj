@@ -2,14 +2,13 @@ context("types.R functions")
 
 
 test_that('types.R: baseType()', {
-    expect_equal(baseType(t_obj, "intensity"), "assay")
+    expect_equal(baseType(t_obj, "counts"), "assay")
     expect_equal(baseType(t_obj, "design"), "col")
-    expect_equal(baseType(t_obj, "intensity_orig"), "meta")
-
-    expect_equivalent(baseType(t_obj, "counts"), "assay")
+    expect_equal(baseType(t_obj, "contrastMatrix"), "meta")
+    expect_equal(baseType(t_obj, "granges"), "row")
 
     expect_error(baseType(t_obj, "dog"),
-                 regexp = "subscript out of bounds")
+                 regexp = "The type is not defined on the DGEobj")
 })
 
 test_that('types.R: baseTypes()', {
@@ -18,9 +17,9 @@ test_that('types.R: baseTypes()', {
 })
 
 test_that('types.R: showTypes()', {
-    showTypes_t_obj <- showTypes(t_obj, printed = FALSE)
+    showTypes_t_obj <- showTypes(t_obj)
     expect_s3_class(showTypes_t_obj, "data.frame")
-    expect_equal(dim(showTypes_t_obj), c(49, 2))
+    expect_equal(dim(showTypes_t_obj), c(37, 2))
 })
 
 test_that('types.R: newType()', {

@@ -8,14 +8,14 @@
 #' information such that a 3rd party can access a DGEobj history to see how each data
 #' object was created or modified.
 #'
-#' Operationally, the DGEobj is styled after the RangedSummarizedExperiment (RSE).
+#' Operationally, the DGEobj is influenced by the RangedSummarizedExperiment (RSE).
 #' The DGEobj has data slots for row (gene), col (samples), assays (anything with n-rows
 #' by m-samples dimensions) and metadata (anything that can't be keyed to row, col or
-#' assay).  The key motivations for creating the DGEobj data structure is that the RSE
+#' assay).  The key motivation for creating the DGEobj data structure is that the RSE
 #' only allows one data item each in the row and col slots and thus is unsuitable for
 #' capturing the plethora of data objects created during a typical DGE workflow.   The
 #' DGEobj data structure can hold any number of row and col data objects and thus is
-#' engineered for capturing the multiple steps of a downstream analysis.
+#' suitable for capturing the multiple steps of a downstream analysis.
 #'
 #' Certain object types, primarily the count matrix and associated row and column info,
 #' are defined as unique which means only one instance of that type may be added to

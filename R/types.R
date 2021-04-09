@@ -1,6 +1,6 @@
 #' Get the baseType of an internal data item
 #'
-#' @param dgeObj A DGEobj
+#' @param dgeObj A class DGEobj created by function initDGEobj()
 #' @param type   An item type for which you want the baseType
 #'
 #' @return character string
@@ -15,7 +15,6 @@
 #'
 #' @export
 baseType <- function(dgeObj, type){
-
     assertthat::assert_that(!missing(dgeObj),
                             !missing(type),
                             msg = "Specify both a DGEobj and a type (to check the baseType). Both are required.")
@@ -25,13 +24,17 @@ baseType <- function(dgeObj, type){
                             msg = "The type must be of class 'character'.")
 
     objDef <- attr(dgeObj, "objDef")
+
+    assertthat::assert_that(type %in% names(objDef$type),
+                            msg = "The type is not defined on the DGEobj")
+
     return(objDef$type[[type]])
 }
 
 
 #' Get a list of the available baseTypes
 #'
-#' @param dgeObj  (optional) A DGEobj
+#' @param dgeObj  (optional) A class DGEobj created by function initDGEobj()
 #'
 #' @return A character vector of baseTypes
 #'
@@ -56,8 +59,7 @@ baseTypes <- function(dgeObj){
 
 #' Returns and prints the list of all defined types
 #'
-#' @param dgeObj  A DGEobj
-#' @param printed Whether to print the list (default = TRUE)
+#' @param dgeObj  A class DGEobj created by function initDGEobj()
 #'
 #' @return data.frame
 #'
@@ -71,7 +73,7 @@ baseTypes <- function(dgeObj){
 #' @importFrom assertthat assert_that
 #'
 #' @export
-showTypes <- function(dgeObj, printed = TRUE){
+showTypes <- function(dgeObj){
 
     assertthat::assert_that(class(dgeObj) == "DGEobj",
                             msg = "The DGEobj must be of class 'DGEobj'.")
@@ -80,16 +82,14 @@ showTypes <- function(dgeObj, printed = TRUE){
     df$type <- rownames(df)
     colnames(df) <- c("BaseType", "Type")
     df <- df[, c("Type", "BaseType")]
-    if (printed) {
-        print(df)
-    }
-    df
+
+    return(df)
 }
 
 
 #' Add a new type definition to a DGEobj
 #'
-#' @param dgeObj     A DGEobj
+#' @param dgeObj     A class DGEobj created by function initDGEobj()
 #' @param itemType   The name of the new type to create
 #' @param baseType   The baseType of the new item. One of [row, col, assay, meta]
 #' @param uniqueItem If set to TRUE, only one instance of the new type is allowed in a DGEobj
