@@ -12,7 +12,9 @@ showAttributes(
 \arguments{
 \item{dgeObj}{A DGEobj}
 
-\item{skipList}{A character vector of attributes to skip. Use this to avoid printing certain lengthy attributes like rownames.  Defaults to c("dim", "dimnames", "rownames", "colnames", "listData", "objDef")}
+\item{skipList}{A character vector of attributes to skip. Use this to avoid
+printing certain lengthy attributes like rownames.  Defaults to c("dim",
+"dimnames", "rownames", "colnames", "listData", "objDef")}
 }
 \description{
 This function prints all attributes regardless of the class of the attribute value.

@@ -12,7 +12,7 @@
 \item{...}{Additional parameters}
 }
 \value{
-A simple list representation
+A named list
 }
 \description{
 Cast as a simple list
@@ -21,6 +21,6 @@ Cast as a simple list
     # example DGEobj
     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
-    as.list(exObj)
+    mylist <- as.list(exObj)
 
 }

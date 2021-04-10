@@ -1,7 +1,7 @@
 Package: DGEobj
 Type:    Package
 Title:   Differential Gene Expression (DGE) Analysis Results Data Object
-Version: 1.0.1
+Version: 1.0.3
 Description: 
     Provides a flexible container to manage and annotate Differential Gene 
     Expression (DGE) analysis results (Smythe et. al (2015) <doi:10.1093/nar/gkv007>).  
@@ -31,8 +31,12 @@ Imports:
     GenomicRanges
 RoxygenNote: 7.1.1
 Suggests: 
+    conflicted,
+    dplyr,
+    glue,
     knitr,
     rmarkdown,
     testthat,
+    biomaRt,
     edgeR
 VignetteBuilder: knitr

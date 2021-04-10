@@ -4,12 +4,10 @@
 \alias{showTypes}
 \title{Returns and prints the list of all defined types}
 \usage{
-showTypes(dgeObj, printed = TRUE)
+showTypes(dgeObj)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
-
-\item{printed}{Whether to print the list (default = TRUE)}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 }
 \value{
 data.frame

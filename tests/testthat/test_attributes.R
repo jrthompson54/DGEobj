@@ -20,14 +20,6 @@ test_that("attributes.R: setAttributes()/getAttributes()", {
     expect_setequal(output$attribute2, LETTERS)
 })
 
-test_that("attributes.R: setAttribute()/getAttribute()", {
-    new_dgeobj     <- setAttribute(t_obj, LETTERS, "new_attribute")
-    output         <- getAttribute(new_dgeobj, "new_attribute")
-
-    expect_type(output, "character")
-    expect_setequal(output, LETTERS)
-})
-
 test_that("attributes.R: getAttributes() returns all", {
     output <- getAttributes(t_obj)
 
@@ -45,7 +37,7 @@ test_that("attributes.R: getAttributes() returns all", {
 })
 
 test_that("attributes.R: showMeta()", {
-    output <- showMeta(t_obj, printed = FALSE)
+    output <- showMeta(t_obj)
 
     expect_s3_class(output, "data.frame")
     expect_equal(output$Value[output$Attribute == "class"], "DGEobj")
@@ -58,11 +50,8 @@ test_that("attributes.R: incorrect usage", {
                  regexp = "attribs must be of class 'list'.")
     expect_error(setAttributes(t_obj, attribs = list()),
                  regexp = "The attribs list should be a named list, specifying the attribute/value pairs. It must have names specified.")
-    expect_error(getAttribute(t_obj, NULL),
-                 regexp = "'which' must be of mode character")
 
     expect_null(getAttributes("fred"))
     expect_null(getAttributes(NULL))
     expect_null(getAttributes(list()))
-    expect_null(getAttribute("fred", "fred"))
 })

@@ -1,20 +1,33 @@
 #' Add annotations
 #'
-#' Reads an annotation file of key/value pairs or a named list and attaches them attributes to a DGEobj.
-#' If a file is used, it should be a text file containing key/value pairs separated by an equals
-#' sign. The keys parameter specifies which key we want to capture as
-#' attributes on the DGEobj. The value will then be the value of that attribute.
+#' Reads an annotation file containing key/value pairs or a named list and attaches them
+#' attributes to a DGEobj. If a file is used, it should be a text file
+#' containing key/value pairs separated by an equals sign. The keys argument
+#' specifies which keys we want to capture as attributes on the DGEobj.
 #'
-#' @param dgeObj  A class DGEobj created by function initDGEobj()
-#' @param annotations Either A character string path to a file with annotations given as key/value pairs separated by an equal sign, or a named list of key/value pairs
-#' @param keys A subset of keys to look for in the annotations and transfer to the DGEobj (default = NULL)
+#' @param dgeObj  A object of class DGEobj created by function initDGEobj()
+#' @param annotations Either a character string path to a file with annotations
+#'   given as key/value pairs separated by an equal sign, or a named list of
+#'   key/value pairs
+#' @param keys By default (value = NULL), all keys are read in and applied as
+#'   DGEobj attributes.  Use the keys argument to specify a specific list of
+#'   keys to read from the file.
 #'
 #' @return A DGEobj
 #'
 #' @examples
+#'    MyDgeObj <- system.file("exampleObj.RDS", package = "DGEobj")
+#'
 #' \dontrun{
-#'    MyDgeObj <- annotateDGEobj(DGEobj, annotations)
-#' }
+#'    #using a text file file of key=value pairs
+#'    annotationFile <- "/location/to/myAnnotations.txt"
+#'    MyDgeObj <- annotateDGEobj(MyDgeObj, annotationFile)
+#'}
+#'    #using a named list of key/values
+#'    annotations <- list(Title     = "Rat Liver Slices from Bile Duct Ligation animals",
+#'                        Organism  = "Rat",
+#'                        GeneModel = "Ensembl.R89")
+#'    MyDgeObj <- annotateDGEobj(MyDgeObj, annotations)
 #'
 #' @import magrittr
 #' @importFrom stringr str_remove_all str_locate
@@ -23,7 +36,7 @@
 #' @export
 annotateDGEobj <- function(dgeObj, annotations, keys = NULL) {
 
-    if (class(annotations) == "character") {
+    if ("character" %in% class(annotations)) {
         assertthat::assert_that(file.exists(annotations),
                                 msg = "The file specified does not exist.")
 
@@ -56,9 +69,8 @@ annotateDGEobj <- function(dgeObj, annotations, keys = NULL) {
         # Squeeze spaces out of keys
         regdat$key <- stringr::str_remove_all(regdat$key, " ")
 
-    } else if (class(annotations) == "list") {
-        assertthat::assert_that(class(annotations) == "list",
-                                msg = "annotations should be a named list of key/value pairs.")
+    } else if ("list" %in% class(annotations)) {
+
         assertthat::assert_that(length(names(annotations)) == length(annotations),
                                 msg = "annotations should be a named list of key/value pairs.")
 

@@ -7,11 +7,11 @@
 \method{print}{DGEobj}(x, ..., verbose = FALSE)
 }
 \arguments{
-\item{x}{A DGEobj}
+\item{x}{A class DGEobj created by function initDGEobj()}
 
 \item{...}{Additional parameters}
 
-\item{verbose}{Add funArgs to the output (default = FALSE)}
+\item{verbose}{Include funArgs column in the output (default = FALSE)}
 }
 \description{
 Print the Inventory

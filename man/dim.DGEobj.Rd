@@ -7,7 +7,7 @@
 \method{dim}{DGEobj}(x)
 }
 \arguments{
-\item{x}{A DGEobj}
+\item{x}{A class DGEobj created by function initDGEobj()}
 }
 \value{
 An integer vector [r,c] with a length of 2.

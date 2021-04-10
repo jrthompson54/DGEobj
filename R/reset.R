@@ -4,7 +4,7 @@
 #' that fail QC or non-expressed genes.  The resetDGEobj() function produces a new DGEobj with
 #' the original unfiltered data.
 #'
-#' @param dgeObj A DGEobj
+#' @param dgeObj A class DGEobj created by function initDGEobj()
 #'
 #' @return A DGEobj
 #'
@@ -16,6 +16,7 @@
 #'     exObj <- exObj[c(1:10), ]
 #'
 #'     exObj <- resetDGEobj(exObj)
+#'     dim(exObj)
 #'
 #' @importFrom assertthat assert_that
 #'
@@ -47,7 +48,7 @@ resetDGEobj <- function(dgeObj){
     }
 
     if (tolower(platformType) %in% platform.types) {
-        newObj <- initDGEobj(counts    = counts,
+        newObj <- initDGEobj(primaryAssayData = counts,
                              rowData   = rowData,
                              colData   = design,
                              level     = attr(dgeObj, "level"),

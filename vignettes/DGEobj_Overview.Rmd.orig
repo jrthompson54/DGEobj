@@ -1,7 +1,7 @@
 ---
 title: 'DGEobj: An S3 Object to Capture and Annotate DGE Workflows'
 author: "John R. Thompson"
-date: "2021-04-09"
+date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:   
     fig_caption: yes
@@ -14,7 +14,63 @@ vignette: >
   %\VignetteEncoding{UTF-8} 
 ---
 
+```{r global_options, include = FALSE}
+knitr::opts_chunk$set(echo    = TRUE, 
+                      include = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      eval    = TRUE)
 
+suppressPackageStartupMessages({
+    library(biomaRt)
+    library(dplyr)
+    library(glue)
+    library(edgeR)
+    library(DGEobj)
+    library(stringr)
+    library(knitr)
+    library(conflicted)
+})
+
+conflict_prefer("select",    "dplyr",   quiet = TRUE) 
+conflict_prefer("filter",    "dplyr",   quiet = TRUE)
+conflict_prefer("left_join", "dplyr",   quiet = TRUE)
+conflict_prefer("rename",    "dplyr",   quiet = TRUE)
+conflict_prefer("collapse",  "glue",    quiet = TRUE) 
+conflict_prefer("Position",  "ggplot2", quiet = TRUE) 
+
+annotation_text <- '
+# general project metadata
+level=gene
+source=Omicsoft
+ID=BDL_Rat_LiverSlice_03Dec2017
+Title=Rat Liver Slices from Bile Duct Ligation animals
+Organism=Rat
+GeneModel=Ensembl.R89
+PlatformType=RNA-Seq
+Description=Rat livers slices from sham or BDL +/- efficacious treatments incubated in vitro
+Keywords=Liver slices; Bile Duct Ligation
+Disease=Liver Fibrosis
+Tissue=Liver
+GEO=GSE120804
+# additional technical data processing attributes
+Technology=Illumina-HiSeq
+LibraryPrep=TruSeq Stranded Total RNA
+AlignmentReference=Rat.B6.0
+ReadType=PE
+Pipeline=RNA-Seq_BMS_v2.4.pscript
+AlignmentAlgorithm=OSA
+ScriptID=RNA-Seq_BMS_v2.4.pscript
+# institutional attributes
+BusinessUnit=Discovery
+FunctionalArea=Fibrosis
+Vendor=BMS
+TBio_Owner=Ron Ammar
+TA_Owner=John Huang
+'
+annotationFile <- tempfile(fileext = ".txt")
+writeLines(annotation_text, con = annotationFile)
+```
 
 
 # Introduction
@@ -115,8 +171,7 @@ See the "Customizing the DGEobj" section below to define new levels.
 
 This GEO project includes a counts table, design table, and QC metrics in the supplemental section. The data is downloaded to temp files and imported into data frames to prepare for building a DGEobj.
 
-
-```r
+```{r downloadGEOData}
 # Get the raw counts, sample annotation ("design") and QC data from GEO
 # Source: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120804
 getLocation <- "http://ftp.ncbi.nlm.nih.gov/geo/series/GSE120nnn/GSE120804/suppl"
@@ -149,8 +204,7 @@ Often the design table will need some manipulation or clean up to properly const
 
 In this example, the design file lacks a proper linking column to the counts data. The colnames from the counts data should be the rownames for the design table. Fortunately, the colnames from counts are present as a substring within the fastq filename column (design\$raw.file). The samplenames will be parsed from the fastq filenames to create a proper linking column between the counts and design data.
 
-
-```r
+```{r parseDesignSampleNames}
 rownames(design) <- str_sub(design$raw.file, start = 1, end = 21)
 ```
 
@@ -159,8 +213,7 @@ Additional manipulations to the design data include:
 * create a design\$DiseaseStatus column to indicate whether a liver is derived from a BDL or sham animal  
 * create an animal number column to capture which liver slice samples were derived from the same animal  
 
-
-```r
+```{r moreDesignEdits}
 #correct the desired case/spelling of one column
 design <- design %>%
     rename(ReplicateGroup = Replicate.group)
@@ -178,8 +231,7 @@ design$AnimalNum <- str_match(design$Sample.name, "r[0-9]{1,3}")
 
 The GEO data for this project is supplied Ensembl gene IDs but no other gene information. Additional gene information will be collected by querying Ensembl directly.
 
-
-```r
+```{r getGeneAnnotation}
 # Now get the gene annotation from Ensembl/biomaRt
 ens.ds      <- "rnorvegicus_gene_ensembl"
 ens.mart    <- useMart(biomart = "ensembl", dataset = ens.ds)
@@ -203,8 +255,7 @@ gene.data <- left_join(data.frame(ensembl_gene_id = rownames(counts), stringsAsF
 rownames(gene.data) <- gene.data$ensembl_gene_id
 ```
 
-
-```r
+```{r get_transcriptLength}
 # Get transcript level data and keep max for each gene, or alternatively, use the cds length
 
 ens.ds          <- "rnorvegicus_gene_ensembl"
@@ -225,6 +276,7 @@ gene.data$ensembl_gene_id <- NULL
 
 # enforce same order as counts
 gene.data <- gene.data[rownames(counts),]
+
 ```
 
 
@@ -237,29 +289,16 @@ As mentioned earlier, rownames and column names provide links between the three 
 
 These statements perform a reality check on these two constraints.
 
-
-```r
+```{r realityCheck}
 all(rownames(counts) == rownames(gene.data))
-```
-
-```
-## [1] TRUE
-```
-
-```r
 all(colnames(counts) == rownames(design))
-```
-
-```
-## [1] TRUE
 ```
 
 ### Instantiate the DGEobj
 
 With the above constraints met, the three data frames can be used to instantiate a DGEobj. In addition the "level" of the data must be specified in the "level" argument (Allowed levels include "gene", "isoform", "exon", "affy"). Finally, two attributes are added via the customAttr argument to annotate the genome and gene model set used for the alignments used to produce the count data.
 
-
-```r
+```{r initializeDGEobj}
 dgeObj <- DGEobj::initDGEobj(primaryAssayData  = counts,
                              rowData = gene.data,
                              colData = design,
@@ -307,8 +346,7 @@ The annotation file for this project looks like this:
 >  TA_Owner=John Huang
 
 
-
-```r
+```{r annotateFromTextFile}
 # the annotation information is stored in a temporary .txt file
 dgeObj <- annotateDGEobj(dgeObj, annotationFile)
 ```
@@ -323,98 +361,33 @@ The DGE object now contains the starting data and metadata and is analysis-ready
 
 To view a listing of the items in the DGEobj:
 
-
-```r
+```{r inventory}
 kable(inventory(dgeObj))
 ```
-
-
-
-|ItemName      |ItemType      |BaseType |Parent        |Class      |Row   |Col |DateCreated         |
-|:-------------|:-------------|:--------|:-------------|:----------|:-----|:---|:-------------------|
-|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2021-04-09 10:06:20 |
-|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2021-04-09 10:06:20 |
-|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2021-04-09 10:06:20 |
-|design        |design        |col      |design_orig   |data.frame |48    |10  |2021-04-09 10:06:20 |
-|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2021-04-09 10:06:20 |
-|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2021-04-09 10:06:20 |
-|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2021-04-09 10:06:20 |
-|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2021-04-09 10:06:20 |
 
 
 ## Examine DGEobj Metadata
 
 Use the `showMeta` function to list the meta data associated with a project.  
 
-
-```r
+```{r showMetaData}
 kable(showMeta(dgeObj))
 ```
-
-
-
-|Attribute          |Value                                                                            |
-|:------------------|:--------------------------------------------------------------------------------|
-|class              |DGEobj                                                                           |
-|DGEobjDef.version  |1.1                                                                              |
-|level              |gene                                                                             |
-|Genome             |Rat.B6.0                                                                         |
-|GeneModel          |Ensembl.R89                                                                      |
-|NA                 |NA                                                                               |
-|source             |Omicsoft                                                                         |
-|ID                 |BDL_Rat_LiverSlice_03Dec2017                                                     |
-|Title              |Rat Liver Slices from Bile Duct Ligation animals                                 |
-|Organism           |Rat                                                                              |
-|PlatformType       |RNA-Seq                                                                          |
-|Description        |Rat livers slices from sham or BDL +/- efficacious treatments incubated in vitro |
-|Keywords           |Liver slices; Bile Duct Ligation                                                 |
-|Disease            |Liver Fibrosis                                                                   |
-|Tissue             |Liver                                                                            |
-|GEO                |GSE120804                                                                        |
-|Technology         |Illumina-HiSeq                                                                   |
-|LibraryPrep        |TruSeq Stranded Total RNA                                                        |
-|AlignmentReference |Rat.B6.0                                                                         |
-|ReadType           |PE                                                                               |
-|Pipeline           |RNA-Seq_BMS_v2.4.pscript                                                         |
-|AlignmentAlgorithm |OSA                                                                              |
-|ScriptID           |RNA-Seq_BMS_v2.4.pscript                                                         |
-|BusinessUnit       |Discovery                                                                        |
-|FunctionalArea     |Fibrosis                                                                         |
-|Vendor             |BMS                                                                              |
-|TBio_Owner         |Ron Ammar                                                                        |
-|TA_Owner           |John Huang                                                                       |
 
 
 ## DGEobj Length and Dimensions
 
 The length of a DGEobj refers to the number of data items in the DGEobj.  
 
-
-```r
+```{r length}
 length(dgeObj)
-```
-
-```
-## [1] 8
 ```
 
 The dimensions reported for a DGEobj are the dimensions of the assays contained in the DGEobj. That is, for the RNA-Seq application, the row dimension is the number of genes contained in the object and the column dimension is the number of samples contained in the object.
 
-
-```r
+```{r dimensions}
 dim(dgeObj)
-```
-
-```
-## [1] 32883    48
-```
-
-```r
 dim(dgeObj$counts)
-```
-
-```
-## [1] 32883    48
 ```
 
 
@@ -429,49 +402,27 @@ Note, there is no facility provided to re-assign rownames or colnames of a DGEob
 
 A DGEobj may be square bracket subsetted similar the same way data frames and matrices may be subsetted. The subsetting function uses the base type to define how each data item is handled during subsetting. During subsetting, metadata items are carried along unchanged.
 
-
-```r
+```{r subsetting}
 #subset to the first 100 genes
 First100genes <- dgeObj[1:100,]
 dim(First100genes)
-```
 
-```
-## [1] 100  48
-```
-
-```r
 #subset to the first 10 samples
 First10samples <- dgeObj[,1:10]
 dim(First10samples)
-```
 
-```
-## [1] 32883    10
-```
-
-```r
 #susbet genes and samples
 AnotherSubset <- dgeObj[1:100, 1:10]
 dim(AnotherSubset)
 ```
 
-```
-## [1] 100  10
-```
-
 Boolean vectors may also be used to subset dimensions of a DGEobj.
 
-
-```r
+```{r booleanIndexing}
 # select a subset of samples
 idx <- dgeObj$design$DiseaseStatus == "BDL"
 BDLonly <- dgeObj[,idx]
 dim(BDLonly)
-```
-
-```
-## [1] 32883    39
 ```
 
 
@@ -479,33 +430,14 @@ dim(BDLonly)
 
 The `inventory` function prints a table of the data items present in a DGEobj. The output includes the item name, type, baseType, parent, class, and date created. If the `verbose = TRUE` argument is used, a `funArgs` column is also included.  
 
-
-```r
+```{r inventory2}
 kable(inventory(dgeObj))
 ```
 
-
-
-|ItemName      |ItemType      |BaseType |Parent        |Class      |Row   |Col |DateCreated         |
-|:-------------|:-------------|:--------|:-------------|:----------|:-----|:---|:-------------------|
-|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2021-04-09 10:06:20 |
-|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2021-04-09 10:06:20 |
-|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2021-04-09 10:06:20 |
-|design        |design        |col      |design_orig   |data.frame |48    |10  |2021-04-09 10:06:20 |
-|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2021-04-09 10:06:20 |
-|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2021-04-09 10:06:20 |
-|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2021-04-09 10:06:20 |
-|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2021-04-09 10:06:20 |
-
 If just the item names of data stored in the DGEobj are needed, use the base R `names` function.
 
-
-```r
+```{r itemNames}
 names(dgeObj)
-```
-
-```
-## [1] "counts_orig"   "counts"        "design_orig"   "design"        "geneData_orig" "geneData"      "granges_orig"  "granges"
 ```
 
 
@@ -515,8 +447,7 @@ names(dgeObj)
 
 Often other sample-related information is available.  In this project, for example, the alignment statistics for the RNA-Seq were deposited in GEO and downloaded with the other data.  This example adds the alignment statistics to the DGEobj.   The alignment QC data as downloaded needs to be transposed to place samples in rows. Once transposed, this data meets the criteria for the colData type "alignQC" and is added to the DGEobj.  As a new data item not derived directly from the existing items, the alignment QC lacks parent or funArgs values in this context.  
 
-
-```r
+```{r addItem_alignQC}
 rownames(alignmentQC) <- alignmentQC$Metric
 
 alignmentQC <- alignmentQC %>% 
@@ -534,8 +465,7 @@ dgeObj <- addItem(dgeObj,
 
 As an analysis progresses, the data analyst should capture intermediate data objects deemed important to properly documenting the workflow. In the example here, the counts will be normalized and the resulting DGElist data item added to the DGEobj.  
 
-
-```r
+```{r addItem_norm}
 # Perform TMM normalization on the raw counts
 dgelist <- dgeObj$counts %>%
   DGEList() %>%
@@ -552,21 +482,6 @@ newdgeObj <- addItem(dgeObj,
 
 kable(inventory(newdgeObj))
 ```
-
-
-
-|ItemName      |ItemType      |BaseType |Parent        |Class      |Row   |Col |DateCreated         |
-|:-------------|:-------------|:--------|:-------------|:----------|:-----|:---|:-------------------|
-|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2021-04-09 10:06:20 |
-|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2021-04-09 10:06:20 |
-|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2021-04-09 10:06:20 |
-|design        |design        |col      |design_orig   |data.frame |48    |10  |2021-04-09 10:06:20 |
-|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2021-04-09 10:06:20 |
-|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2021-04-09 10:06:20 |
-|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2021-04-09 10:06:20 |
-|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2021-04-09 10:06:20 |
-|AlignmentQC   |alignQC       |col      |              |data.frame |48    |172 |2021-04-09 10:06:21 |
-|normTMM       |DGEList       |assay    |counts        |DGEList    |32883 |48  |2021-04-09 10:06:22 |
 
 **item** is the actual data object to add.
 
@@ -588,8 +503,7 @@ If a whole analysis step, together with the addItem call, is contained within a 
 
 Within a function call, `match.call` returns the calling function name and arguments. Modifying the normalization example above:  
 
-
-```r
+```{r addItemFunctionalized, eval=TRUE}
 runNorm <- function(x, method){
   # Perform TMM normalization on the raw counts
   dgelist <- x$counts %>%
@@ -613,29 +527,13 @@ inv <- inventory(newdgeObj, verbose = TRUE)[ ,c(1:3,9)]
 kable(inv)
 ```
 
-
-
-|ItemName      |ItemType      |BaseType |FunArgs                                                                                                                                                                                                                                                                                     |
-|:-------------|:-------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|counts_orig   |counts_orig   |meta     |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|counts        |counts        |assay    |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|design_orig   |design_orig   |meta     |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|design        |design        |col      |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|geneData_orig |geneData_orig |meta     |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|geneData      |geneData      |row      |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|granges_orig  |granges_orig  |meta     |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|granges       |granges       |row      |::(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); DGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")); initDGEobj(counts, gene.data, design, gene, list(Genome = "Rat.B6.0", GeneModel = "Ensembl.R89")) |
-|AlignmentQC   |alignQC       |col      |addItem(dgeObj, alignmentQC, AlignmentQC, alignQC)                                                                                                                                                                                                                                          |
-|normTMM       |DGEList       |assay    |runNorm(dgeObj, TMM)                                                                                                                                                                                                                                                                        |
-
 ### Batch addition of multiple items  
 
 The `addItem` function is typically used to capture each item during the course of an analysis. Another use case is constructing a DGEobj in a post-hoc fashion. In this scenario, it may be more efficient to collect and add multiple items. The `addItems` function supports this scenario.  
 
 In this example, add a normalized dgelist and a design matrix to the DGEobj:  
 
-
-```r
+```{r addItems}
 # Perform TMM normalization on the raw counts
 dgelist <- dgeObj$counts %>%
   DGEList() %>%
@@ -677,52 +575,9 @@ limma/voom DGE workflow for RNA-Seq and Affymetrix data types.
 
 To see a complete list of pre-defined item types use the **showTypes** function.
 
-
-```r
+```{r showTypes}
 kable(arrange(showTypes(dgeObj), BaseType, Type))
 ```
-
-
-
-|                     |Type                 |BaseType |
-|:--------------------|:--------------------|:--------|
-|AffyRMA              |AffyRMA              |assay    |
-|assay                |assay                |assay    |
-|counts               |counts               |assay    |
-|DGEList              |DGEList              |assay    |
-|effectiveLength      |effectiveLength      |assay    |
-|Elist                |Elist                |assay    |
-|isoformFrac          |isoformFrac          |assay    |
-|alignQC              |alignQC              |col      |
-|col                  |col                  |col      |
-|design               |design               |col      |
-|designMatrix         |designMatrix         |col      |
-|AffyRMA_orig         |AffyRMA_orig         |meta     |
-|contrast_fit_treat   |contrast_fit_treat   |meta     |
-|contrastMatrix       |contrastMatrix       |meta     |
-|corFit               |corFit               |meta     |
-|counts_orig          |counts_orig          |meta     |
-|design_orig          |design_orig          |meta     |
-|effectiveLength_orig |effectiveLength_orig |meta     |
-|exonData_orig        |exonData_orig        |meta     |
-|geneData_orig        |geneData_orig        |meta     |
-|geneList             |geneList             |meta     |
-|granges_orig         |granges_orig         |meta     |
-|isoformData_orig     |isoformData_orig     |meta     |
-|meta                 |meta                 |meta     |
-|pathway              |pathway              |meta     |
-|svobj                |svobj                |meta     |
-|topTreat             |topTreat             |meta     |
-|URL                  |URL                  |meta     |
-|affyData             |affyData             |row      |
-|contrast_fit         |contrast_fit         |row      |
-|exonData             |exonData             |row      |
-|fit                  |fit                  |row      |
-|geneData             |geneData             |row      |
-|granges              |granges              |row      |
-|isoformData          |isoformData          |row      |
-|row                  |row                  |row      |
-|topTable             |topTable             |row      |
 
 
 ## Adding a New Data Type  
@@ -731,8 +586,7 @@ The capability to define new data types is core to the extensibility of the DGEo
 
 A set of data types has already been defined based on data types encountered in a typical limma/Voom workflow. The `newTypes` function is used to define data types to support a novel workflow.  
 
-
-```r
+```{r newType}
 # Add a new colData datatype called "sampleQC"
 newDgeObj <- newType(dgeObj,
                     itemType = "sampleQC",
@@ -752,22 +606,11 @@ Typically an analyst will need to access items stored in the DGEobj as the analy
 
 The `getItem` function allows the user to retrieve any item in a DGEobj by referencing its item name. Use the inventory function (described above) to check the contents of the DGEobj including the list of item names that are available.  
 
-
-```r
+```{r getItem}
 counts <- getItem(dgeObj, "counts")
 
 #peek at the first 4 columns
 head(counts[ ,1:4])
-```
-
-```
-##                    T_20170823MAN1_C05P01 T_20170823MAN1_H05P01 T_20170823MAN1_C04P01 T_20170823MAN1_D03P01
-## ENSRNOG00000046319                     2                     0                 0.000                0.0000
-## ENSRNOG00000047964                     0                     0                 0.000                0.0000
-## ENSRNOG00000050370                     0                     0                 0.000                1.0000
-## ENSRNOG00000032365                     0                     0                 0.000                0.0000
-## ENSRNOG00000040300                     1                     6                 5.783                6.8135
-## ENSRNOG00000058808                     0                     0                 0.000                0.0000
 ```
 
 
@@ -777,15 +620,13 @@ There are several ways to retrieve multiple items as a list or data objects.
 
 The user can supply a list of item names to retrieve specific items. The items requested are returned in a list.  
 
-
-```r
+```{r getItems}
 MyItems <- getItems(dgeObj, list("counts", "geneData"))
 ```
 
 If all the items the user wants to retrieve are of the same type, the `getType` function may be used to retrieve them as a named list. For example, an analyst may want to retrieve a set of contrast results stored as topTable output.  
 
-
-```r
+```{r getType}
 # The below example object is a post-workflow object that has multiple contrasts
 FullWorkflowDGEobj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
@@ -793,40 +634,19 @@ MyContrasts <- getType(FullWorkflowDGEobj, "topTable")
 names(MyContrasts)
 ```
 
-```
-## [1] "BDL_vs_Sham"    "EXT1024_vs_BDL" "Nint_vs_BDL"    "Sora_vs_BDL"
-```
-
 Similarly, all items of the same baseType may be retrieved as a named list with the getBaseType function.  
 
-
-```r
+```{r getBaseType}
 MyColData <- getBaseType(FullWorkflowDGEobj, "col")
 names(MyColData)
 ```
 
-```
-## [1] "design"               "ReplicateGroupDesign"
-```
-
 Finally, the DGEobj can be recast as a named list.  
 
-
-```r
+```{r as.list}
 MyList <- as.list(dgeObj)
 class(MyList)
-```
-
-```
-## [1] "list"
-```
-
-```r
 names(MyList)
-```
-
-```
-## [1] "counts_orig"   "counts"        "design_orig"   "design"        "geneData_orig" "geneData"      "granges_orig"  "granges"       "AlignmentQC"
 ```
 
 
@@ -837,13 +657,8 @@ names(MyList)
 
 Returns the baseType for a given Type:  
 
-
-```r
+```{r baseType}
 baseType(dgeObj, "DGEList")
-```
-
-```
-## [1] "assay"
 ```
 
 
@@ -855,15 +670,13 @@ The `showMeta` function will return a named list of all attributes of a DGEobj.
 
 To retrieve a specific attribute:  
 
-
-```r
+```{r specificAttribute}
 keywords <- attr(dgeObj, "Keywords")
 ```
 
 To retrieve an attribute from an item, use dollar sign syntax to reference the item:  
 
-
-```r
+```{r attributeFromItem}
 formula <- attr(FullWorkflowDGEobj$ReplicateGroupDesign, "formula")
 ```
 
@@ -874,8 +687,7 @@ For common workflow usage, the DGEobj should be considered read-only. Items are 
 
 To delete an item from a DGEobj:  
 
-
-```r
+```{r rmItem}
 MyDgeObj <- rmItem(dgeObj, "granges")
 ```
 
@@ -884,15 +696,13 @@ MyDgeObj <- rmItem(dgeObj, "granges")
 
 To add or update a single attribute, use the base R`attr` function:  
 
-
-```r
+```{r assignAttribute}
 attr(dgeObj, "Tissue")  <- "Liver"
 ```
 
 The `setAttributes` function allows attaching a named list of attributes. Unlike the base R attributes function, setAttributes will add or update the named attributes without deleting any existing attributes.  
 
-
-```r
+```{r setAttributes}
 newDgeObj <- setAttributes(dgeObj, list(date=date(), analyst="JRT"))
 ```
 
@@ -901,43 +711,9 @@ newDgeObj <- setAttributes(dgeObj, list(date=date(), analyst="JRT"))
 
 This function returns any project annotation attached as attributes to the DGEobj using function `annotateDGEobj`. It returns the attributes as a two column dataframe of Attribute/Value pairs. It only returns attributes with character values.   
 
-
-```r
+```{r showMeta}
 kable(showMeta(dgeObj))
 ```
-
-
-
-|Attribute          |Value                                                                            |
-|:------------------|:--------------------------------------------------------------------------------|
-|class              |DGEobj                                                                           |
-|DGEobjDef.version  |1.1                                                                              |
-|level              |gene                                                                             |
-|Genome             |Rat.B6.0                                                                         |
-|GeneModel          |Ensembl.R89                                                                      |
-|NA                 |NA                                                                               |
-|source             |Omicsoft                                                                         |
-|ID                 |BDL_Rat_LiverSlice_03Dec2017                                                     |
-|Title              |Rat Liver Slices from Bile Duct Ligation animals                                 |
-|Organism           |Rat                                                                              |
-|PlatformType       |RNA-Seq                                                                          |
-|Description        |Rat livers slices from sham or BDL +/- efficacious treatments incubated in vitro |
-|Keywords           |Liver slices; Bile Duct Ligation                                                 |
-|Disease            |Liver Fibrosis                                                                   |
-|Tissue             |Liver                                                                            |
-|GEO                |GSE120804                                                                        |
-|Technology         |Illumina-HiSeq                                                                   |
-|LibraryPrep        |TruSeq Stranded Total RNA                                                        |
-|AlignmentReference |Rat.B6.0                                                                         |
-|ReadType           |PE                                                                               |
-|Pipeline           |RNA-Seq_BMS_v2.4.pscript                                                         |
-|AlignmentAlgorithm |OSA                                                                              |
-|ScriptID           |RNA-Seq_BMS_v2.4.pscript                                                         |
-|BusinessUnit       |Discovery                                                                        |
-|FunctionalArea     |Fibrosis                                                                         |
-|Vendor             |BMS                                                                              |
-|TBio_Owner         |Ron Ammar                                                                        |
-|TA_Owner           |John Huang                                                                       |
 
 
 # Technical Information  
@@ -954,13 +730,8 @@ User supplied meta data in the form of key/value pairs are attached to the DGEob
 
 Several attributes are used to capture information about each data item ("type", "basetype", "dateCreated" and "funArgs."), as well as relationships between them ("parent"). The `inventory` function provides a convenient table view of these attributes. Operationally, the value of each of these attributes is a named list where the names are the item names and the value is the value for that item. For example, to query just the basetype attribute of the "design" itemName:  
 
-
-```r
+``` {r workflowAttributes}
 attr(dgeObj, "basetype")[["design"]]
-```
-
-```
-## [1] "col"
 ```
 
 
@@ -970,8 +741,7 @@ A class DGEobjDef has been created to define the data types acceptable to a DGEo
 
 To return the default DGEobjDef:  
 
-
-```r
+```{r defaultDGEobjDef}
 defaultDGEobjDef <- initDGEobjDef()
 ```
 
@@ -986,8 +756,7 @@ There are four optional arguments to initDGEobjDef:
 
 The example below defines new types to accommodate metabolomics data.  
 
-
-```r
+```{r initDGEObjDef}
 # simulate some data 
 nr <- nrow(dgeObj)
 nc <- ncol(dgeObj)
@@ -1014,19 +783,6 @@ MetabolomicObj <- initDGEobj(primaryAssayData = myMSquant,
 kable(inventory(MetabolomicObj))
 ```
 
-
-
-|ItemName            |ItemType            |BaseType |Parent              |Class      |Row   |Col |DateCreated         |
-|:-------------------|:-------------------|:--------|:-------------------|:----------|:-----|:---|:-------------------|
-|intensity_orig      |intensity_orig      |meta     |                    |matrix     |32883 |48  |2021-04-09 10:06:24 |
-|intensity           |intensity           |assay    |intensity_orig      |matrix     |32883 |48  |2021-04-09 10:06:24 |
-|design_orig         |design_orig         |meta     |                    |data.frame |48    |10  |2021-04-09 10:06:24 |
-|design              |design              |col      |design_orig         |data.frame |48    |10  |2021-04-09 10:06:24 |
-|metaboliteData_orig |metaboliteData_orig |meta     |                    |data.frame |32883 |8   |2021-04-09 10:06:24 |
-|metaboliteData      |metaboliteData      |row      |metaboliteData_orig |data.frame |32883 |8   |2021-04-09 10:06:24 |
-|granges_orig        |granges_orig        |meta     |metaboliteData_orig |GRanges    |32883 |NA  |2021-04-09 10:06:24 |
-|granges             |granges             |row      |metaboliteData      |GRanges    |32883 |NA  |2021-04-09 10:06:24 |
-
 There are simple dimension-based criteria to determine the basetype of a
 new datatype.
 
@@ -1037,20 +793,6 @@ new datatype.
 
 The DGEobj definitions created during initialization or added post-hoc by the newType function, are stored the "objDef" attribute of the DGEobj.  
 
-
-```r
+```{r objDefAttr}
 str(attr(dgeObj, "objDef"))
-```
-
-```
-## List of 5
-##  $ basetype         : Named chr [1:4] "row" "col" "assay" "meta"
-##   ..- attr(*, "names")= chr [1:4] "row" "col" "assay" "meta"
-##  $ type             : Named chr [1:37] "row" "col" "assay" "meta" ...
-##   ..- attr(*, "names")= chr [1:37] "row" "col" "assay" "meta" ...
-##  $ uniqueType       : chr [1:18] "counts" "counts_orig" "design" "design_orig" ...
-##  $ allowedLevels    : chr [1:4] "gene" "isoform" "exon" "affy"
-##  $ primaryAssayNames: Named chr [1:4] "counts" "counts" "counts" "AffyRMA"
-##   ..- attr(*, "names")= chr [1:4] "gene" "isoform" "exon" "affy"
-##  - attr(*, "class")= chr "DGEobjDef"
 ```

@@ -7,7 +7,7 @@
 baseType(dgeObj, type)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
 \item{type}{An item type for which you want the baseType}
 }

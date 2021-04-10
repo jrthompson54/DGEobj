@@ -1,7 +1,7 @@
 
 #' Subset internal row or column data
 #'
-#' @param x     A DGEobj
+#' @param x     A class DGEobj created by function initDGEobj()
 #' @param ...   Additional parameters
 #' @param row   Row index for the subset
 #' @param col   Col index for the subset

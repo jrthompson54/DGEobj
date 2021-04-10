@@ -7,7 +7,7 @@
 resetDGEobj(dgeObj)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 }
 \value{
 A DGEobj
@@ -25,5 +25,6 @@ the original unfiltered data.
     exObj <- exObj[c(1:10), ]
 
     exObj <- resetDGEobj(exObj)
+    dim(exObj)
 
 }

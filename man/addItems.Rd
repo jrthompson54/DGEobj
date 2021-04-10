@@ -7,17 +7,20 @@
 addItems(dgeObj, itemList, itemTypes, parents, itemAttr, overwrite = FALSE)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
-\item{itemList}{A list of data items to add to DGEobj}
+\item{itemList}{A named list of data items to add to DGEobj}
 
 \item{itemTypes}{A list of type values for each item on itemList}
 
-\item{parents}{(optional) A list of parent values for each item on itemList (optional, but highly recommended)}
+\item{parents}{(optional) A list of parent values for each item on itemList
+(optional, but highly recommended)}
 
-\item{itemAttr}{(optional) An named list of attributes to add to each item}
+\item{itemAttr}{(optional) An named list of attributes to add to each item.
+These attributes will be attached to all items in the call.}
 
-\item{overwrite}{Whether to overwrite a matching data object stored in the itemName slot (default = FALSE)}
+\item{overwrite}{Whether to overwrite a matching data object stored in the
+itemName slot (default = FALSE)}
 }
 \value{
 A DGEobj
@@ -26,9 +29,17 @@ A DGEobj
 Add multiple data items
 }
 \examples{
-\dontrun{
-   # Replace a set of contrasts after adding something to each
-   myDGEobj <- addItems(myDGEobj, myContrastList, overwrite= TRUE)
-}
+
+   # Add normalize counts (DGEList) and log2CPM as additional "assay" items in the DGEobj
+   dgeObj  <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+   dgeList <- edgeR::calcNormFactors(edgeR::DGEList(dgeObj$counts), method="TMM")
+   log2cpm <- edgeR::cpm(dgeList, log = TRUE)
+
+   dgeObj <- addItems(dgeObj,
+                      itemList = list(newDgelist = dgeList, Log2CPM = log2cpm),
+                      itemTypes = list("assay", "assay"),
+                      parents = list("counts", "newDgelist")
+   )
+   inventory(dgeObj)
 
 }

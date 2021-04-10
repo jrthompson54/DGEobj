@@ -2,7 +2,7 @@
 #'
 #' @param dgeObj    A class DGEobj created by function initDGEobj()
 #' @param item      The data item to be deposited in the DGEobj
-#' @param itemName  The assigned name for this data item
+#' @param itemName  The user-assigned name for this data item
 #' @param itemType  The type attribute.  See showTypes() to see the predefined types -- types are extensible with the newType() function.
 #' @param funArgs   (optional) A text field to annotate how the data object was created. If the result of match.call() is passed as this argument, the name and arguments used in the current function are captured
 #' @param itemAttr  (optional) A named list of attributes to add directly to the item
@@ -154,20 +154,31 @@ addItem <- function(dgeObj,
 
 #' Add multiple data items
 #'
-#' @param dgeObj    A DGEobj
-#' @param itemList  A list of data items to add to DGEobj
+#' @param dgeObj    A class DGEobj created by function initDGEobj()
+#' @param itemList  A named list of data items to add to DGEobj
 #' @param itemTypes A list of type values for each item on itemList
-#' @param parents   (optional) A list of parent values for each item on itemList (optional, but highly recommended)
-#' @param itemAttr  (optional) An named list of attributes to add to each item
-#' @param overwrite Whether to overwrite a matching data object stored in the itemName slot (default = FALSE)
+#' @param parents   (optional) A list of parent values for each item on itemList
+#'   (optional, but highly recommended)
+#' @param itemAttr  (optional) An named list of attributes to add to each item.
+#'   These attributes will be attached to all items in the call.
+#' @param overwrite Whether to overwrite a matching data object stored in the
+#'   itemName slot (default = FALSE)
 #'
 #' @return A DGEobj
 #'
 #' @examples
-#' \dontrun{
-#'    # Replace a set of contrasts after adding something to each
-#'    myDGEobj <- addItems(myDGEobj, myContrastList, overwrite= TRUE)
-#' }
+#'
+#'    # Add normalize counts (DGEList) and log2CPM as additional "assay" items in the DGEobj
+#'    dgeObj  <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'    dgeList <- edgeR::calcNormFactors(edgeR::DGEList(dgeObj$counts), method="TMM")
+#'    log2cpm <- edgeR::cpm(dgeList, log = TRUE)
+#'
+#'    dgeObj <- addItems(dgeObj,
+#'                       itemList = list(newDgelist = dgeList, Log2CPM = log2cpm),
+#'                       itemTypes = list("assay", "assay"),
+#'                       parents = list("counts", "newDgelist")
+#'    )
+#'    inventory(dgeObj)
 #'
 #' @importFrom assertthat assert_that
 #'
@@ -189,6 +200,8 @@ addItems <- function(dgeObj,
                             msg = "The DGEobj must be of class DGEobj, while the itemList and itemTypes must both be lists.")
     assertthat::assert_that(length(itemList) == length(itemTypes),
                             msg = "The length of the itemList must match the length of the itemTypes.")
+    assertthat::assert_that(!is.null(names(itemList)),
+                            msg = "The itemList must be a named list.")
 
     if (!missing(parents))
         assertthat::assert_that(class(parents)[[1]] == "list",

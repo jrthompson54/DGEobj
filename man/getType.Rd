@@ -7,7 +7,7 @@
 getType(dgeObj, type, parent)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
 \item{type}{A type or list of types to retrieve}
 
@@ -24,7 +24,6 @@ Retrieve data items by type
     # example DGEobj
     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
-    MyContrastList <- getType(exObj, type = "topTable")
     MyRawData      <- getType(exObj, type = list("counts", "design", "geneData"))
 
 }

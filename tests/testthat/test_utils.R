@@ -16,14 +16,14 @@ test_that('utils.R: inventory()', {
     inventory_t_obj <- inventory(t_obj)
 
     expect_true(is.data.frame(inventory_t_obj))
-    expect_equal(nrow(inventory_t_obj), 8)
+    expect_equal(nrow(inventory_t_obj), 18)
     expect_equal(ncol(inventory_t_obj), 8)
     expect_setequal(names(inventory_t_obj), c("ItemName", "ItemType", "BaseType", "Parent", "Class", "Row", "Col", "DateCreated"))
 
     inventory_t_obj_verbose <- inventory(t_obj, verbose = TRUE)
 
     expect_true(is.data.frame(inventory_t_obj_verbose))
-    expect_equal(nrow(inventory_t_obj_verbose), 8)
+    expect_equal(nrow(inventory_t_obj_verbose), 18)
     expect_equal(ncol(inventory_t_obj_verbose), 9)
     expect_setequal(names(inventory_t_obj), c("ItemName", "ItemType", "BaseType", "Parent", "Class", "Row", "Col", "DateCreated"))
 })

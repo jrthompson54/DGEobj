@@ -7,9 +7,9 @@
 inventory(dgeObj, verbose = FALSE)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
-\item{verbose}{Add funArgs to the output (default = FALSE)}
+\item{verbose}{Include funArgs column in the output (default = FALSE)}
 }
 \value{
 A data.frame summarizing the data contained in the DGEobj

@@ -7,7 +7,7 @@
 getBaseType(dgeObj, baseType)
 }
 \arguments{
-\item{dgeObj}{A DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
 \item{baseType}{One or more of: ["row", "col", "assay", "meta"]}
 }

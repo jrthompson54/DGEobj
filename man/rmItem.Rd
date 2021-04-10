@@ -7,7 +7,7 @@
 rmItem(dgeObj, itemName)
 }
 \arguments{
-\item{dgeObj}{A class DGEobj}
+\item{dgeObj}{A class DGEobj created by function initDGEobj()}
 
 \item{itemName}{Name of the item to remove}
 }

@@ -7,7 +7,7 @@
 \method{subset}{DGEobj}(x, ..., row, col, drop = FALSE, debug = FALSE)
 }
 \arguments{
-\item{x}{A DGEobj}
+\item{x}{A class DGEobj created by function initDGEobj()}
 
 \item{...}{Additional parameters}
 
