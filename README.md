@@ -4,7 +4,7 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/DGEobj?color=9bc2cf)](https://cran.r-project.org/package=DGEobj) 
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/grand-total/DGEobj?color=9bc2cf)](https://cran.r-project.org/package=DGEobj) 
 [![Travis build status](https://travis-ci.com/cb4ds/DGEobj.svg?branch=master)](https://travis-ci.com/cb4ds/DGEobj?branch=master)
-[![Codecov test coverage](https://codecov.io/gh/cb4ds/DGEobj/branch/develop/graph/badge.svg)](https://codecov.io/gh/cb4ds/DGEobj?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/cb4ds/DGEobj/branch/master/graph/badge.svg)](https://codecov.io/gh/cb4ds/DGEobj?branch=master)
 <!-- badges: end -->
 
 DGEobj is an S3 data class that provides a flexible container for Differential Gene Expression (DGE) analysis results.  The DGEobj class is designed to be extensible. Thus, while designed with RNA-Seq analysis workflows in mind, The DGE object data structure is suitable for  allowing definition of new data types as needed. A set of accessory functions to deposit, query and retrieve subsets of a data workflow has been provided.  Attributes are used to capture metadata such as species and gene model, including reproducibility information such that a 3rd party can access a DGEobj history to see how each data object was created or modified. 
