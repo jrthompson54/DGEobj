@@ -1,9 +1,10 @@
 ## Comments from Maintainer
 
-* significant documentation review/updates
-* underlying structure - added a few new fields and cleaned up unneeded methods
-* updated the example object with additional field information
-* precompiled the vignette to avoid hitting internet resources and performing intensive calculations with each CMD check
+* made GenomicRanges package optional - used only for exon/gene levels
+* added "protein" level data, reviewed/updated isoform data for proper handling
+* added imputationMatrix as a type of metadata
+* reworked reset to resolve issues and remove unneeded code
+* updated tests and documentation
 
 ---  
 
@@ -12,13 +13,13 @@
 RStudio Server Pro (ubuntu 18.04.2)  
 
 * R 3.6.3
-* R 4.0.4
+* R 4.0.5
+* R 4.1.3
 
-Travis-CI (ubuntu 16.04.6)
+CircleCI
 
-* R 3.6.3
-* R 4.0.2
-* R devel (2021-04-08 r80148)
+* R 4.0.5
+* R 4.1.3
 
 WinBuilder
 
@@ -44,11 +45,21 @@ devtools::check()
 
 ## Reverse dependencies
 
-
-**NONE**
+* DGEobj.utils
 
 ```
 revdepcheck::cran_revdeps('DGEobj', bioc = T)
 
-[1] "DGEobj"
+[1] "DGEobj"       "DGEobj.utils"
+```
+
+```
+revdepcheck:: revdep_report_cran()
+## revdepcheck results
+
+We checked 1 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
+
 ```

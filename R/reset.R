@@ -1,8 +1,10 @@
 #' Reset to original data
 #'
 #' During a workflow, a DGEobj typically gets filtered down to remove samples
-#' that fail QC or non-expressed genes.  The resetDGEobj() function produces a new DGEobj with
-#' the original unfiltered data.
+#' that fail QC or non-expressed genes. The resetDGEobj() function produces a new DGEobj with
+#' the original unfiltered data. Resetting an object does not restore changes to attributes or class,
+#' but does revert changes made with addItem() and rmItem(). Reset requires that *_orig data is still
+#' in the DGEobj.
 #'
 #' @param dgeObj A class DGEobj created by function initDGEobj()
 #'
@@ -21,54 +23,28 @@
 #' @importFrom assertthat assert_that
 #'
 #' @export
-resetDGEobj <- function(dgeObj){
-    platform.types <- c("rna-seq", "rnaseq", "affymetrix")
 
+resetDGEobj <- function(dgeObj){
     assertthat::assert_that("DGEobj" %in% class(dgeObj),
                             msg = "The DGEobj must be of class 'DGEobj'.")
     assertthat::assert_that(!is.null(attr(dgeObj, "level")),
                             msg = "The DGEobj must have a 'level' attribute specified.")
-    assertthat::assert_that(!is.null(attr(dgeObj, "PlatformType")),
-                            msg = "Required attribute \"PlatformType\" is missing.")
 
-    platformType <- tolower(attr(dgeObj, "PlatformType"))
-    counts       <- getItem(dgeObj, "counts_orig")
-    design       <- getItem(dgeObj, "design_orig")
+    #TODO:: check that we have a design and primary assay data on the object, protect the following.
 
-    if ("geneData_orig" %in% names(dgeObj)) {
-        rowData <- getItem(dgeObj, "geneData_orig")
-    } else if ("isoformData_orig" %in% names(dgeObj)) {
-        rowData <- getItem(dgeObj, "isoformData_orig")
-    } else if ("exonData_orig" %in% names(dgeObj)) {
-        rowData <- getItem(dgeObj, "exonData_orig")
-    } else if ("proteinData_orig" %in% names(dgeObj)) {
-        rowData <- getItem(dgeObj, "proteinData_orig")
-    } else {
-        stop("Gene/isoform/exon/protein data not found")
-    }
+    level     <- attr(dgeObj, "level")
+    levelData <- getItem(dgeObj, paste(level, "Data_orig", sep = ""))
 
-    if (tolower(platformType) %in% platform.types) {
-        newObj <- initDGEobj(primaryAssayData = counts,
-                             rowData   = rowData,
-                             colData   = design,
-                             level     = attr(dgeObj, "level"),
-                             DGEobjDef = attr(dgeObj, "objDef"))
-    } else {
-        stop("The PlatformType attribute value was not recognized!")
-    }
+    design    <- getItem(dgeObj, "design_orig")
+    def       <- attr(dgeObj, "objDef")
 
-    if ("effectiveLength_orig" %in% names(dgeObj)) {
-        newObj <- addItem(newObj,
-                          item = dgeObj$effectiveLength_orig,
-                          itemName = "effectiveLength_orig",
-                          itemType = "effectiveLength_orig")
+    paData    <- getItem(dgeObj, paste(def$primaryAssayNames[[level]], "_orig", sep = ""))
 
-        newObj <- addItem(newObj,
-                          item = dgeObj$effectiveLength_orig,
-                          itemName = "effectiveLength",
-                          itemType = "effectiveLength",
-                          parent = "effectiveLength_orig")
-    }
+    newObj  <- initDGEobj(primaryAssayData = paData,
+                          rowData          = levelData,
+                          colData          = design,
+                          level            = level,
+                          DGEobjDef        = def)
 
     excludeList <- list("names",
                         "class",
@@ -84,7 +60,9 @@ resetDGEobj <- function(dgeObj){
                         "funArgs",
                         "level",
                         "dateCreated")
+
     attributes.dgeObj <- getAttributes(dgeObj, excludeList = excludeList)
+
     for (at in names(attributes.dgeObj)) {
         attr(newObj, at) <- attributes.dgeObj[[at]]
     }

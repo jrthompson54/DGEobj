@@ -65,7 +65,7 @@ getItem <- function(dgeObj, itemName){
                             msg = "Specify both a DGEobj and an itemName to retrieve.")
     assertthat::assert_that("DGEobj" %in% class(dgeObj),
                             msg = "The DGEobj must be of class 'DGEobj'.")
-    assertthat::assert_that(class(itemName) == "character",
+    assertthat::assert_that("character" %in% class(itemName),
                             length(itemName) == 1,
                             msg = "The itemName should be a character string and contain the name of only one item to retrieve. To retrieve multiple items, use the getItems() function.")
     assertthat::assert_that(itemName %in% names(dgeObj),

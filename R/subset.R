@@ -22,7 +22,7 @@
 #' @export
 subset.DGEobj <- function(x, ..., row, col, drop = FALSE, debug = FALSE){
 
-    assertthat::assert_that(class(x)[[1]] == "DGEobj",
+    assertthat::assert_that("DGEobj" %in% class(x),
                             msg = "x must be of class 'DGEobj'.")
 
     # Fill in missing row/col args
@@ -38,13 +38,13 @@ subset.DGEobj <- function(x, ..., row, col, drop = FALSE, debug = FALSE){
         stop("col coordinates out of range")
 
     # Warn if named items don't exist
-    if (class(row)[[1]] == "character") {
+    if ("character" %in% class(row)) {
         count <- length(row)
         foundcount <- sum(row %in% rownames(x))
         if (foundcount < count)
             warning(stringr::str_c((count - foundcount), " items in row index not found in rownames(x)"))
     }
-    if (class(col)[[1]] == "character") {
+    if ("character" %in% class(col)) {
         count <- length(col)
         foundcount <- sum(col %in% colnames(x))
         if (foundcount < count)
@@ -54,9 +54,9 @@ subset.DGEobj <- function(x, ..., row, col, drop = FALSE, debug = FALSE){
     basetypes <- attr(x, "basetype")
     dropClasses <- c("data.frame", "matrix")
 
-    if (class(row)[[1]] == "character")
+    if ("character" %in% class(row))
         row <- rownames(x) %in% row
-    if (class(col)[[1]] == "character")
+    if ("character" %in% class(col))
         col <- colnames(x) %in% col
 
     for (i in 1:length(x)) {

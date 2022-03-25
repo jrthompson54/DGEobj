@@ -66,3 +66,54 @@ test_that('init.R: initDGEobj()', {
     expect_error(initDGEobj(primaryAssayData = counts, rowData =  rowData, colData =  colData, customAttr = customAttr),
                  regexp = "Specify the primaryAssayData, colData, rowData, and level. All are required to initialize a DGEobj.")
 })
+
+test_that('init.R: levels - asserts', {
+
+    # collect data from test object to initialize new DGEobj
+    counts     <- getItem(t_obj, "counts_orig")
+    rowData    <- getItem(t_obj, "geneData_orig")
+    colData    <- getItem(t_obj, "design_orig")
+    level      <- "not level"
+
+    # checking not allowed level
+    expect_error({initDGEobj(primaryAssayData = counts,
+                             rowData          = rowData,
+                             colData          = colData,
+                             level            = level)},
+                 regexp = "The specified level must be one of:  gene, exon, isoform, protein, affy")
+
+    # checking level class
+    level <- 123
+    expect_error({initDGEobj(primaryAssayData = counts,
+                             rowData          = rowData,
+                             colData          = colData,
+                             level            = level)},
+                 regexp = "The specified level must be one of:  gene, exon, isoform, protein, affy")
+
+    # checking NULL level
+    level <- NULL
+    expect_error({initDGEobj(primaryAssayData = counts,
+                             rowData          = rowData,
+                             colData          = colData,
+                             level            = level)},
+                 regexp = "Specify the primaryAssayData, colData, rowData, and level. All are required to initialize a DGEobj.")
+
+    # checking NA level
+    level <- NA
+    expect_error({initDGEobj(primaryAssayData = counts,
+                             rowData          = rowData,
+                             colData          = colData,
+                             level            = level)},
+                 regexp = "The specified level must be one of:  gene, exon, isoform, protein, affy")
+})
+
+test_that('init.R: initDGEobjDef - happy case', {
+    myDGEobjDef <- initDGEobjDef(levels = "metabolomics",
+                                 primaryAssayNames = "intensity",
+                                 types <- c(normalizedIntensity = "assay"))
+    expect_equal(length(myDGEobjDef), 5)
+    expect_equal(names(myDGEobjDef$basetype), c("row", "col", "assay", "meta"))
+    expect_equal(length(myDGEobjDef$type), 47)
+    expect_equal(myDGEobjDef$allowedLevels, c("gene", "exon", "isoform", "protein", "affy", "metabolomics"))
+    expect_equal(myDGEobjDef$primaryAssayNames[["affy"]], "AffyRMA")
+})

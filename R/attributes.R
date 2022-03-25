@@ -80,7 +80,7 @@ setAttributes <- function(dgeObj, attribs){
     assertthat::assert_that(!missing(dgeObj),
                             !missing(attribs),
                             msg = "Specify both a DGEobj and the attributes (attribs).")
-    assertthat::assert_that(class(attribs)[[1]] == "list",
+    assertthat::assert_that("list" %in% class(attribs),
                             msg = "attribs must be of class 'list'.")
     assertthat::assert_that(!is.null(names(attribs)),
                             msg = "The attribs list should be a named list, specifying the attribute/value pairs. It must have names specified.")

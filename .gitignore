@@ -13,6 +13,8 @@ vignettes/*.html
 *.knit.md
 /.project
 inst/doc
+working-*
+revdep
 
 /**/*.png
 /**/*.xlsx
@@ -22,3 +24,8 @@ inst/doc
 /**/*.rds
 /**/*.RDS
 /**/*.Rds
+
+vignettes/*.html
+vignettes/*.R
+vignettes/*.log
+!vignettes/precompiled_vignettes.R

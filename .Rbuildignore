@@ -7,3 +7,8 @@
 ^misc$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
+^\.circleci$
+^\.circleci/config\.yml$
+^working-.*$
+^revdep$
+^CRAN-SUBMISSION$
