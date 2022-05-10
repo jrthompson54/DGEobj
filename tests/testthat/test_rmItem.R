@@ -1,5 +1,5 @@
 context("rmItem.R functions")
-
+skip_if(setup_failed)
 
 test_that('rmItem.R: rmItem()', {
     expect_length(t_obj, 18)

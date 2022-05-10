@@ -1,5 +1,5 @@
 context("DGEobj - tests for annotate.R functions")
-
+skip_if(setup_failed)
 
 test_that('annotate.R: annotateDGEobj()', {
     ann.file <- tempfile("annotations_test", fileext = ".txt")

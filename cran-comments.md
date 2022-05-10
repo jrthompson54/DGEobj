@@ -1,10 +1,8 @@
 ## Comments from Maintainer
 
-* made GenomicRanges package optional - used only for exon/gene levels
-* added "protein" level data, reviewed/updated isoform data for proper handling
-* added imputationMatrix as a type of metadata
-* reworked reset to resolve issues and remove unneeded code
-* updated tests and documentation
+* Resolved CRAN check errors
+* Skipping examples dependent on suggested packages
+* Updated tests so that they do not fail if suggested packages are not available
 
 ---  
 
@@ -20,6 +18,7 @@ CircleCI
 
 * R 4.0.5
 * R 4.1.3
+* rocker/verse:latest
 
 WinBuilder
 
@@ -28,7 +27,8 @@ WinBuilder
 
 RHub
 
-* devtools::check_rhub(interactive = F)
+* devtools::check_rhub(interactive = F,
+                       env_vars    = c("_R_CHECK_DEPENDS_ONLY_"   = "true"))
 
 ---  
 
@@ -54,7 +54,8 @@ revdepcheck::cran_revdeps('DGEobj', bioc = T)
 ```
 
 ```
-revdepcheck:: revdep_report_cran()
+revdepcheck::revdep_report_cran()
+
 ## revdepcheck results
 
 We checked 1 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.

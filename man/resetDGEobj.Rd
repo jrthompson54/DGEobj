@@ -20,6 +20,7 @@ but does revert changes made with addItem() and rmItem(). Reset requires that *_
 in the DGEobj.
 }
 \examples{
+\dontrun{
     #example object
     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
@@ -28,5 +29,6 @@ in the DGEobj.
 
     exObj <- resetDGEobj(exObj)
     dim(exObj)
+}
 
 }

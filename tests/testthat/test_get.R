@@ -1,5 +1,5 @@
 context("get.R functions")
-
+skip_if(setup_failed)
 
 test_that('get.R: getItem()', {
     getItem_DGEobj_test <- getItem(t_obj, 'design')

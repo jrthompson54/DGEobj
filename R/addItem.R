@@ -167,7 +167,7 @@ addItem <- function(dgeObj,
 #' @return A DGEobj
 #'
 #' @examples
-#'
+#' \dontrun{
 #'    # Add normalize counts (DGEList) and log2CPM as additional "assay" items in the DGEobj
 #'    dgeObj  <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'    dgeList <- edgeR::calcNormFactors(edgeR::DGEList(dgeObj$counts), method="TMM")
@@ -179,6 +179,7 @@ addItem <- function(dgeObj,
 #'                       parents = list("counts", "newDgelist")
 #'    )
 #'    inventory(dgeObj)
+#' }
 #'
 #' @importFrom assertthat assert_that
 #'

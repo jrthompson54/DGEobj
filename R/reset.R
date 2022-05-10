@@ -11,6 +11,7 @@
 #' @return A DGEobj
 #'
 #' @examples
+#' \dontrun{
 #'     #example object
 #'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
@@ -19,6 +20,7 @@
 #'
 #'     exObj <- resetDGEobj(exObj)
 #'     dim(exObj)
+#'}
 #'
 #' @importFrom assertthat assert_that
 #'

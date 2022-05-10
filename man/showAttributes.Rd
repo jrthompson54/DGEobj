@@ -23,9 +23,11 @@ This function prints all attributes regardless of the class of the attribute val
 *Note* Use showMeta() to only retrieve attributes that are key/value pairs.
 }
 \examples{
+\dontrun{
     # example DGEobj
     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
    showAttributes(exObj)
+}
 
 }

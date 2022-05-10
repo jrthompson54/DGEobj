@@ -43,7 +43,9 @@ dge_creation_workflow <- function(counts, gene.data, design, qcdata, contrast_li
     result <- result[result$geneData$gene_biotype == "protein_coding", ]
 
     # Normalize
-    result <- runEdgeRNorm(result, includePlot = FALSE)
+    if (requireNamespace("edgeR", quietly = TRUE)) {
+        result <- runEdgeRNorm(result, includePlot = FALSE)
+    }
 
     # Define Model
     formula          <- '~ 0 + ReplicateGroup'

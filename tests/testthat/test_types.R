@@ -1,5 +1,5 @@
 context("types.R functions")
-
+skip_if(setup_failed)
 
 test_that('types.R: baseType()', {
     expect_equal(baseType(t_obj, "counts"), "assay")

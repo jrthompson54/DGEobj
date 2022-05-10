@@ -11,10 +11,12 @@
 #' @return A DGEobj
 #'
 #' @examples
+#' \dontrun{
 #'     # example DGEobj
 #'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
 #'     exObj <- subset(exObj, 1:10, 5:50)
+#'}
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom stringr str_c

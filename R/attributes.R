@@ -10,10 +10,12 @@
 #'   "dimnames", "rownames", "colnames", "listData", "objDef")
 #'
 #' @examples
+#' \dontrun{
 #'     # example DGEobj
 #'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'
 #'    showAttributes(exObj)
+#'}
 #'
 #' @export
 showAttributes <- function(dgeObj, skipList = c("dim", "dimnames", "rownames", "colnames", "listData", "objDef")) {

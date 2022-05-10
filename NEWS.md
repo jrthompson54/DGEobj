@@ -4,11 +4,14 @@
 
 ---
 
+### v1.1.1
+* Updated tests and examples so that when suggested packages are unavailable the examples and/or tests dependent on them are not run
+
 ### v1.1
 * made GenomicRanges package optional - used only for exon/gene levels
 * added "protein" level data, reviewed/updated isoform data for proper handling
 * added imputationMatrix as a type of metadata
-* reworked reset to resolve issues and remove unneded code
+* reworked reset to resolve issues and remove unneeded code
 * updated tests and documentation
 
 ### v1.0.3

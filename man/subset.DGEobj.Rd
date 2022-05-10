@@ -26,9 +26,11 @@ A DGEobj
 Subset internal row or column data
 }
 \examples{
+\dontrun{
     # example DGEobj
     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 
     exObj <- subset(exObj, 1:10, 5:50)
+}
 
 }
