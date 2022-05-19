@@ -1,6 +1,7 @@
 context("attributes.R functions")
 skip_if(setup_failed)
 
+
 test_that("attributes.R: showAttributes()", {
     output <- capture_output_lines(showAttributes(t_obj))
 

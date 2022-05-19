@@ -1,6 +1,7 @@
 context("init.R functions")
 skip_if(setup_failed)
 
+
 test_that('init.R: initDGEobj()', {
 
     # collect data from test object to initialize new DGEobj

@@ -1,6 +1,7 @@
 context("DGEobj - tests for annotate.R functions")
 skip_if(setup_failed)
 
+
 test_that('annotate.R: annotateDGEobj()', {
     ann.file <- tempfile("annotations_test", fileext = ".txt")
     writeLines(c("key1='value 1'", "key2=value 2"), con = ann.file)

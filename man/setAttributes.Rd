@@ -24,7 +24,7 @@ To remove an attribute from an object pass NULL as the attribute value.
 }
 \examples{
     # example DGEobj
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     # Assign attributes to a DGEobj
     MyAttributes <- list(Platform       = "RNA-Seq",

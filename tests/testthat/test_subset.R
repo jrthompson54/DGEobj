@@ -1,6 +1,7 @@
 context("subset.R functions")
 skip_if(setup_failed)
 
+
 test_that('subset.R: subset()', {
     subsett_obj_1.0 <- subset(t_obj, row = c(1:5))
     subsett_obj_1.1 <- t_obj[c(1:5), ]

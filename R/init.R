@@ -20,18 +20,17 @@
 #' @return A DGEobj
 #'
 #' @examples
-#'
-#'    dgeObj   <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'    dgeObj   <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'    MyCounts <- dgeObj$counts
 #'    geneinfo <- dgeObj$geneData
 #'    sampinfo <- dgeObj$design
 #'
 #'   myDgeObj <- initDGEobj(primaryAssayData = MyCounts,
-#'                          rowData = geneinfo,
-#'                          colData = sampinfo,
-#'                          level = "gene",
-#'                          customAttr = list (Genome = "Rat.B6.0",
-#'                                             GeneModel = "Ensembl.R89"))
+#'                          rowData          = geneinfo,
+#'                          colData          = sampinfo,
+#'                          level            = "gene",
+#'                          customAttr       = list (Genome = "Rat.B6.0",
+#'                                                GeneModel = "Ensembl.R89"))
 #'
 #' @import magrittr
 #' @importFrom assertthat assert_that

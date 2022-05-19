@@ -1,7 +1,7 @@
 ---
 title: 'DGEobj: An S3 Object to Capture and Annotate DGE Workflows'
 author: "John R. Thompson"
-date: "2022-03-24"
+date: "2022-05-12"
 output:
   rmarkdown::html_vignette:
     fig_caption: yes
@@ -332,14 +332,14 @@ kable(inventory(dgeObj))
 
 |ItemName      |ItemType      |BaseType |Parent        |Class      |Row   |Col |DateCreated         |
 |:-------------|:-------------|:--------|:-------------|:----------|:-----|:---|:-------------------|
-|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2022-03-24 11:47:54 |
-|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2022-03-24 11:47:54 |
-|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2022-03-24 11:47:54 |
-|design        |design        |col      |design_orig   |data.frame |48    |10  |2022-03-24 11:47:54 |
-|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2022-03-24 11:47:54 |
-|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2022-03-24 11:47:54 |
-|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2022-03-24 11:47:55 |
-|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2022-03-24 11:47:55 |
+|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2022-05-12 10:58:09 |
+|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2022-05-12 10:58:09 |
+|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2022-05-12 10:58:09 |
+|design        |design        |col      |design_orig   |data.frame |48    |10  |2022-05-12 10:58:09 |
+|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2022-05-12 10:58:09 |
+|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2022-05-12 10:58:09 |
+|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2022-05-12 10:58:10 |
+|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2022-05-12 10:58:10 |
 
 
 ## Examine DGEobj Metadata
@@ -488,14 +488,14 @@ kable(inventory(dgeObj))
 
 |ItemName      |ItemType      |BaseType |Parent        |Class      |Row   |Col |DateCreated         |
 |:-------------|:-------------|:--------|:-------------|:----------|:-----|:---|:-------------------|
-|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2022-03-24 11:47:54 |
-|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2022-03-24 11:47:54 |
-|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2022-03-24 11:47:54 |
-|design        |design        |col      |design_orig   |data.frame |48    |10  |2022-03-24 11:47:54 |
-|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2022-03-24 11:47:54 |
-|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2022-03-24 11:47:54 |
-|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2022-03-24 11:47:55 |
-|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2022-03-24 11:47:55 |
+|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2022-05-12 10:58:09 |
+|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2022-05-12 10:58:09 |
+|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2022-05-12 10:58:09 |
+|design        |design        |col      |design_orig   |data.frame |48    |10  |2022-05-12 10:58:09 |
+|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2022-05-12 10:58:09 |
+|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2022-05-12 10:58:09 |
+|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2022-05-12 10:58:10 |
+|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2022-05-12 10:58:10 |
 
 If just the item names of data stored in the DGEobj are needed, use the base R `names` function.
 
@@ -557,16 +557,16 @@ kable(inventory(newdgeObj))
 
 |ItemName      |ItemType      |BaseType |Parent        |Class      |Row   |Col |DateCreated         |
 |:-------------|:-------------|:--------|:-------------|:----------|:-----|:---|:-------------------|
-|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2022-03-24 11:47:54 |
-|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2022-03-24 11:47:54 |
-|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2022-03-24 11:47:54 |
-|design        |design        |col      |design_orig   |data.frame |48    |10  |2022-03-24 11:47:54 |
-|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2022-03-24 11:47:54 |
-|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2022-03-24 11:47:54 |
-|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2022-03-24 11:47:55 |
-|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2022-03-24 11:47:55 |
-|AlignmentQC   |alignQC       |col      |              |data.frame |48    |172 |2022-03-24 11:47:55 |
-|normTMM       |DGEList       |assay    |counts        |DGEList    |32883 |48  |2022-03-24 11:47:56 |
+|counts_orig   |counts_orig   |meta     |              |matrix     |32883 |48  |2022-05-12 10:58:09 |
+|counts        |counts        |assay    |counts_orig   |matrix     |32883 |48  |2022-05-12 10:58:09 |
+|design_orig   |design_orig   |meta     |              |data.frame |48    |10  |2022-05-12 10:58:09 |
+|design        |design        |col      |design_orig   |data.frame |48    |10  |2022-05-12 10:58:09 |
+|geneData_orig |geneData_orig |meta     |              |data.frame |32883 |8   |2022-05-12 10:58:09 |
+|geneData      |geneData      |row      |geneData_orig |data.frame |32883 |8   |2022-05-12 10:58:09 |
+|granges_orig  |granges_orig  |meta     |geneData_orig |GRanges    |32883 |NA  |2022-05-12 10:58:10 |
+|granges       |granges       |row      |geneData      |GRanges    |32883 |NA  |2022-05-12 10:58:10 |
+|AlignmentQC   |alignQC       |col      |              |data.frame |48    |172 |2022-05-12 10:58:10 |
+|normTMM       |DGEList       |assay    |counts        |DGEList    |32883 |48  |2022-05-12 10:58:11 |
 
 **item** is the actual data object to add.
 
@@ -1023,12 +1023,12 @@ kable(inventory(MetabolomicObj))
 
 |ItemName            |ItemType            |BaseType |Parent              |Class      |Row   |Col |DateCreated         |
 |:-------------------|:-------------------|:--------|:-------------------|:----------|:-----|:---|:-------------------|
-|intensity_orig      |intensity_orig      |meta     |                    |matrix     |32883 |48  |2022-03-24 11:47:58 |
-|intensity           |intensity           |assay    |intensity_orig      |matrix     |32883 |48  |2022-03-24 11:47:58 |
-|design_orig         |design_orig         |meta     |                    |data.frame |48    |10  |2022-03-24 11:47:58 |
-|design              |design              |col      |design_orig         |data.frame |48    |10  |2022-03-24 11:47:58 |
-|metaboliteData_orig |metaboliteData_orig |meta     |                    |data.frame |32883 |8   |2022-03-24 11:47:58 |
-|metaboliteData      |metaboliteData      |row      |metaboliteData_orig |data.frame |32883 |8   |2022-03-24 11:47:58 |
+|intensity_orig      |intensity_orig      |meta     |                    |matrix     |32883 |48  |2022-05-12 10:58:14 |
+|intensity           |intensity           |assay    |intensity_orig      |matrix     |32883 |48  |2022-05-12 10:58:14 |
+|design_orig         |design_orig         |meta     |                    |data.frame |48    |10  |2022-05-12 10:58:14 |
+|design              |design              |col      |design_orig         |data.frame |48    |10  |2022-05-12 10:58:14 |
+|metaboliteData_orig |metaboliteData_orig |meta     |                    |data.frame |32883 |8   |2022-05-12 10:58:14 |
+|metaboliteData      |metaboliteData      |row      |metaboliteData_orig |data.frame |32883 |8   |2022-05-12 10:58:14 |
 
 There are simple dimension-based criteria to determine the basetype of a
 new datatype.

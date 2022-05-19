@@ -1,7 +1,7 @@
 context("reset.R functions")
 skip_if(setup_failed)
 
-# test gene level data
+
 test_that('reset.R: gene level data', {
 
     test_t_obj <- t_obj

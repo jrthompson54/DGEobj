@@ -10,12 +10,10 @@
 #'   "dimnames", "rownames", "colnames", "listData", "objDef")
 #'
 #' @examples
-#' \dontrun{
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'    showAttributes(exObj)
-#'}
 #'
 #' @export
 showAttributes <- function(dgeObj, skipList = c("dim", "dimnames", "rownames", "colnames", "listData", "objDef")) {
@@ -57,7 +55,7 @@ showAttributes <- function(dgeObj, skipList = c("dim", "dimnames", "rownames", "
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     # Assign attributes to a DGEobj
 #'     MyAttributes <- list(Platform       = "RNA-Seq",
@@ -107,7 +105,7 @@ setAttributes <- function(dgeObj, attribs){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     getAttributes(exObj)
 #'
@@ -132,7 +130,7 @@ getAttributes <- function(dgeObj,
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     showMeta(exObj)
 #'

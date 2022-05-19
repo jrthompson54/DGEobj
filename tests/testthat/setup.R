@@ -4,8 +4,14 @@ require(DGEobj)
 
 setup_failed <- TRUE
 
-if (requireNamespace('GenomicRanges', quietly = TRUE)) {
+# NOTE: if the bioconductor packages are missing from the platform we will NOT perform tests
+if (requireNamespace('GenomicRanges', quietly = TRUE) &&
+    requireNamespace('edgeR',         quietly = TRUE) &&
+    requireNamespace('biomaRt',       quietly = TRUE)) {
+
     require(GenomicRanges)
+    require(edgeR)
+    # require(biomaRt) - does not need to be imported into the environment
 
     # --- gene level example object
     t_obj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj", mustWork = TRUE))
@@ -59,4 +65,8 @@ if (requireNamespace('GenomicRanges', quietly = TRUE)) {
                                          level            = "protein")
 
     setup_failed <- FALSE
+}
+
+if (setup_failed) {
+    message('Test Setup Failed - likely due to missing suggested packages.  Tests will be skipped.')
 }

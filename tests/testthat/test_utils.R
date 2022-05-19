@@ -1,6 +1,7 @@
 context("utils.R functions")
 skip_if(setup_failed)
 
+
 test_that('utils.R: dim()/dimnames()', {
     expect_equal(dim(t_obj), t_dim)
     dimnames_t_obj <- dimnames(t_obj)

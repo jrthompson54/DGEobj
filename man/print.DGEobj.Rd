@@ -17,11 +17,9 @@
 Print the Inventory
 }
 \examples{
-\dontrun{
     # example DGEobj
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     print(exObj)
-}
 
 }

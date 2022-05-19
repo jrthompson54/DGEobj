@@ -40,40 +40,39 @@ dge_creation_workflow <- function(counts, gene.data, design, qcdata, contrast_li
     # saveRDS(result, glue("simple{ifelse(is.null(limit_genes), '', limit_genes)}.RDS"))
 
     # Protein Coding Filtering
-    result <- result[result$geneData$gene_biotype == "protein_coding", ]
+    result <- result[result$geneData$gene_biotype %in% ("protein_coding"), ]
 
-    # Normalize
-    if (requireNamespace("edgeR", quietly = TRUE)) {
-        result <- runEdgeRNorm(result, includePlot = FALSE)
+    # Create using workflow functions IF IT MAKES SENSE
+    if (limit_genes > 500) {
+        # Normalize
+            result <- runEdgeRNorm(result, includePlot = FALSE)
+
+        # Define Model
+        formula          <- '~ 0 + ReplicateGroup'
+        designMatrixName <- "ReplicateGroupDesign"
+
+        designMatrix <- model.matrix(as.formula(formula),
+                                     getItem(result, "design"))
+        attr(designMatrix, "formula") <- formula
+        colnames(designMatrix) <- make.names(colnames(designMatrix))
+
+        result <- addItem(result,
+                          item      = designMatrix,
+                          itemName  = designMatrixName,
+                          itemType  = "designMatrix",
+                          parent    = "design",
+                          overwrite = TRUE)
+
+        result <- runVoom(result,
+                          designMatrixName = designMatrixName,
+                          mvPlot = FALSE)
+
+        result <- runContrasts(result,
+                               designMatrixName = designMatrixName,
+                               contrastList     = contrast_list,
+                               qValue = TRUE,
+                               IHW    = TRUE)
     }
-
-    # Define Model
-    formula          <- '~ 0 + ReplicateGroup'
-    designMatrixName <- "ReplicateGroupDesign"
-
-    designMatrix <- model.matrix(as.formula(formula),
-                                 getItem(result, "design"))
-    attr(designMatrix, "formula") <- formula
-    colnames(designMatrix) <- make.names(colnames(designMatrix))
-
-    result <- addItem(result,
-                      item      = designMatrix,
-                      itemName  = designMatrixName,
-                      itemType  = "designMatrix",
-                      parent    = "design",
-                      overwrite = TRUE)
-
-    # runVoom
-    result <- runVoom(result,
-                      designMatrixName = designMatrixName,
-                      mvPlot = FALSE)
-
-    # runContrasts
-    result <- runContrasts(result,
-                           designMatrixName = designMatrixName,
-                           contrastList     = contrast_list,
-                           qValue = TRUE,
-                           IHW    = TRUE)
 
     result
 }
@@ -167,3 +166,6 @@ saveRDS(full.dge, "fullObj.RDS")
 
 sm.dge <- dge_creation_workflow(counts, gene.data, design, qcdata, contrast_list, annotatFile, limit_genes = 1000)
 saveRDS(sm.dge, 'exampleObj.RDS')
+
+mini.dge <- dge_creation_workflow(counts, gene.data, design, qcdata, contrast_list[c(1,4)], annotatFile, limit_genes = 250)
+saveRDS(mini.dge, 'miniObj.RDS')

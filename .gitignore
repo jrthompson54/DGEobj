@@ -5,7 +5,6 @@
 *-Ex.R
 /*.Rcheck/
 .Rproj.user/
-vignettes/*.html
 .httr-oauth
 /*_cache/
 /cache/
@@ -28,4 +27,7 @@ revdep
 vignettes/*.html
 vignettes/*.R
 vignettes/*.log
+
 !vignettes/precompiled_vignettes.R
+!inst/exampleObj.RDS
+!inst/miniObj.RDS

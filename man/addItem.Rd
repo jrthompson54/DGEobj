@@ -45,10 +45,10 @@ Add a data item
 \dontrun{
    myFunArgs <- match.call()  #  Capture calling function and arguments
 
-   myDGEobj <- addItem(myDGEobj, item = MyCounts,
+   myDGEobj <- addItem(myDGEobj, item     = MyCounts,
                                  itemName = "counts",
                                  itemType = "counts",
-                                 funArgs = myFunArgs)
+                                 funArgs  = myFunArgs)
 }
 
 }

@@ -18,11 +18,9 @@ A data.frame summarizing the data contained in the DGEobj
 Retrieve the object inventory
 }
 \examples{
-\dontrun{
     # example DGEobj
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     inventory(exObj)
-}
 
 }

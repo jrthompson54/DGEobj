@@ -16,10 +16,10 @@
 #' \dontrun{
 #'    myFunArgs <- match.call()  #  Capture calling function and arguments
 #'
-#'    myDGEobj <- addItem(myDGEobj, item = MyCounts,
+#'    myDGEobj <- addItem(myDGEobj, item     = MyCounts,
 #'                                  itemName = "counts",
 #'                                  itemType = "counts",
-#'                                  funArgs = myFunArgs)
+#'                                  funArgs  = myFunArgs)
 #' }
 #'
 #' @importFrom assertthat assert_that
@@ -168,7 +168,9 @@ addItem <- function(dgeObj,
 #'
 #' @examples
 #' \dontrun{
-#'    # Add normalize counts (DGEList) and log2CPM as additional "assay" items in the DGEobj
+#'    # NOTE: Requires the edgeR package
+#'
+#'    # Add normalized counts and log2CPM as additional "assay" items in the DGEobj
 #'    dgeObj  <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'    dgeList <- edgeR::calcNormFactors(edgeR::DGEList(dgeObj$counts), method="TMM")
 #'    log2cpm <- edgeR::cpm(dgeList, log = TRUE)

@@ -7,7 +7,7 @@
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     myList <- getItems(exObj, list("counts", "geneData"))
 #'     names(myList)
@@ -17,7 +17,6 @@
 #'
 #' @export
 getItems <- function(dgeObj, itemNames){
-
     assertthat::assert_that(!missing(dgeObj),
                             !missing(itemNames),
                             msg = "Specify both a DGEobj and at least one itemName to retrieve.")
@@ -52,7 +51,7 @@ getItems <- function(dgeObj, itemNames){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     MyCounts <- getItem(exObj, "counts")
 #'
@@ -85,7 +84,7 @@ getItem <- function(dgeObj, itemName){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     MyRawData      <- getType(exObj, type = list("counts", "design", "geneData"))
 #'
@@ -119,7 +118,7 @@ getType <- function(dgeObj, type, parent){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     Assays <- getBaseType(exObj, baseType = "assay")
 #'     AssaysAndMeta <- getBaseType(exObj, c("assay", "meta"))

@@ -4,6 +4,12 @@
 
 ---
 
+### v1.1.2
+* Made all Bioconductor packages optional (suggested)
+* Added a new, minimal "mini" example object that has no internal Bioconductor-based features (ie normalization, analysis) to allow 
+for clean, simple examples that do not depend on suggested packages
+* Testing updated so that when Bioconductor suggested packages are unavailable the tests will not be run
+
 ### v1.1.1
 * Updated tests and examples so that when suggested packages are unavailable the examples and/or tests dependent on them are not run
 

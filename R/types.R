@@ -7,7 +7,7 @@
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     baseType(exObj, type = "DGEList")
 #'
@@ -43,7 +43,7 @@ baseType <- function(dgeObj, type){
 #'     baseTypes()
 #'
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     # Basetypes from a specific DGEobj
 #'     baseTypes(exObj)
@@ -65,7 +65,7 @@ baseTypes <- function(dgeObj){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     showTypes(exObj)
 #'
@@ -98,7 +98,7 @@ showTypes <- function(dgeObj){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     exObj <- newType(exObj,
 #'                      itemType   = "AffyRMA",

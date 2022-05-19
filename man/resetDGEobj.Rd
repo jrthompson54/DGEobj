@@ -20,15 +20,13 @@ but does revert changes made with addItem() and rmItem(). Reset requires that *_
 in the DGEobj.
 }
 \examples{
-\dontrun{
     #example object
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     # subset to first 10 rows to show reset functionality
     exObj <- exObj[c(1:10), ]
 
     exObj <- resetDGEobj(exObj)
     dim(exObj)
-}
 
 }
