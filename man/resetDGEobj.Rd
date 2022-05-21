@@ -14,12 +14,14 @@ A DGEobj
 }
 \description{
 During a workflow, a DGEobj typically gets filtered down to remove samples
-that fail QC or non-expressed genes.  The resetDGEobj() function produces a new DGEobj with
-the original unfiltered data.
+that fail QC or non-expressed genes. The resetDGEobj() function produces a new DGEobj with
+the original unfiltered data. Resetting an object does not restore changes to attributes or class,
+but does revert changes made with addItem() and rmItem(). Reset requires that *_orig data is still
+in the DGEobj.
 }
 \examples{
     #example object
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     # subset to first 10 rows to show reset functionality
     exObj <- exObj[c(1:10), ]

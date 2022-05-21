@@ -45,7 +45,7 @@ dimnames.DGEobj <- function(x){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     print(exObj)
 #'
@@ -66,7 +66,7 @@ print.DGEobj <- function(x, ..., verbose = FALSE) {
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     inventory(exObj)
 #'
@@ -118,7 +118,7 @@ inventory <- function(dgeObj, verbose = FALSE)  {
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     mylist <- as.list(exObj)
 #'

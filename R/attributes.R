@@ -11,7 +11,7 @@
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'    showAttributes(exObj)
 #'
@@ -55,7 +55,7 @@ showAttributes <- function(dgeObj, skipList = c("dim", "dimnames", "rownames", "
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     # Assign attributes to a DGEobj
 #'     MyAttributes <- list(Platform       = "RNA-Seq",
@@ -80,7 +80,7 @@ setAttributes <- function(dgeObj, attribs){
     assertthat::assert_that(!missing(dgeObj),
                             !missing(attribs),
                             msg = "Specify both a DGEobj and the attributes (attribs).")
-    assertthat::assert_that(class(attribs)[[1]] == "list",
+    assertthat::assert_that("list" %in% class(attribs),
                             msg = "attribs must be of class 'list'.")
     assertthat::assert_that(!is.null(names(attribs)),
                             msg = "The attribs list should be a named list, specifying the attribute/value pairs. It must have names specified.")
@@ -105,7 +105,7 @@ setAttributes <- function(dgeObj, attribs){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     getAttributes(exObj)
 #'
@@ -130,7 +130,7 @@ getAttributes <- function(dgeObj,
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     showMeta(exObj)
 #'

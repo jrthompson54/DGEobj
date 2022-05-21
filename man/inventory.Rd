@@ -19,7 +19,7 @@ Retrieve the object inventory
 }
 \examples{
     # example DGEobj
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     inventory(exObj)
 

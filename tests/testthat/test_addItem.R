@@ -1,4 +1,5 @@
 context("addItem.R functions")
+skip_if(setup_failed)
 
 
 test_that('addItem.R: addItem()', {

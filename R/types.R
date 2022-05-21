@@ -7,7 +7,7 @@
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     baseType(exObj, type = "DGEList")
 #'
@@ -18,9 +18,9 @@ baseType <- function(dgeObj, type){
     assertthat::assert_that(!missing(dgeObj),
                             !missing(type),
                             msg = "Specify both a DGEobj and a type (to check the baseType). Both are required.")
-    assertthat::assert_that(class(dgeObj)[[1]] == "DGEobj",
+    assertthat::assert_that("DGEobj" %in% class(dgeObj),
                             msg = "The DGEobj must be of class 'DGEobj'.")
-    assertthat::assert_that(class(type)[[1]] == "character",
+    assertthat::assert_that("character" %in% class(type),
                             msg = "The type must be of class 'character'.")
 
     objDef <- attr(dgeObj, "objDef")
@@ -43,7 +43,7 @@ baseType <- function(dgeObj, type){
 #'     baseTypes()
 #'
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     # Basetypes from a specific DGEobj
 #'     baseTypes(exObj)
@@ -65,7 +65,7 @@ baseTypes <- function(dgeObj){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     showTypes(exObj)
 #'
@@ -75,7 +75,7 @@ baseTypes <- function(dgeObj){
 #' @export
 showTypes <- function(dgeObj){
 
-    assertthat::assert_that(class(dgeObj) == "DGEobj",
+    assertthat::assert_that("DGEobj" %in% class(dgeObj),
                             msg = "The DGEobj must be of class 'DGEobj'.")
 
     df <- as.data.frame(unlist(attr(dgeObj, "objDef")$type), stringsAsFactors = FALSE)
@@ -98,7 +98,7 @@ showTypes <- function(dgeObj){
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     exObj <- newType(exObj,
 #'                      itemType   = "AffyRMA",
@@ -115,7 +115,7 @@ newType <- function(dgeObj, itemType, baseType, uniqueItem = FALSE){
                             !missing(itemType),
                             !missing(baseType),
                             msg = "Specify the DGEobj, itemType, and baseType. All three are required.")
-    assertthat::assert_that(class(dgeObj) == "DGEobj",
+    assertthat::assert_that("DGEobj" %in% class(dgeObj),
                             msg = "The DGEobj must be of class 'DGEobj'.")
     assertthat::assert_that(baseType %in% baseTypes(dgeObj),
                             msg = "The baseType must be one of the baseTypes available in the DGEobj. Use baseTypes(DGEobj) to see which are available.")

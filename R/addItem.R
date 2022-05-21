@@ -16,10 +16,10 @@
 #' \dontrun{
 #'    myFunArgs <- match.call()  #  Capture calling function and arguments
 #'
-#'    myDGEobj <- addItem(myDGEobj, item = MyCounts,
+#'    myDGEobj <- addItem(myDGEobj, item     = MyCounts,
 #'                                  itemName = "counts",
 #'                                  itemType = "counts",
-#'                                  funArgs = myFunArgs)
+#'                                  funArgs  = myFunArgs)
 #' }
 #'
 #' @importFrom assertthat assert_that
@@ -116,7 +116,7 @@ addItem <- function(dgeObj,
                    " Use a base type instead (row, col, assay, meta),",
                    " or define a new type.", sep = ""))
 
-    if (class(funArgs) == "call")
+    if ("call" %in% class(funArgs))
         funArgs <- paste(funArgs[[1]], "(",
                          paste(funArgs[2:length(funArgs)], collapse = ", "),
                          ")", sep = "")
@@ -167,8 +167,10 @@ addItem <- function(dgeObj,
 #' @return A DGEobj
 #'
 #' @examples
+#' \dontrun{
+#'    # NOTE: Requires the edgeR package
 #'
-#'    # Add normalize counts (DGEList) and log2CPM as additional "assay" items in the DGEobj
+#'    # Add normalized counts and log2CPM as additional "assay" items in the DGEobj
 #'    dgeObj  <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
 #'    dgeList <- edgeR::calcNormFactors(edgeR::DGEList(dgeObj$counts), method="TMM")
 #'    log2cpm <- edgeR::cpm(dgeList, log = TRUE)
@@ -179,6 +181,7 @@ addItem <- function(dgeObj,
 #'                       parents = list("counts", "newDgelist")
 #'    )
 #'    inventory(dgeObj)
+#' }
 #'
 #' @importFrom assertthat assert_that
 #'
@@ -194,9 +197,9 @@ addItems <- function(dgeObj,
                             !missing(itemList),
                             !missing(itemTypes),
                             msg = "Specify the DGEobj, itemList, and itemTypes. All are required.")
-    assertthat::assert_that(class(dgeObj)[[1]] == "DGEobj",
-                            class(itemList)[[1]] == "list",
-                            class(itemTypes)[[1]] == "list",
+    assertthat::assert_that("DGEobj" %in% class(dgeObj),
+                            "list" %in% class(itemList),
+                            "list" %in% class(itemTypes),
                             msg = "The DGEobj must be of class DGEobj, while the itemList and itemTypes must both be lists.")
     assertthat::assert_that(length(itemList) == length(itemTypes),
                             msg = "The length of the itemList must match the length of the itemTypes.")
@@ -204,7 +207,7 @@ addItems <- function(dgeObj,
                             msg = "The itemList must be a named list.")
 
     if (!missing(parents))
-        assertthat::assert_that(class(parents)[[1]] == "list",
+        assertthat::assert_that("list" %in% class(parents),
                                 length(parents) == length(itemList),
                                 msg = "The parents list must be of class 'list' and of the same length as the itemList.")
 

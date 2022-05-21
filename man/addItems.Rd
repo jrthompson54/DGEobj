@@ -29,8 +29,10 @@ A DGEobj
 Add multiple data items
 }
 \examples{
+\dontrun{
+   # NOTE: Requires the edgeR package
 
-   # Add normalize counts (DGEList) and log2CPM as additional "assay" items in the DGEobj
+   # Add normalized counts and log2CPM as additional "assay" items in the DGEobj
    dgeObj  <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
    dgeList <- edgeR::calcNormFactors(edgeR::DGEList(dgeObj$counts), method="TMM")
    log2cpm <- edgeR::cpm(dgeList, log = TRUE)
@@ -41,5 +43,6 @@ Add multiple data items
                       parents = list("counts", "newDgelist")
    )
    inventory(dgeObj)
+}
 
 }

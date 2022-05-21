@@ -19,7 +19,7 @@ Cast as a simple list
 }
 \examples{
     # example DGEobj
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     mylist <- as.list(exObj)
 

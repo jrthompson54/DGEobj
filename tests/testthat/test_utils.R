@@ -1,4 +1,5 @@
 context("utils.R functions")
+skip_if(setup_failed)
 
 
 test_that('utils.R: dim()/dimnames()', {

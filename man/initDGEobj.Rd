@@ -19,13 +19,13 @@ initDGEobj(
 colnames. Each column represents a sample.  Each row represents and assay.
 This is typically the counts matrix in a DGE RNA-Seq experiment.}
 
-\item{rowData}{Gene, isoform or exon level annotation. Rownames
+\item{rowData}{Gene, exon, isoform or protein level annotation. Rownames
 must match the rownames in primaryAssayData}
 
 \item{colData}{A dataframe describing the experiment design.
 Rownames much match the colnames(primaryAssayData)}
 
-\item{level}{One of "gene", "isoform", or "exon"}
+\item{level}{One of "gene", "exon", "isoform" or "protein"}
 
 \item{customAttr}{(optional) Named list of attributes}
 
@@ -45,17 +45,16 @@ A DGEobj
 Initialize with base data (primaryAssayData, row annotations, col annotations)
 }
 \examples{
-
-   dgeObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+   dgeObj   <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
    MyCounts <- dgeObj$counts
    geneinfo <- dgeObj$geneData
    sampinfo <- dgeObj$design
 
   myDgeObj <- initDGEobj(primaryAssayData = MyCounts,
-                         rowData = geneinfo,
-                         colData = sampinfo,
-                         level = "gene",
-                         customAttr = list (Genome = "Rat.B6.0",
-                                            GeneModel = "Ensembl.R89"))
+                         rowData          = geneinfo,
+                         colData          = sampinfo,
+                         level            = "gene",
+                         customAttr       = list (Genome = "Rat.B6.0",
+                                               GeneModel = "Ensembl.R89"))
 
 }

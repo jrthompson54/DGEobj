@@ -24,7 +24,7 @@ This function prints all attributes regardless of the class of the attribute val
 }
 \examples{
     # example DGEobj
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
    showAttributes(exObj)
 

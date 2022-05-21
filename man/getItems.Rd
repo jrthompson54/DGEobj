@@ -19,7 +19,7 @@ Retrieve multiple data items by name
 }
 \examples{
     # example DGEobj
-    exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+    exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 
     myList <- getItems(exObj, list("counts", "geneData"))
     names(myList)

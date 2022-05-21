@@ -7,7 +7,7 @@
 #'
 #' @examples
 #'     # example DGEobj
-#'     exObj <- readRDS(system.file("exampleObj.RDS", package = "DGEobj"))
+#'     exObj <- readRDS(system.file("miniObj.RDS", package = "DGEobj"))
 #'
 #'     exObj <- rmItem(exObj, "design")
 #'
@@ -16,11 +16,11 @@
 #' @export
 rmItem <- function(dgeObj, itemName){
 
-    assertthat::assert_that(class(dgeObj)[[1]] == "DGEobj",
+    assertthat::assert_that("DGEobj" %in% class(dgeObj),
                             msg = "The dgeObj parameter must be of class 'DGEobj'.")
     assertthat::assert_that(!missing(itemName),
                             length(itemName) == 1,
-                            class(itemName)[[1]] == "character",
+                            "character" %in% class(itemName),
                             msg = "Specify a singular itemName as a character string.")
 
     if (!itemName %in% names(dgeObj))

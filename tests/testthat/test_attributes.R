@@ -1,4 +1,5 @@
 context("attributes.R functions")
+skip_if(setup_failed)
 
 
 test_that("attributes.R: showAttributes()", {

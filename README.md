@@ -2,9 +2,9 @@
 
 <!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/DGEobj?color=9bc2cf)](https://cran.r-project.org/package=DGEobj) 
-[![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/grand-total/DGEobj?color=9bc2cf)](https://cran.r-project.org/package=DGEobj) 
-[![Travis build status](https://travis-ci.com/cb4ds/DGEobj.svg?branch=master)](https://travis-ci.com/cb4ds/DGEobj?branch=master)
-[![Codecov test coverage](https://codecov.io/gh/cb4ds/DGEobj/branch/develop/graph/badge.svg)](https://codecov.io/gh/cb4ds/DGEobj?branch=master)
+[![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/grand-total/DGEobj?color=9bc2cf)](https://cran.r-project.org/package=DGEobj)
+[![CircleCI](https://circleci.com/gh/cb4ds/DGEobj/tree/master.svg?style=svg)](https://app.circleci.com/pipelines/github/cb4ds/DGEobj?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/cb4ds/DGEobj/branch/master/graph/badge.svg)](https://app.codecov.io/gh/cb4ds/DGEobj?branch=master)
 <!-- badges: end -->
 
 DGEobj is an S3 data class that provides a flexible container for Differential Gene Expression (DGE) analysis results.  The DGEobj class is designed to be extensible. Thus, while designed with RNA-Seq analysis workflows in mind, The DGE object data structure is suitable for  allowing definition of new data types as needed. A set of accessory functions to deposit, query and retrieve subsets of a data workflow has been provided.  Attributes are used to capture metadata such as species and gene model, including reproducibility information such that a 3rd party can access a DGEobj history to see how each data object was created or modified. 
@@ -34,6 +34,7 @@ The funArgs text field intended to hold details from creating the object.  Passi
 * **rmItem/s**:  Remove a data item from a DGEobj  
 * **newType**:  Define a new data type  
 * **setAttribute/s**: Allows setting attributes (facilitates attribute templates)
+* **resetDGEobj**: Produces a new DGEobj with the original unfiltered data
 
 #### Query Functions  
 
@@ -59,4 +60,4 @@ If the gene data object (row annotation) contains chromosome position informatio
 
 #### Original Data 
 
-During initialization, a copy of the counts, gene annotation and sample annotation is duplicated and stored in the meta slot with an "_orig" suffix on the itemName.  This preserves the original data if you subset the original data. 
+During initialization, a copy of the counts, gene annotation and sample annotation is duplicated and stored in the meta slot with an "_orig" suffix on the itemName.  This preserves the original data if you subset the original data. To restore select attributes including primary parts of the originally initialized DGEobj, you can reset the object.
